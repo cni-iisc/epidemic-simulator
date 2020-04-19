@@ -1,0 +1,44 @@
+#Set this to -fopenmp to enable compiling with openmp
+parallel = -fopenmp
+
+#Set this to -DTIMING to enable timing output
+timing = -DTIMING
+
+#Set this to -DDEBUG to enable debugging output
+debug = 
+
+#Set this to -DMERSENNE_TWISTER to use the Mersenne twister 19937 Random number generator
+random = -DMERSENNE_TWISTER
+
+include_paths = -Ilibs/ -Ilibs/cxxopts-2.2.0/include/
+obj = initializers.o models.o interventions.o updates.o simulator.o outputs.o drive_simulator.o
+
+DEPFLAGS = -MMD -MP -MF $*.d
+
+CXX = g++
+CPPFLAGS = -Wall --std=c++14 -O3 $(DEPFLAGS) $(include_paths) $(parallel) $(timing) $(debug) $(random)
+
+
+
+all: drive_simulator
+
+drive_simulator: $(obj)
+	$(CXX) $(CPPFLAGS) $^ -o $@
+
+%.o : $.cc %.d
+	$(CXX) $(CPPFLAGS) -c $<
+
+$(DEPDIR):
+	mkdir -p $@
+
+
+DEPFILES := $(obj:%.o=%.d)
+$(DEPFILES):
+
+
+.PHONY: clean
+clean:
+	rm drive_simulator *.o
+
+include $(wildcard $(DEPFILES))
+
