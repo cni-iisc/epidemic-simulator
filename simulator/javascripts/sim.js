@@ -4,8 +4,8 @@
 const WEBPAGE_VERSION = true;
 //simulation inputs
 const INPUTPATHPREFIX = 'staticInst/data/web_input_files';
-var cityName = 'bengaluru';
-var inputPath = INPUTPATHPREFIX + '/' + cityName + '/';
+const IMAGEPREFIX = 'simulator/images';
+//var cityName = 'bengaluru';
 
 NUM_DAYS = 120; //Number of days. Simulation duration
 SIM_STEPS_PER_DAY = 4; //Number of simulation steps per day.
@@ -1462,7 +1462,19 @@ function run_simulation() {
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "my_data_all_together.csv");
             document.body.appendChild(link); // Required for FF
-            document.getElementById("status").innerHTML = "Numbers plotted are per " + String(NUM_PEOPLE) + ".";
+            // NUM_PEOPLE is not always exact size you intended to instantiate, due to stochasticity
+            // Below code adjusts the displayed number within +/- 100 for 100K model
+            let numKs = NUM_PEOPLE;
+            let precBand = 100;
+            let residue = NUM_PEOPLE%(precBand*10)
+            if (residue <= precBand) { 
+                numKs = NUM_PEOPLE - residue; 
+            }
+            else if (residue >= precBand*9) {
+                numKs = NUM_PEOPLE + ((precBand*10)-residue);
+            }
+
+            document.getElementById("status").innerHTML = "Numbers plotted are per " + String(numKs) + ".";
             if (!WEBPAGE_VERSION) {
                 link.click();	//TODO: Instead of click link, add link for download on page.
             }
@@ -1566,7 +1578,7 @@ function call_plotly(data_tuple) {
     plot_plotly([plot_values[3]], 'num_critical_plot_2', 'Number Critical (daily)', 'Evolution of Critical Population');
     plot_plotly([plot_values[4]], 'num_fatalities_plot_2', 'Number Fatalities (cum.)', 'Evolution of Fatalities Population');
     //plot_plotly([plot_values[5]],'num_recovered_plot_2','Number Recovered (cum.)','Evolution of Recovered Population');
-    plot_plotly([plot_values[6]], 'num_affected_plot_2', 'Number Affected (cum.)', 'Evolution of Affected Population');
+    plot_plotly([plot_values[6]], 'num_affected_plot_2', 'Number Symptomatic (cum.)', 'Evolution of Affected Population');
     plot_lambda_evolution([plot_values[7]], 'lambda_evolution', 'Source of infection', ['Home', 'School/Workplace', 'Community', 'Public Transport']);
 
 }
@@ -1739,10 +1751,64 @@ function set_default_values_html() {
     document.getElementById("betaSchools").value = BETA_S;
     document.getElementById("betaPT").value = BETA_PT;
     //document.getElementById("interventions").value = "0";
+    //
+
+    //cityName = document.getElementById("cityname").value;
+    setCity( document.getElementById("cityname").value );
+    console.log('initCity: ', cityName)
 }
 
-function clear_variables() {
+//function clear_variables() {
+//
+//}
 
+function setToolTips () {
+    //$('#password').tooltip({'trigger':'focus', 'title': 'Password tooltip'});
 }
+
+function setCity (city) {
+    cityName = city;
+    console.log('City: ', cityName)
+    inputPath = INPUTPATHPREFIX + '/' + cityName + '/';
+    mapImage.src = IMAGEPREFIX + '/' + cityName + '-wards_v2.png'
+}
+
+//jquery events for the webUI
+//
+$(document).ready(function () {
+    $('#numDays').tooltip({'trigger':'focus', 'title': 'Number of days to run the simulation'});
+    $('#Incubation').tooltip({'trigger':'focus', 'title': 'Once exposed to the virus, the mean duration before the exposed individual starts transmitting the virus.'});
+
+    $('#asymptomaticMean').tooltip({'trigger':'focus', 'title': 'The mean duration for which asymptomatic or presymptomatic individuals may transmit the virus before recovering or before symptoms begin to show.'});
+
+    $('#symptomaticMean').tooltip({'trigger':'focus', 'title': 'The mean duration for which an infected individual exhibits symptoms and continues to transmit the virus.'});
+
+    $('#symtomaticFraction').tooltip({'trigger':'focus', 'title': 'The fraction of the exposed individuals that show symptoms.'});
+
+    $('#meanHospitalPeriod').tooltip({'trigger':'focus', 'title': 'Some symptomatic individuals may need hospital care. If admitted, the mean duration of their stay in the regular ward.'});
+
+    $('#meanICUPeriod').tooltip({'trigger':'focus', 'title': 'Some hospitalised individuals may develop complications, and may need intensive care. If so, the mean duration of their stay in an intensive care unit.'});
+
+    $('#betaHouse').tooltip({'trigger':'focus', 'title': 'The expected number of eventful (infection spreading) contact opportunities in a day at home.'});
+
+    $('#betaWork').tooltip({'trigger':'focus', 'title': 'The expected number of eventful contact opportunities in a day at the workplace.'});
+
+    $('#betaSchools').tooltip({'trigger':'focus', 'title': 'The expected number of eventful contact opportunities in a day at the school.'});
+
+    $('#betaCommunity').tooltip({'trigger':'focus', 'title': 'The expected number of eventful contact opportunities in the community interaction space.'});
+
+    $('#betaPT').tooltip({'trigger':'focus', 'title': 'The expected number of eventful contact opportunities in the transport interaction space.'});
+
+    $('#initFrac').tooltip({'trigger':'focus', 'title': 'How many are exposed to the virus? The residual incubation period is random.'});
+
+    $('#compliance').tooltip({'trigger':'focus', 'title': 'What fraction of households are likely to follow the restrictions specified in the chosen intervention?'});
+});
+
+$('.selectpicker').change(function () {
+    var selectedItem = $('.selectpicker').val();
+    //cityName = selectedItem;
+    setCity(selectedItem);
+   });
 
 set_default_values_html();
+
