@@ -21,7 +21,7 @@ The first stage of the simulator workflow is to generate static information requ
 
 The above script instantiates a synthetic city with the specified population where each individual being assigned to a house, school, workplace and community centre based on their age, and commute distance. The instantiated outputs are in the form of JSON files and will be available in the specified output directory.
 
-A detailed description of the input files, the script and instructions to run are available at [staticInst/README.md](https://bitbucket.org/iiscdsCov/markov_simuls/src/master/staticInst/README.md)
+A detailed description of the input files, the script and instructions to run are available at [`staticInst/README.md`](staticInst/README.md)
 
 ## `simulator/` - Javascript simulator
 
@@ -45,4 +45,4 @@ The simulator injests the city-wide instatiation files generated using the scrip
 These subfolders in simulator contains:  1) the main calibration script (tune_model_CPP.py) that can be used to calibrate (tune) the cpp-simulator beta values to a given fatalities time series, and 2) plotting scripts that can be used to generate plots from the cpp-simulator outputs.
 
 ## `cpp-simulator/` - CPP simulator
-This folder contains the cpp-version of the simulator. The CPP simulator evolved from the JS simulator. Please read the README.md inside the folder for more details.
+This folder contains the cpp-version of the simulator. The CPP simulator evolved from the JS simulator. Please read the [`cpp-simulator/README.md`](cpp-simulator/README.md) for more details.
