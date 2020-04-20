@@ -60,6 +60,7 @@ SPDX-License-Identifier: Apache-2.0-->
                 display: block;
                 margin: 0 auto;
             }
+            /*
             a {
                 text-decoration: none;
             }
@@ -72,6 +73,7 @@ SPDX-License-Identifier: Apache-2.0-->
             a:visited {
                 color: #005999;
             }
+            */
             .column {
                 float: left;
                 width: 40%;
@@ -110,6 +112,12 @@ SPDX-License-Identifier: Apache-2.0-->
         
         .radio-toolbar input[type="radio"]:focus + label {
             border: 2px dashed #444;
+        }
+
+        .tooltip-inner {
+          background: #323232;
+            padding: 5px 5px 5px 5px;
+            border-radius: 6px;
         }
 
         fieldset {
@@ -169,20 +177,21 @@ SPDX-License-Identifier: Apache-2.0-->
       <div class="container-fluid">
         <div class="row">
           <div class="col-xl-8 col-sm-6 my-3">
-            This is a city-scale agent-based simulator for the city of Bengaluru. 
-            It has been built to study the spread of COVID-19 in an Indian city. The open-source code for the simulator is available at <a target="_blank" href="https://github.com/cni-iisc/epidemic-simulator">https://github.com/cni-iisc/epidemic-simulator</a>.
+            This is a city-scale agent-based simulator, built to study the spread of COVID-19 in an Indian city.
+            The simulator is released as <a target="_blank" HREF="https://github.com/cni-iisc/epidemic-simulator">open-source software here.</a>
             Details of our implementation can be found 
             <A target="_blank" HREF="https://covid19.iisc.ac.in/modeling-of-epidemic-spread-in-indian-urban-conditions/">
                 here</A>.
+              <!-- <span class="badge badge-primary badge-pill float-left mt-1">new</span> -->
             <br>
             <br>
-            The simulator instantiates a smaller scale Bengaluru with 100,000 agents across its 
-            198 wards. The reduced size is so that it can run on your browser. 
+            The simulator creates a smaller scale city with 100,000 agents distributed across its 
+            municipal wards. The reduced size is so that it can run on your browser. 
             The population distribution, 
             employed fraction, age distribution, and household size distribution are based on 
             the 2011 census data. Agents are assigned to households, schools or workplaces, and 
             community spaces. The epidemic then spreads in a stochastic fashion based on meetings
-            that happen in the interaction spaces in our synthetic Bengaluru.
+            that happen in the interaction spaces in our synthetic city.
             <br>
             <br>
             Choose one of the implemented interventions and see how the epidemic evolves.
@@ -191,22 +200,34 @@ SPDX-License-Identifier: Apache-2.0-->
             <em>A disclaimer: This tool is to help you understand the effectiveness of social distancing interventions related to COVID-19.
             The simulator's outputs should not be used for medical diagnostic, prognostic or treatment purposes or
             for guidance on personal travel plans.</em>
+            <br><br>
+            Note: best viewed on a desktop/laptop/tablet screen.
           </div>
           <div class="col-xl-4 col-sm-3 align-self-center justify-content-center p-3">
             <div class="h-75 d-inline-block">
-                  <img src="simulator/images/bangalore-wards_v2.png" alt="city map" width="80%">
+                  <img src="simulator/images/bangalore-wards_v2.png" id="mapImage" alt="city map" width="80%">
             </div>
           </div>
         </div>
-        <div class="row justify-content-between">
+        <div class="row justify-content-between align-self-center">
             <div class="col-xl-4 col-md-4 px-3" id="controls">
-              <div class="row py-3 pl-2" >
-                <div class="col justify-content-left px-1"><b>Adjustable simulation parameters: 
-                    </b>
+
+              <div class="row py-3 pl-2 justify-content-between">
+                <div class="col justify-content-start px-1"><b>Adjustable simulation parameters: </b>
                 </div>
-                <div class="col justify-content-left">
+                <div class="col">
                   <button type="button" class="btn btn-primary" id="run_button" onclick="clear_plots();">Run</button>
                 <button type="button" class="btn btn-danger" id="sim_stop" style="display: none" onclick="stop_sim();">Stop Simulation</button>
+                </div>
+              </div>
+
+              <div class="row py-2">
+                <div class="col"><label for="cityname"><b>Select a city</b></label></div>
+                <div class="col">
+                  <select class="selectpicker" id="cityname" name="cityname">
+                    <option value="bengaluru" selected="selected">Bengaluru</option>
+                    <option value="mumbai">Mumbai</option>
+                  </select>
                 </div>
               </div>
 
