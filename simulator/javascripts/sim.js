@@ -1751,20 +1751,13 @@ function set_default_values_html() {
     document.getElementById("betaSchools").value = BETA_S;
     document.getElementById("betaPT").value = BETA_PT;
     //document.getElementById("interventions").value = "0";
-    //
 
-    //cityName = document.getElementById("cityname").value;
     setCity( document.getElementById("cityname").value );
-    console.log('initCity: ', cityName)
 }
 
 //function clear_variables() {
 //
 //}
-
-function setToolTips () {
-    //$('#password').tooltip({'trigger':'focus', 'title': 'Password tooltip'});
-}
 
 function setCity (city) {
     cityName = city;
@@ -1781,11 +1774,11 @@ $(document).ready(function () {
 
     $('#asymptomaticMean').tooltip({'trigger':'focus', 'title': 'The mean duration for which asymptomatic or presymptomatic individuals may transmit the virus before recovering or before symptoms begin to show.'});
 
-    $('#symptomaticMean').tooltip({'trigger':'focus', 'title': 'The mean duration for which an infected individual exhibits symptoms and continues to transmit the virus.'});
+    $('#symptomaticMean').tooltip({'trigger':'focus', 'title': 'If symptoms begin to show, the mean duration for which an infected individual exhibits symptoms and continues to transmit the virus.'});
 
     $('#symtomaticFraction').tooltip({'trigger':'focus', 'title': 'The fraction of the exposed individuals that show symptoms.'});
 
-    $('#meanHospitalPeriod').tooltip({'trigger':'focus', 'title': 'Some symptomatic individuals may need hospital care. If admitted, the mean duration of their stay in the regular ward.'});
+    $('#meanHospitalPeriod').tooltip({'trigger':'focus', 'title': 'Some symptomatic individuals may need hospital care. If admitted, the mean duration of their stay in a regular ward.'});
 
     $('#meanICUPeriod').tooltip({'trigger':'focus', 'title': 'Some hospitalised individuals may develop complications, and may need intensive care. If so, the mean duration of their stay in an intensive care unit.'});
 
@@ -1799,14 +1792,13 @@ $(document).ready(function () {
 
     $('#betaPT').tooltip({'trigger':'focus', 'title': 'The expected number of eventful contact opportunities in the transport interaction space.'});
 
-    $('#initFrac').tooltip({'trigger':'focus', 'title': 'How many are exposed to the virus? The residual incubation period is random.'});
+    $('#initFrac').tooltip({'trigger':'focus', 'title': 'What percentage of population is exposed to the virus? The residual incubation period is random.'});
 
     $('#compliance').tooltip({'trigger':'focus', 'title': 'What fraction of households are likely to follow the restrictions specified in the chosen intervention?'});
 });
 
 $('.selectpicker').change(function () {
     var selectedItem = $('.selectpicker').val();
-    //cityName = selectedItem;
     setCity(selectedItem);
    });
 
