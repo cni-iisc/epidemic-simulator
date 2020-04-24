@@ -1,458 +1,61 @@
 <!DOCTYPE html>
-<!--Copyright [2020] [Indian Institute of Science, Bangalore & Tata Institute of Fundamental Research, Mumbai]
+<!--Copyright [2020] [Indian Institute of Science, Bangalore]
 SPDX-License-Identifier: Apache-2.0-->
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Google Analytics -->
-        <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-        
-        ga('create', 'UA-164131064-1', 'auto');
-        ga('send', 'pageview');
-        </script>
-        <!-- End Google Analytics -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-        <title>City-Scale Epidemic Simulator</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
-        <link rel="stylesheet" href="simulator/css/font-awesome.min.css">
-        <link rel="icon" type="image/png" sizes="32x32" href="https://iisc.ac.in/wp-content/themes/iisc/images/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="https://iisc.ac.in/wp-content/themes/iisc/images/favicon/favicon-96x96.png">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <title>City-Scale Epidemic Simulator</title>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="simulator/css/font-awesome.min.css">
+  <link rel="icon" type="image/png" sizes="32x32"
+    href="https://iisc.ac.in/wp-content/themes/iisc/images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96"
+    href="https://iisc.ac.in/wp-content/themes/iisc/images/favicon/favicon-96x96.png">
+    <link rel="stylesheet" href="simulator/css/custom.css">
 
-        <style>
-            body {
-                font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-                -webkit-font-smoothing: antialiased;
-                text-rendering: optimizeLegibility;
-                line-height: 1.5;
-            }
-            #status{
-                text-align: center;
-            }
-            #header {
-              font-family: serif;
-              font-size: max(0.9em, 12px);
-              top: 0px;
-              padding-bottom: 1px;
-              border-bottom: 1px solid #eceefb;
-              box-shadow: 5px 10px 13px #ddd;
-              position: sticky;
-              position: -webkit-sticky;
-              z-index: 100;
-            }
-            #footer {
-              font-family: serif;
-              font-size: max(0.9em, 12px);
-              bottom: 2px;
-              border-top: 1px solid #eceefb;
-              box-shadow: 5px 10px 10px #ddd;
-              position: sticky;
-              position: -webkit-sticky;
-              z-index: 100;
-            }
-            .content {
-                max-width: 35em;
-                margin: 0 auto;
-                padding: 0 10px;
-            } 
-            .nav {
-                text-align: center;
-                margin-top: 10px;
-                margin-bottom: 10px;
-            }
-            img {
-                max-width: 100%;
-                display: block;
-                margin: 0 auto;
-            }
-            /*
-            a {
-                text-decoration: none;
-            }
-            a:link, .nav a, .nav a:visited {
-                color: #07C;
-            }
-            a:hover, a:active, .nav a:visited:active, .nav a:visited:hover {
-                color: #3af;
-            }
-            a:visited {
-                color: #005999;
-            }
-            */
-
-          input[type="number"] {
-            width: 70px;
-            padding: 2px;
-            display: inline-block;
-            margin-left: 2px;
-        }
-          .col label {
-            font-size:1.0em;
-          }
-
-        .radio-toolbar input[type="radio"] {
-          opacity: 0;
-          position: fixed;
-          width: 0;
-        }
-
-        .radio-toolbar label {
-            display: inline-block;
-            background-color: #eee;
-            padding: 5px 5px;
-            font-family: sans-serif, Arial;
-              font-size:0.9em;
-            border: 1px solid #444;
-            border-radius: 3px;
-        }
-
-        .radio-toolbar input[type="radio"]:checked + label {
-            background-color:#bfb;
-            border-color: #4c4;
-              font-weight: bold;
-        }
-        
-        .radio-toolbar input[type="radio"]:focus + label {
-            border: 2px dashed #444;
-        }
-
-        .tooltip-inner {
-          background: #323232;
-            padding: 5px 5px 5px 5px;
-            border-radius: 6px;
-        }
-
-        fieldset {
-          background-color:#DDC;
-          border-radius: 5px;
-          border: 1px solid #000;
-          font-family: sans-serif, Arial;
-          font-size: 0.9em;
-            width: 85%;
-        }
-        legend {
-          margin-bottom:0px;
-          margin-left:16px;
-          margin-right:10px;
-          padding: 5px 5px;
-          font-size:medium;  
-          border: 1px solid #888;
-            border-radius: 5px;
-            background-color: #BB9;
-        }
-        #disclaimer {
-          text-align:justify;
-            text-justify: inter-word;
-
-        }
-        </style>
-
-    </head>
-
-    <body>
-      <section id="header">
-      <div class="d-flex bg-dark justify-content-between align-items-center">
-            <div class="d-flex p-2 text-white">
-              <div class="d-flex flex-column px-3 py-1">
-              <a target="_blank" href="https://www.iisc.ac.in"><img src="simulator/images/iisc_1.png" alt="IISc logo" width="70px"></a>
-              </div>
-              <div class="flex-shrink-1 flex-column">
-                <div class="d-flex"><a target="_blank" href="https://cni.iisc.ac.in" style="color:#ffff99">Centre for Networked Intelligence</a></div>
-                <div class="d-flex"><a target="blank" href="https://cps.iisc.ac.in" style="color:#ffff99">Robert Bosch Centre for CPS</a></div>
-                <div class="d-flex"><a target="blank" href="https://iisc.ac.in" style="color:#ffff99">Indian Institute of Science, Bangalore</a></div>
-              </div>
-            </div>
-            <div class="d-flex p-2 text-white">
-              <h4>City-Scale Epidemic Simulator</h4>
-            </div>
-            <div class="d-flex p-2 text-white">
-              <div class="flex-shrink-1 flex-column">
-                <div class="d-flex justify-content-end"><a target="_blank" href="https://www.tcs.tifr.res.in" style="color:#ffff99">School of Technology and Computer Science</a></div>
-                <div class="d-flex justify-content-end"><a target="blank" href="https://www.tifr.res.in" style="color:#ffff99">Tata Institute of Fundamental Research, Mumbai</a></div>
-              </div>
-            <div class="d-flex px-3 py-1">
-              <a target="_blank" href="https://www.tifr.res.in"><img src="simulator/images/Covid-TIFR-Logo.png" alt="TIFR logo" width="80px"></a>
-            </div>
-            </div>
-      </div>
-      </section>
-
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-xl-8 col-sm-6 my-3">
-            This is a city-scale agent-based simulator, built to study the spread of COVID-19 in an Indian city.
-            The simulator is released as <a target="_blank" HREF="https://github.com/cni-iisc/epidemic-simulator">open-source software here.</a>
-            Details of our implementation can be found 
-            <A target="_blank" HREF="https://covid19.iisc.ac.in/modeling-of-epidemic-spread-in-indian-urban-conditions/">
-                here</A>.
-              <!-- <span class="badge badge-primary badge-pill float-left mt-1">new</span> -->
-            <br>
-            <br>
-            The simulator creates a smaller scale city with 100,000 agents distributed across its 
-            municipal wards. The reduced size is so that it can run on your browser. 
-            The population distribution, 
-            employed fraction, age distribution, and household size distribution are based on 
-            the 2011 census data. Agents are assigned to households, schools or workplaces, and 
-            community spaces. The epidemic then spreads in a stochastic fashion based on meetings
-            that happen in the interaction spaces in our synthetic city.
-            <br>
-            <br>
-            Choose one of the implemented interventions and see how the epidemic evolves.
-            <br>
-            <br>
-            <em>A disclaimer: This tool is to help you understand the effectiveness of social distancing interventions related to COVID-19.
-            The simulator's outputs should not be used for medical diagnostic, prognostic or treatment purposes or
-            for guidance on personal travel plans.</em>
-            <br><br>
-            Note: best viewed on a desktop/laptop/tablet screen.
-          </div>
-          <div class="col-xl-4 col-sm-3 align-self-center justify-content-center p-3">
-            <div class="h-75 d-inline-block">
-                  <img src="simulator/images/bengaluru-wards_v2.png" id="mapImage" alt="city map" width="80%">
-            </div>
-          </div>
-        </div>
-        <div class="row justify-content-between align-self-center">
-            <div class="col-xl-4 col-md-4 px-3" id="controls">
-
-              <div class="row py-3 pl-2 justify-content-between">
-                <div class="col justify-content-start px-1"><b>Adjustable simulation parameters: </b>
-                </div>
-                <div class="col">
-                  <button type="button" class="btn btn-primary" id="run_button" onclick="clear_plots();">Run</button>
-                <button type="button" class="btn btn-danger" id="sim_stop" style="display: none" onclick="stop_sim();">Stop Simulation</button>
-                </div>
-              </div>
-
-              <div class="row py-2">
-                <div class="col"><label for="cityname"><b>Select a city</b></label></div>
-                <div class="col">
-                  <select class="selectpicker" id="cityname" name="cityname">
-                    <option value="bengaluru" selected="selected">Bengaluru</option>
-                    <option value="mumbai">Mumbai</option>
-                  </select>
-                </div>
-              </div>
-
-                <div class="row">
-                  <div class="col"><label for="numDays">Number of Days to Simulate</label></div>
-                  <div class="col"><input type="number" min="1" max="600" value="120" step="1" id="numDays"></div>
-                </div>
-
-                <b>Disease Progression Parameters</b>
-                <div class="row pt-1">
-                <div class="col"><label  for="Incubation">Mean incubation days</label></div>
-                <div class="col"><input  type="number"  min="0" max="30" value="4.5"  step="0.25"  id="Incubation"></div>
-                </div>
-              
-                <div class="row pt-1">
-                <div class="col"><label  for="asymptomaticMean">Mean asymptomatic days </label></div>
-                <div class="col"><input type="number"  min="0" max="30" value="0.5"  step="0.25"  id="asymptomaticMean"></div>
-                </div>
-
-                <div class="row pt-1">
-                <div class="col"><label  for="symptomaticMean">Mean symptomatic days</label></div>
-                <div class="col"><input type="number"  min="0" max="30" value="5"  step="0.25"  id="symptomaticMean"></div>
-                </div>
-
-                <div class="row pt-1">
-                <div class="col"><label  for="symtomaticFraction">Symptomatic Fraction </label></div>
-                <div class="col"><input type="number"  min="0" max="1" value="0.66"  step="0.01" id="symtomaticFraction"></div>
-                </div>
-
-                <div class="row pt-1">
-                <div class="col"><label  for="meanHospitalPeriod">Mean Hospital Stay (days)</label></div>
-                <div class="col"><input type="number" min="0" max="30" value="8"  step="0.25"  id="meanHospitalPeriod" ></div>
-                </div>
-
-                <div class="row pt-1">
-                <div class="col"><label  for="meanICUPeriod">Mean ICU Stay (days)</label></div>
-                <div class="col"><input type="number" min="0" max="30" value="8"  step="0.25" id="meanICUPeriod" ></div>
-                </div>
-
-                <b>Daily Contact Rate for Infection Spread</b>
-                <div class="row pt-1">
-                <div class="col"><label  for="betaHouse">Households</label></div>
-                <div class="col"><input type="number" min="0" max="2" value="0.47"  step="0.01" id="betaHouse"></div>
-                </div>
-
-                <div class="row pt-1">
-                <div class="col"><label  for="betaWork">Workplaces</label></div>
-                <div class="col"><input type="number" min="0" max="2" value="0.376"  step="0.01" id="betaWork"></div>
-                </div>
-
-                <div class="row pt-1">
-                <div class="col"><label  for="betaSchools">Schools</label></div>
-                <div class="col"><input type="number"  min="0" max="2" value="0.752"  step="0.01" id="betaSchools"></div>
-                </div>
-
-                <div class="row pt-1">
-                <div class="col"><label  for="betaCommunity">Community</label></div>
-                <div class="col"><input type="number"   min="0" max="2" value="0.3395"  step="0.01" id="betaCommunity"> </div>
-                </div>
-                
-                <div class="row pt-1">
-                <div class="col"><label  for="betaPT">Public Transport</label></div>
-                <div class="col"><input type="number"   min="0" max="2" value="0.01"  step="0.01" id="betaPT"> </div>
-                </div>
-	
-                <div class="row pt-1">
-                <div class="col"><label  for="simNum" style="display: none">Simulations Number</label></div>
-                <div class="col"><input type="number"  style="display: none" min="0" step="1" max="1000" value="0" id="simNum"> </div>
-                </div>
-
-		          <b>Initialisation</b>
-                <div class="row pt-1">
-                <div class="col"><label  for="initFrac">Initial Exposed Percentage</label></div>
-                <div class="col"><input type="number"  min="0" max="2" value="0.1" step="0.02"  id="initFrac"></div>
-                </div>
-
-                <div class="row px-3">
-                    <fieldset class="border p-1" style="border:2px">
-                        <legend class="w-auto">Intervention Method (click to select)</legend>
-                        <p >Simulations under all scenarios are assumed to begin on March 1, 2020. Interventions begin on 25 March 2020, aligned with the national lockdown start date. 
-                          They continue for the indicated duration (or indefinitely if not specified).</p>
-                        
-                        <div class="radio-toolbar">
-                          <div class="row px-3">
-                          <input type="radio" name="interventions2" id="0" value="0" checked="checked">
-                          <label for="0"> No intervention </label>
-                          </div>
-
-                          <div class="row px-3">
-                            <input type="radio" name="interventions2" id="1" value="1">
-                            <label for="1"> Case isolation </label>
-                          </div>
-
-                          <div class="row px-3">
-                            <input type="radio" name="interventions2" id="2" value="2">
-                            <label for="2"> Home quarantine of infected households </label>
-                          </div>
-
-                          <div class="row px-3">
-                            <input type="radio" name="interventions2" id="3" value="3">
-                            <label for="3"> Lockdown </label>
-                          </div>
-
-                          <div class="row px-3">
-                            <input type="radio" name="interventions2" id="4" value="4">
-                            <label for="4"> Case isolation and home quarantine of infected households </label>
-                          </div>
-
-                          <div class="row px-3">
-                            <input type="radio" name="interventions2" id="5" value="5">
-                            <label for="5">
-                            Case isolation, home quarantine of infected households, and social distancing of those above 65 years of age</input>   
-                            </label>
-                          </div>
-
-                          <div class="row px-3">
-                            <input type="radio" name="interventions2" id="6" value="6">
-                            <label for="6">
-                            21 days of lockdown followed by 21 days of [case isolation, home quarantine, and social distancing of those above 65 years], case isolation thereafter
-                            </label>
-                          </div>
-
-                          <div class="row px-3">
-                            <input type="radio" name="interventions2" id="7" value="7">
-                            <label for="7"> 21 days of lockdown, case isolation thereafter</label>
-                          </div>
-
-                          <div class="row px-3">
-                            <input type="radio" name="interventions2" id="8" value="8">
-                            <label for="8">
-                            21 days of lockdown followed by 21 days of [home quarantine of infected households and school-college closures], followed by 42 days of school and college closure, case isolation thereafter
-                            </label>
-                          </div>
-
-                          <div class="row px-3">
-                            <input type="radio" name="interventions2" id="9" value="9">
-                            <label for="9">
-                            21 days of lockdown followed by 21 days of [home quarantine of infected households and school-college closures], case isolation thereafter
-                            </label>
-                          </div>
-
-                          <div class="row px-3">
-                            <input type="radio" name="interventions2" id="10" value="10">
-                            <label for="10">
-                            21 days of lockdown followed by 30 days of [home quarantine of infected households, school-college closures, and offices working at half strength], case isolation thereafter
-                            </label>
-                          </div>
-                        </div>
-                    </fieldset>
-                </div>
-
-                <div class="row py-3">
-                  <div class="col"><label  for="compliance">Compliance Probability</label></div>
-                  <div class="col"><input  type="number" min="0" max="1" value="0.9"  id="compliance" ></div>
-                </div>
-            </div>
-
-            <div class="col-xl-8 col-md-5">
-              <div class="row justify-content-center">
-                <div id="sim_progress"></div>
-                <div class="d-flex p-2 bg-success text-white" style="visibility:hidden" id="status"></div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <div id="num_affected_plot_2"></div>
-                </div>
-                <div class="col">
-                  <div id="num_infected_plot_2"></div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col">
-                  <div id="num_hospitalised_plot_2"></div>
-                </div>
-                <div class="col">
-                  <div id="num_critical_plot_2"></div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col">
-                  <div id="num_fatalities_plot_2"></div>
-                </div>
-                <div class="col">
-                  <div id="lambda_evolution"></div>
-                </div>
-              </div> 
-                
-            </div>
-        </div>
-      </div>
-                  <div id="num_exposed_plot_2"></div>
-                  <div id="num_recovered_plot_2"></div>
-
-      <section id="footer">
-        <div class="d-flex bg-dark p-1 text-white justify-content-between">
-          <div class="d-flex px-3"><b><a href="mailto:contact.cni@iisc.ac.in" style="color:#ffff99"><i class="fa fa-envelope" aria-hidden="true"></i> contact.cni@iisc.ac.in</a></b></div>
-
-          <div class="d-flex px-3"><a style="color:#ffff99" target="_blank" href="https://cni.iisc.ac.in/simulator">https://cni.iisc.ac.in/simulator</a></div>
-          <div class="d-flex px-3">Licensed under Apache 2.0 license. Copyright [2020] [IISc, Bangalore and TIFR, Mumbai]</div>
-        </div>
-      </section>
-
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.1/math.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
-        <script type="text/javascript" src="https://d3js.org/d3-random.v2.min.js"></script>
-        <script type="text/javascript" src="simulator/javascripts/random-0.26.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.1/math.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
+  
+  <script type="text/javascript" src="https://d3js.org/d3-random.v2.min.js"></script>
+  <script type="text/javascript" src="simulator/javascripts/random-0.26.js"></script>
         <script type="text/javascript" src="simulator/javascripts/interventions.js"></script>
         <script type="text/javascript" src="simulator/javascripts/initialise_network.js"></script>
         <script type="text/javascript" src="simulator/javascripts/sim.js"></script>        
-    </body>
+  <script type="text/javascript" src="simulator/javascripts/splitter.js"></script>
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-164131064-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+    <!-- End Google Analytics -->
+</head>
+
+<body>
+
+  <!-- <div id="num_exposed_plot_2"></div>
+  <div id="num_recovered_plot_2"></div> -->
+  
+ 
+</body>
+
 </html>

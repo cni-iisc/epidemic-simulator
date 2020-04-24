@@ -46,11 +46,11 @@ const HOME_QUARANTINE = 2
 const LOCKDOWN = 3
 const CASE_ISOLATION_AND_HOME_QUARANTINE = 4
 const CASE_ISOLATION_AND_HOME_QUARANTINE_SD_70_PLUS = 5
-const LOCKDOWN_21_CI_HQ_SD_70_PLUS_21_CI = 6
-const LOCKDOWN_21 = 7
-const LD_21_CI_HQ_SD70_SC_21_SC_42 = 8
-const LD_21_CI_HQ_SD70_SC_21 = 9
-const LD_21_CI_HQ_SD70_SC_OE_30 = 10
+const LOCKDOWN_40_CI_HQ_SD_70_PLUS_21_CI = 6
+const LOCKDOWN_40 = 7
+const LD_40_CI_HQ_SD70_SC_21_SC_42 = 8
+const LD_40_CI_HQ_SD70_SC_21 = 9
+const LD_40_CI_HQ_SD70_SC_OE_30 = 10
 
 const HOME_QUARANTINE_DAYS = 14
 const SELF_ISOLATION_DAYS = 7
@@ -69,7 +69,7 @@ const DEAD = 7
 
 let csvContent = "data:text/csv;charset=utf-8,"; //for file dump
 
-INCUBATION_PERIOD = 2.3
+INCUBATION_PERIOD = 2.29
 MEAN_ASYMPTOMATIC_PERIOD = 0.5
 MEAN_SYMPTOMATIC_PERIOD = 5
 MEAN_HOSPITAL_REGULAR_PERIOD = 8
@@ -166,19 +166,19 @@ function set_compliance() {
         case CASE_ISOLATION_AND_HOME_QUARANTINE_SD_70_PLUS:
             val = 0.7;
             break;
-        case LOCKDOWN_21_CI_HQ_SD_70_PLUS_21_CI:
+        case LOCKDOWN_40_CI_HQ_SD_70_PLUS_21_CI:
             val = 0.9;
             break;
-        case LOCKDOWN_21:
+        case LOCKDOWN_40:
             val = 0.9;
             break;
-        case LD_21_CI_HQ_SD70_SC_21_SC_42:
+        case LD_40_CI_HQ_SD70_SC_21_SC_42:
             val = 0.9;
             break;
-        case LD_21_CI_HQ_SD70_SC_21:
+        case LD_40_CI_HQ_SD70_SC_21:
             val = 0.9;
             break;
-        case LD_21_CI_HQ_SD70_SC_OE_30:
+        case LD_40_CI_HQ_SD70_SC_OE_30:
             val = 0.9;
             break;
         default:
@@ -1212,20 +1212,20 @@ function update_all_kappa(nodes, homes, workplaces, communities, cur_time) {
             case CASE_ISOLATION_AND_HOME_QUARANTINE_SD_70_PLUS:
                 get_kappa_CI_HQ_70P(nodes, homes, workplaces, communities, current_time);
                 break;
-            case LOCKDOWN_21_CI_HQ_SD_70_PLUS_21_CI:
-                get_kappa_LOCKDOWN_21_CI_HQ_SD_70_PLUS_21_CI(nodes, homes, workplaces, communities, current_time);
+            case LOCKDOWN_40_CI_HQ_SD_70_PLUS_21_CI:
+                get_kappa_LOCKDOWN_40_CI_HQ_SD_70_PLUS_21_CI(nodes, homes, workplaces, communities, current_time);
                 break;
-            case LOCKDOWN_21:
-                get_kappa_LOCKDOWN_21(nodes, homes, workplaces, communities, current_time);
+            case LOCKDOWN_40:
+                get_kappa_LOCKDOWN_40(nodes, homes, workplaces, communities, current_time);
                 break;
-            case LD_21_CI_HQ_SD70_SC_21_SC_42:
-                get_kappa_LD_21_CI_HQ_SD70_SC_21_SC_42(nodes, homes, workplaces, communities, current_time);
+            case LD_40_CI_HQ_SD70_SC_21_SC_42:
+                get_kappa_LD_40_CI_HQ_SD70_SC_21_SC_42(nodes, homes, workplaces, communities, current_time);
                 break;
-            case LD_21_CI_HQ_SD70_SC_21:
-                get_kappa_LD_21_CI_HQ_SD70_SC_21(nodes, homes, workplaces, communities, current_time);
+            case LD_40_CI_HQ_SD70_SC_21:
+                get_kappa_LD_40_CI_HQ_SD70_SC_21(nodes, homes, workplaces, communities, current_time);
                 break;
-            case LD_21_CI_HQ_SD70_SC_OE_30:
-                get_kappa_LD_21_CI_HQ_SD70_SC_OE_30(nodes, homes, workplaces, communities, current_time);
+            case LD_40_CI_HQ_SD70_SC_OE_30:
+                get_kappa_LD_40_CI_HQ_SD70_SC_OE_30(nodes, homes, workplaces, communities, current_time);
                 break;
             default:
                 break;
@@ -1416,7 +1416,7 @@ function run_simulation() {
     document.getElementById("run_button").style.display = "none";
     document.getElementById("sim_stop").style.display = "inline";
 
-
+    document.getElementById('plots-area').style.display = 'block';
     const [homes, workplaces, communities, public_transports, nodes, community_distance_matrix, seed_array,
         days_num_affected, days_num_critical, days_num_exposed, days_num_fatalities, days_num_hospitalised, days_num_infected, days_num_recovered, lambda_evolution] = initialize_simulation();
     document.getElementById("status").innerHTML = "Starting to run Simulation...";
@@ -1426,7 +1426,8 @@ function run_simulation() {
 
     let plot_tuple = [days_num_infected, days_num_exposed, days_num_hospitalised, days_num_critical, days_num_fatalities, days_num_recovered, days_num_affected, lambda_evolution];
     call_plotly(plot_tuple);
-
+    document.getElementById("in-progress").style.display = 'none';
+    document.getElementById('plots-area').style.display = 'block';
 
     const interval = setInterval(function () {
         console.log("inside the interval stuff. time_step = ", time_step);
@@ -1522,7 +1523,7 @@ function plot_lambda_evolution(data, plot_position, title_text, legends) {
 
     var layout = {
         autosize: true,
-        width: 350,
+        width: 300,
         height: 300,
         barmode: 'stack',
         margin: {l:50, r:50, t:50, b:50},
@@ -1634,7 +1635,7 @@ function plot_plotly(data, plot_position, title_text, legends) {
 
     const layout = {
         autosize: true,
-        width: 350,
+        width: 300,
         height:300,
         margin: {l:50, r:50, t:50, b:50},
         xaxis: {
@@ -1722,17 +1723,25 @@ function runSimulations() {
 
 function clear_plots() {
     //clear previous plots
+    document.getElementById("no-data").style.display = 'none';
+    document.getElementById('plots-area').style.display = 'none';
+    document.getElementById("in-progress").style.display = 'block';
     document.getElementById("status").innerHTML = "Simulation in Progress....";
+    document.getElementById("status").style.display = 'inline'
     document.getElementById("num_affected_plot_2").innerHTML = "";
     document.getElementById("num_infected_plot_2").innerHTML = "";
-    document.getElementById("num_exposed_plot_2").innerHTML = "";
+    // document.getElementById("num_exposed_plot_2").innerHTML = "";
     document.getElementById("num_hospitalised_plot_2").innerHTML = "";
     document.getElementById("num_critical_plot_2").innerHTML = "";
     document.getElementById("num_fatalities_plot_2").innerHTML = "";
-    document.getElementById("num_recovered_plot_2").innerHTML = "";
+    // document.getElementById("num_recovered_plot_2").innerHTML = "";
     document.getElementById("lambda_evolution").innerHTML = "";
-
+    if($('body').hasClass('mobile')) {
+    $('.tabs li#right-btn').trigger('click');
+    }
+    setTimeout(function() {
     runSimulations();
+},1)
 }
 
 function set_default_values_html() {
@@ -1769,6 +1778,39 @@ function setCity (city) {
 //jquery events for the webUI
 //
 $(document).ready(function () {
+    if (window.matchMedia("(max-width: 767px)").matches)  {
+    fetch("simulator/html/body_mobile.html")
+  .then(response => {
+    return response.text()
+  })
+  .then(data => {
+    $("body").html(data).addClass('mobile');
+  }).then(()=>{
+    let h = $(window).outerHeight() - ($('.custom-header').outerHeight() + $('.sticky-footer').outerHeight());
+    $('.content-mobile, .left-pane, .right-pane').css('height',h - 25 );
+    set_default_values_html();
+    initListner();
+  });
+}
+
+else {
+    fetch("simulator/html/body_desktop.html")
+  .then(response => {
+    return response.text()
+  })
+  .then(data => {
+    $("body").html(data);
+  }).then(()=>{
+    let w = $(window).width() / 3
+    $("#MySplitter").splitter({resizeToWidth: true, sizeLeft:w});
+    set_default_values_html();
+    initListner();
+  });
+}
+});
+
+function initListner() {
+    
     $('#numDays').tooltip({'trigger':'focus', 'title': 'Number of days to run the simulation'});
     $('#Incubation').tooltip({'trigger':'focus', 'title': 'Once exposed to the virus, the mean duration before the exposed individual starts transmitting the virus.'});
 
@@ -1795,12 +1837,61 @@ $(document).ready(function () {
     $('#initFrac').tooltip({'trigger':'focus', 'title': 'What percentage of population is exposed to the virus? The residual incubation period is random.'});
 
     $('#compliance').tooltip({'trigger':'focus', 'title': 'What fraction of households are likely to follow the restrictions specified in the chosen intervention?'});
-});
 
-$('.selectpicker').change(function () {
-    var selectedItem = $('.selectpicker').val();
-    setCity(selectedItem);
-   });
+    $('.selectpicker').on('change', function () {
+        var selectedItem = $('.selectpicker').val();
+        setCity(selectedItem);
+       });
 
-set_default_values_html();
+       $('#toggleInfo').on('click',function() {
+        let att = $(this).attr('data-field');
+        if(($(this).next()).hasClass('tool-dec')) {
+            $(this).next().remove();
+        }
+        else {
+            $(this).after('<div class="tool-dec"><img width="100%" src="'+ IMAGEPREFIX +'/InfectionProgression.png" /></div>');
+        }
+    })
+
+    $('#about').on('shown.bs.collapse', function () {
+        $('.abt-toggle .down').hide();
+        $('.abt-toggle .up').show();
+      })
+      $('#about').on('hidden.bs.collapse', function () {
+        $('.abt-toggle .up').hide();
+        $('.abt-toggle .down').show();
+      })
+
+      $('.tabs li').on('click',function() {
+          let attr = $(this).attr('data-tab');
+          $('.tabs .active').removeClass('active');
+          $(this).addClass('active');
+          if(attr === 'left') {
+            $('#right').hide();
+              $('#left').show();
+          }
+          else {
+            $('#left').hide();
+            $('#right').show();
+          }
+          
+      })
+      if(!$('body').hasClass('mobile')) {
+      $(window).resize();
+      }
+}
+
+
+$(window).resize(function() {
+    if(!$('body').hasClass('mobile')) {
+    let h = $(window).outerHeight() - ($('.custom-header').outerHeight() + $('.footer').outerHeight());
+    $('.splitter-container').css('height',h);
+
+    let h1 = $('.splitter-container').outerHeight() - $('.run-btn-cnt').outerHeight();
+    $('.scroll').css('height',h1);
+
+    let h2 = $('.splitter-container').outerHeight() - $('.right-top').outerHeight();
+    $('.sim-lane').css('height',h2);
+    }
+})
 
