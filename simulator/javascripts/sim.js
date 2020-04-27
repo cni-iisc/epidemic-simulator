@@ -1537,6 +1537,7 @@ function plot_lambda_evolution(data, plot_position, title_text, legends) {
             x: 0.05,
         },
         xaxis: {
+            fixedrange: getFixedRange(),
             title: {
                 text: 'Days',
                 font: {
@@ -1547,6 +1548,7 @@ function plot_lambda_evolution(data, plot_position, title_text, legends) {
             },
         },
         yaxis: {
+            fixedrange: getFixedRange(),
             title: {
                 text: title_text,
                 font: {
@@ -1569,7 +1571,13 @@ function plot_lambda_evolution(data, plot_position, title_text, legends) {
     Plotly.newPlot(plot_position, data_plot, layout);
 }
 
+function getFixedRange() {
+    if($('body').hasClass('mobile')) {
+        return true;
+    }
 
+    return false;
+}
 function call_plotly(data_tuple) {
     var plot_values = data_tuple;
 
@@ -1639,6 +1647,7 @@ function plot_plotly(data, plot_position, title_text, legends) {
         height:300,
         margin: {l:50, r:50, t:50, b:50},
         xaxis: {
+            fixedrange: getFixedRange(),
             title: {
                 text: 'Days',
                 font: {
@@ -1649,6 +1658,7 @@ function plot_plotly(data, plot_position, title_text, legends) {
             }
         },
         yaxis: {
+            fixedrange: getFixedRange(),
             title: {
                 text: title_text,
                 font: {
