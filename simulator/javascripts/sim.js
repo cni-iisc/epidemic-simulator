@@ -1843,13 +1843,29 @@ function initListner() {
         setCity(selectedItem);
        });
 
-       $('#toggleInfo').on('click',function() {
+       $('.toggleInfo').on('click',function() {
         let att = $(this).attr('data-field');
+        let htmlInner;
+        switch(att) {
+            case 'DiseaseProgression':
+                htmlInner =  '<img width="100%" src="'+ IMAGEPREFIX +'/InfectionProgression-v2.png" />'
+                break;
+            case 'Intervention':
+                htmlInner = `<span>Simulations under all scenarios are assumed to begin on March 1, 2020. Interventions begin on March 25, aligned with the national lockdown start date. They continue for the indicated duration (or indefinitely if not specified)
+                    <br></br>
+                <b>Case Isolation</b>: One day after onset of symptoms, the individual is assumed to stay isolated at home for a period of seven days.
+                <br></br>
+                <b>Home Quarantine</b>: One day after onset of symptoms, all members of the individual's household stay at home for fourteen days.
+                <br></br>
+                <b>Lockdown</b>: All schools and colleges are closed. Only essential services are operational. Community interactions are also reduced.
+                </span>`
+                break;
+        }
         if(($(this).next()).hasClass('tool-dec')) {
             $(this).next().remove();
         }
         else {
-            $(this).after('<div class="tool-dec"><img width="100%" src="'+ IMAGEPREFIX +'/InfectionProgression.png" /></div>');
+            $(this).after(`<div class="tool-dec">${htmlInner}</div>`);
         }
     })
 

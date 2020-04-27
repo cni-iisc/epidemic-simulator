@@ -218,7 +218,9 @@
          background-color:#009933;
          padding: 0 3rem;
        }
-
+       .tool-dec {
+        font-size: 12px;
+    }
        .mobile .custom-header{
         padding: 5px 0;
        }
@@ -226,6 +228,10 @@
        .mobile .left-pane, .mobile .right-pane {
          padding: 0 5px;
          overflow: auto;
+       }
+
+       .mobile .left-pane {
+        overflow-x: hidden !important;
        }
 
        .mobile .scroll, .mobile .sim-lane {
