@@ -1,0 +1,13 @@
+[{
+	"num_days": 1,
+	"compliance" : 0.9,
+	"case_isolation": {
+		"active": true
+    },
+    "home_quarantine": {
+		"active": true
+	},
+    "social_dist_elderly": {
+		"active": true
+	}
+}]

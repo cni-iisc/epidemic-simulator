@@ -16,7 +16,6 @@ import pandas as pd
 import time
 
 NUM_DAYS=120
-INIT_FRAC_INFECTED=0.0001
 INCUBATION_PERIOD=2.3
 MEAN_ASYMPTOMATIC_PERIOD=0.5
 MEAN_SYMPTOMATIC_PERIOD=5
@@ -24,18 +23,25 @@ SYMPTOMATIC_FRACTION=0.67
 MEAN_HOSPITAL_REGULAR_PERIOD=8
 MEAN_HOSPITAL_CRITICAL_PERIOD=8
 COMPLIANCE_PROBABILITY=0.9
-F_KERNEL_A= 10.751
-F_KERNEL_B= 5.384
-BETA_H=1.0304629560864003
-BETA_W=0.5167008726604188
-BETA_C=0.20141643387387292
-BETA_S=1.0334017453208375
+
+##########################################################################################################
+### IMPORTANT: Check if these value fit the city we want to calibrate on. Currently set to Mumbai values #
+##########################################################################################################
+
+F_KERNEL_A= 2.709
+F_KERNEL_B= 1.278
+BETA_H=0.91100
+BETA_W=0.48803
+BETA_C=0.22089
+BETA_S=0.97607
 BETA_TRAVEL=0
+
+
 HD_AREA_FACTOR=2.0
 HD_AREA_EXPONENT=0
 INTERVENTION=0
-output_directory_base="/home/nihesh/Documents/covid_19_bangalore/sim_data"
-input_directory="/home/nihesh/Documents/covid_19_bangalore/markov_simuls/simulator/input_files"
+output_directory_base="../../cpp-simulator/outputs/calibration_2020-05-31/"
+input_directory="../../staticInst/data/mumbai_1million_2020-05-31"
 CALIBRATION_DELAY=0
 DAYS_BEFORE_LOCKDOWN=0
 # Set this to "--SEED_HD_AREA_POPULATION" to seed hd area population
@@ -54,7 +60,7 @@ SEED_FIXED_NUMBER="--SEED_FIXED_NUMBER"
 INIT_FIXED_NUMBER_INFECTED=100
 INTERVENTION=0
 EXEC_DIR = "./../../cpp-simulator"
-
+LOGFILE = output_directory_base + "/calibration.log"
 ######################
 def calculate_means_fatalities_CPP(output_directory_base, num_sims,results_dir):
     column_names = ['timestep','dead']
@@ -101,7 +107,6 @@ def run_sim(num_sims_count, params):
     command+=params['seedOnlyNonCommuter'] + " "
     command+=params['seedFixedNumber']
     command+=" --NUM_DAYS "+ str(params['numDays'])
-    command+=" --INIT_FRAC_INFECTED " + str(params['initFracInfected'])
     command+=" --INIT_FIXED_NUMBER_INFECTED "+ str(params['initFixedNumberInfected'])
     command+=" --INCUBATION_PERIOD " +  str(params['incubationPeriod'])
     command+=" --MEAN_ASYMPTOMATIC_PERIOD " +  str(params['MeanAsymptomaticPeriod']) 
@@ -120,6 +125,7 @@ def run_sim(num_sims_count, params):
     command+=" --HD_AREA_FACTOR " + str(params['hdAreaFactor'])
     command+=" --HD_AREA_EXPONENT " + str(params['hdAreaExponent'])
     command+=" --INTERVENTION " + str(params['intervention'])
+    command+=" --IGNORE_ATTENDANCE_FILE "
     command+=" --output_directory " + str(output_directory)
     command+=" --input_directory " + str(params['inputDirectory'])
     command+=" --CALIBRATION_DELAY " + str(params['calibrationDelay'])
@@ -136,7 +142,7 @@ continue_run = True
 resolution = 4
 num_sims = 6 #cpu_count()/2
 count = 0
-num_cores = 2 #cpu_count()
+num_cores = 12 #cpu_count()
 
 print ('Cpu count: ', num_cores)
 
@@ -144,7 +150,7 @@ while (continue_run):
    
     params = { 'execDir': EXEC_DIR,'seedHDAreaPopulation': SEED_HD_AREA_POPULATION, 'seedOnlyNonCommuter': SEED_ONLY_NON_COMMUTER,
                'seedFixedNumber':SEED_FIXED_NUMBER, 'seedFixedNumber':SEED_FIXED_NUMBER, 'numDays': NUM_DAYS, 
-               'initFracInfected': INIT_FRAC_INFECTED, 'initFixedNumberInfected': INIT_FIXED_NUMBER_INFECTED, 'incubationPeriod': INCUBATION_PERIOD, 
+               'initFixedNumberInfected': INIT_FIXED_NUMBER_INFECTED, 'incubationPeriod': INCUBATION_PERIOD, 
                'MeanAsymptomaticPeriod': MEAN_ASYMPTOMATIC_PERIOD, 'MeanSymptomaticPeriod': MEAN_SYMPTOMATIC_PERIOD, 'symptomaticFraction': SYMPTOMATIC_FRACTION, 
                'meanHospitalRegularPeriod': MEAN_HOSPITAL_REGULAR_PERIOD, 'meanHospitalCriticalPeriod': MEAN_HOSPITAL_CRITICAL_PERIOD, 
                'complianceProbability': COMPLIANCE_PROBABILITY, 'FKernelA': F_KERNEL_A, 'FKernelB': F_KERNEL_B, 
@@ -163,7 +169,16 @@ while (continue_run):
     calculate_means_fatalities_CPP(output_directory_base, num_sims,"./data/")
     calculate_means_lambda_CPP(output_directory_base, num_sims,"./data/") 
     
-    [flag, BETA_SCALE_FACTOR, step_beta_h, step_beta_w, step_beta_c, delay] = calibrate(resolution,count)
+    [flag, BETA_SCALE_FACTOR, step_beta_h, step_beta_w, step_beta_c, delay, slope_diff, lambda_h_diff, lambda_w_diff, lambda_c_diff] = calibrate(resolution,count)
+    with open(LOGFILE, "a+") as logfile:
+        logfile.write(f"beta_h: {BETA_H}\n")
+        logfile.write(f"beta_w: {BETA_W}\n")
+        logfile.write(f"beta_c: {BETA_C}\n")
+        logfile.write(f"beta_s: {BETA_S}\n")
+        logfile.write(f"slope_diff: {slope_diff}\n")
+        logfile.write(f"lambda_h_diff: {lambda_h_diff}\n")
+        logfile.write(f"lambda_w_diff: {lambda_w_diff}\n")
+        logfile.write(f"lambda_c_diff: {lambda_c_diff}\n\n\n")        
     count+=1    
     if flag == True:
         continue_run = False
@@ -173,6 +188,7 @@ while (continue_run):
         BETA_S = BETA_W * 2
         BETA_C = max(BETA_C + step_beta_c,0)*BETA_SCALE_FACTOR
         #INIT_FRAC_SCALE_FACTOR = INIT_FRAC_SCALE_FACTOR*init_frac_mult_factor
+        print("\n\n\n")
         print ("count:", count, '. BETA_H: ', BETA_H, '. BETA_W: ',BETA_W, '. BETA_S: ', BETA_S, '. BETA_C: ', BETA_C, 'Delay: ', delay )
     #continue_run = False
 

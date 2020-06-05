@@ -47,6 +47,7 @@ string intervention_rep(Intervention i){
 	break;
   case Intervention::lockdown_fper:
 	return "lockdown_fper";
+	break;
   case Intervention::ld_fper_ci_hq_sd65_sc_sper_sc_tper:
 	return "ld_fper_ci_hq_sd65_sc_sper_sc_tper";
 	break;
@@ -55,6 +56,27 @@ string intervention_rep(Intervention i){
 	break;
   case Intervention::ld_fper_ci_hq_sd65_sc_oe_sper:
 	return "ld_fper_ci_hq_sd65_sc_oe_sper";
+	break;
+  case Intervention::intv_fper_intv_sper_intv_tper:
+	return "intv_fper_intv_sper_intv_tper";
+	break;
+  case Intervention::intv_NYC:
+	return "intv_NYC";
+	break;
+  case Intervention::intv_Mum:
+	return "intv_Mum";
+	break;
+  case Intervention::intv_Mum_cyclic:
+	return "intv_Mum_cyclic";
+	break;
+  case Intervention::intv_nbr_containment:
+	return "intv_nbr_containment";
+	break;
+  case Intervention::intv_ward_containment:
+	return "intv_ward_containment";
+	break;
+  case Intervention::intv_file_read:
+	return "intv_file_read";
 	break;
   default:
 	assert(false);
@@ -94,10 +116,34 @@ void output_timed_csv(const std::vector<std::string>& field_row, const std::stri
   fout.close();
 }
 
+void output_copy_file(const string& input_file, const string& output_file){
+  std::ofstream fout(output_file, std::ios::out | std::ios::binary);
+  check_stream(fout, output_file);
+
+  std::ifstream fin(input_file, std::ios::in | std::ios::binary);
+
+  constexpr auto BUF_SIZE = 4096;
+  std::streamsize count;
+  char buffer[BUF_SIZE];
+  do {
+	fin.read(&buffer[0], BUF_SIZE);
+	count = fin.gcount();
+	fout.write(&buffer[0], count);
+  } while(count > 0);
+
+  fin.close();
+  fout.close();
+}
+
 void output_global_params(const string& output_dir){
   std::string global_params_path = output_dir + "/global_params.txt";
-  std::ofstream fout(output_dir + "/global_params.txt", std::ios::out);
+  std::ofstream fout(global_params_path, std::ios::out);
   check_stream(fout, global_params_path);
+
+  fout << "GIT COMMIT HASH: " << GIT_HASH << ";" << endl;
+  fout << "GIT TREE STATE: " << GIT_TREE_STATE << ";" << endl;
+
+  fout << "RNG_SEED: " << GLOBAL.RNG_SEED << ";" << endl;
 
   fout << "COMPLIANCE_PROBABILITY: " << GLOBAL.COMPLIANCE_PROBABILITY << ";" << endl; 
   
@@ -143,13 +189,18 @@ void output_global_params(const string& output_dir){
   fout << "HOSPITAL_CRITICAL_PERIOD: " << GLOBAL.HOSPITAL_CRITICAL_PERIOD << ";" << endl; 
   fout << "SYMPTOMATIC_FRACTION: " << GLOBAL.SYMPTOMATIC_FRACTION << ";" << endl; 
 
-  fout << "INTERVENTION: " << static_cast<count_type>(GLOBAL.INTERVENTION) << ";" << endl; 
+  fout << "INTERVENTION: " << static_cast<count_type>(GLOBAL.INTERVENTION)
+	   << ", " << intervention_rep(GLOBAL.INTERVENTION) << ";" << endl;
+
+  //Cylic policy
+  fout << "CYCLIC_POLICY_TYPE: " << static_cast<count_type>(GLOBAL.CYCLIC_POLICY_TYPE) << ";" << endl;
+  fout << "CYCLIC_POLICY_START_DAY: " << GLOBAL.CYCLIC_POLICY_START_DAY << ";" << endl;
 
   // Beta values
-  fout << "BETA_H: " << GLOBAL.BETA_H << ";" << endl;  //Thailand data
-  fout << "BETA_W: " << GLOBAL.BETA_W << ";" << endl;  //Thailand data
-  fout << "BETA_S: " << GLOBAL.BETA_S << ";" << endl;  //Thailand data
-  fout << "BETA_C: " << GLOBAL.BETA_C << ";" << endl;  // Thailand data. Product = 0.47
+  fout << "BETA_H: " << GLOBAL.BETA_H << ";" << endl;
+  fout << "BETA_W: " << GLOBAL.BETA_W << ";" << endl;
+  fout << "BETA_S: " << GLOBAL.BETA_S << ";" << endl;
+  fout << "BETA_C: " << GLOBAL.BETA_C << ";" << endl;
 
   fout << "ALPHA: " << GLOBAL.ALPHA << ";" << endl; 
 
@@ -172,8 +223,30 @@ void output_global_params(const string& output_dir){
   fout << "USE_SAME_INFECTION_PROB_FOR_ALL_WARDS: " << GLOBAL.USE_SAME_INFECTION_PROB_FOR_ALL_WARDS << ";" << endl;
   fout << "SEED_HD_AREA_POPULATION: " << GLOBAL.SEED_HD_AREA_POPULATION << ";" << endl;
   fout << "SEED_ONLY_NON_COMMUTER: " << GLOBAL.SEED_ONLY_NON_COMMUTER << ";" << endl;
+  fout << "LOCKED_COMMUNITY_LEAKAGE: " << GLOBAL.LOCKED_COMMUNITY_LEAKAGE << ";" << endl;
+
+  fout << "IGNORE_ATTENDANCE_FILE: " << GLOBAL.IGNORE_ATTENDANCE_FILE << ";" << endl;
+  fout << "MASK_ACTIVE: " << GLOBAL.MASK_ACTIVE << ";" << endl;
+  fout << "MASK_FACTOR: " << GLOBAL.MASK_FACTOR << ";" << endl;
+  fout << "MASK_START_DATE: " << GLOBAL.MASK_START_DATE << ";" << endl;
+
+  fout << "WARD_CONTAINMENT_THRESHOLD:" <<GLOBAL.WARD_CONTAINMENT_THRESHOLD << ";"<< endl;
+  fout << "ENABLE_CONTAINMENT:" <<GLOBAL.ENABLE_CONTAINMENT << ";"<< endl;
   
   fout.close();
+
+  //Copy the attendance file
+  if(!GLOBAL.IGNORE_ATTENDANCE_FILE){
+	output_copy_file(GLOBAL.input_base + GLOBAL.attendance_filename,
+					 output_dir + "/attendance_file.json");
+  }
+
+  //Copy the intervention file
+  if(GLOBAL.INTERVENTION==Intervention::intv_file_read){
+	output_copy_file(GLOBAL.input_base + GLOBAL.intervention_filename,
+					 output_dir + "/intervention_params.json");
+  }
+
 }
 
 
@@ -221,12 +294,33 @@ void output_csv_files(const std::string& output_directory,
 	if(elem.first == "csvContent"){
 	  //This file contains everything!
 	  output_timed_csv({"community",
-						"infected",
 						"affected",
+						"susceptible",
+						"exposed",
+						"infective",
+						"symptomatic",
 						"hospitalised",
 						"critical",
 						"dead",
-						"hd_area_affected"},
+						"recovered",
+						"recovered_from_infective",
+						"recovered_from_symptomatic",
+						"recovered_from_hospitalised",
+						"recovered_from_critical",
+						"hd_area_affected",
+						"hd_area_susceptible",
+						"hd_area_exposed",
+                        "hd_area_infective",
+						"hd_area_symptomatic",
+                        "hd_area_hospitalised",
+                        "hd_area_critical",
+                        "hd_area_dead",
+						"hd_area_recovered",
+						"hd_area_recovered_from_infective",
+						"hd_area_recovered_from_symptomatic",
+						"hd_area_recovered_from_hospitalised",
+						"hd_area_recovered_from_critical"
+		},
 		csvfile_path, elem.second);
 	} else {
 	  output_timed_csv({elem.first},
@@ -274,5 +368,34 @@ void output_csv_files(const std::string& output_directory,
 					 csvfile_path,
 					 elem.second);
 	gnuplot.plot_data(elem.first);
+  }
+
+  //Now output infections by individuals that became infective at this time
+  for(const auto& elem: plot_data.infections_by_new_infectives){
+	std::string csvfile_name = elem.first + ".csv";
+	std::string csvfile_path = output_directory + "/" + csvfile_name;
+	output_timed_csv({elem.first},
+					 csvfile_path,
+					 elem.second);
+	gnuplot.plot_data(elem.first);
+  }
+  
+  for(const auto& elem: plot_data.quarantined_stats){
+    std::string csvfile_name = elem.first + ".csv";
+    std::string csvfile_path = output_directory + "/" + csvfile_name;
+    //This file contains quarantine_stats
+    output_timed_csv({"quarantined_individuals",
+            "quarantined_infectious",
+            "quarantined_cases"},
+    csvfile_path, elem.second);
+  }
+
+  for(const auto& elem: plot_data.curtailment_stats){
+    std::string csvfile_name = elem.first + ".csv";
+    std::string csvfile_path = output_directory + "/" + csvfile_name;
+    //This file contains quarantine_stats
+    output_timed_csv({"normal_interactions",
+            "curtailed_interactions"},
+    csvfile_path, elem.second);
   }
 }

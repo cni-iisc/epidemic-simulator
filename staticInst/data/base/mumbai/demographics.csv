@@ -1,25 +1,49 @@
-wardIndex,wardNo,wardName,area(sq km),totalPopulation
-0,1,Colaba,12.5,185014
-1,2,Sandhurst Road,2.5,127290
-2,3,Marine Lines,1.8,166161
-3,4,Grant Road,6.6,346866
-4,5,Byculla,7.4,393286
-5,6,Matunga,13,529034
-6,7,Parel,14,360972
-7,8,Dadar/Plaza,9.1,599039
-8,9,Elphinstone,10,377749
-9,10,Khar/Santacruz,13.5,557239
-10,11,Bandra,11.6,307581
-11,12,Andheri (East),24.8,823885
-12,13,Andheri (West),23.4,748688
-13,14,Kurla,15.9,902225
-14,15,Chembur,32.5,807720
-15,16,Chembur (West),19.5,411893
-16,17,Ghatkopar,26,622853
-17,18,Malad,19.1,941366
-18,19,Goregaon,24.4,463507
-19,20,Borivali,50,562162
-20,21,Dahisar,18,431368
-21,22,Kandivali,17.8,691229
-22,23,Bhandup,64,743783
-23,24,Mulund,45.4,341463
+wardIndex,wardNo,BMC_ID,wardName,area.sq.km.,totalPopulation,hd_flag
+0,1,A,Colaba,12.5,162732,0
+1,2,B,Sandhurst Road,2.5,114579,0
+2,3,C,Marine Lines,1.8,149590,0
+3,4,D,Grant Road,6.6,312167,0
+4,5,E,Byculla,7.4,269092,0
+5,6,F/N,Matunga,13,290906,0
+6,7,F/S,Parel,14,180844,0
+7,8,G/N,Dadar/Plaza,10,237365,0
+8,9,G/S,Elphinstone,9.1,253443,0
+9,10,H/E,Khar/Santacruz,13.5,168316,0
+10,11,H/W,Bandra,11.6,225029,0
+11,12,K/E,Andheri (East),24.8,251067,0
+12,13,K/W,Andheri (West),23.4,533010,0
+13,14,L,Kurla,15.9,144117,0
+14,15,M/E,Chembur (East),32.5,121726,0
+15,16,M/W,Chembur (West),19.5,246901,0
+16,17,N,Ghatkopar,26,373624,0
+17,18,P/N,Malad,19.1,233119,0
+18,19,P/S,Goregaon,24.4,232678,0
+19,20,R/C,Borivali,50,389313,0
+20,21,R/N,Dahisar,18,150217,0
+21,22,R/S,Kandivali,17.8,276834,0
+22,23,S,Bhandup,64,335341,0
+23,24,T,Mulund,45.4,255903,0
+24,25,A_hd,Colaba_hd,12.5,22282,1
+25,26,B_hd,Sandhurst Road_hd,2.5,12711,1
+26,27,C_hd,Marine Lines_hd,1.8,16571,1
+27,28,D_hd,Grant Road_hd,6.6,34699,1
+28,29,E_hd,Byculla_hd,7.4,124194,1
+29,30,F/N_hd,Matunga_hd,13,238128,1
+30,31,F/S_hd,Parel_hd,14,180128,1
+31,32,G/N_hd,Dadar/Plaza_hd,10,361674,1
+32,33,G/S_hd,Elphinstone_hd,9.1,124306,1
+33,34,H/E_hd,Khar/Santacruz_hd,13.5,388923,1
+34,35,H/W_hd,Bandra_hd,11.6,82552,1
+35,36,K/E_hd,Andheri (East)_hd,24.8,572818,1
+36,37,K/W_hd,Andheri (West)_hd,23.4,215678,1
+37,38,L_hd,Kurla_hd,15.9,758108,1
+38,39,M/E_hd,Chembur (East)_hd,32.5,685994,1
+39,40,M/W_hd,Chembur (West)_hd,19.5,164992,1
+40,41,N_hd,Ghatkopar_hd,26,249229,1
+41,42,P/N_hd,Malad_hd,19.1,708247,1
+42,43,P/S_hd,Goregaon_hd,24.4,230829,1
+43,44,R/C_hd,Borivali_hd,50,172849,1
+44,45,R/N_hd,Dahisar_hd,18,281151,1
+45,46,R/S_hd,Kandivali_hd,17.8,414395,1
+46,47,S_hd,Bhandup_hd,64,408442,1
+47,48,T_hd,Mulund_hd,45.4,85560,1

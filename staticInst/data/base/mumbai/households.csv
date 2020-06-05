@@ -1,25 +1,49 @@
-wardIndex,wardNo,wardName,Households
-0,1,Colaba,43866
-1,2,Sandhurst Road,27140
-2,3,Marine Lines,36479
-3,4,Grant Road,77556
-4,5,Byculla,78346
-5,6,Matunga,119624
-6,7,Parel,79733
-7,8,Elphinstone,83457
-8,9,Dadar/Plaza,128138
-9,10,Khar/Santacruz,120266
-10,11,Bandra,72943
-11,12,Andheri (East),190845
-12,13,Andheri (West),168076
-13,14,Kurla,186833
-14,15,Chembur (East),166400
-15,16,Chembur (West),93607
-16,17,Ghatkopar,137885
-17,18,Malad,211642
-18,19,Goregaon,106922
-19,20,Borivali,134795
-20,21,Dahisar,104091
-21,22,Kandivali,159639
-22,23,Bhandup,169962
-23,24,Mulund,81698
+wardIndex,wardNo,BMC_ID,wardName,Households,hd_flag
+0,1,A,Colaba,-1,0
+1,2,B,Sandhurst Road,-1,0
+2,3,C,Marine Lines,-1,0
+3,4,D,Grant Road,-1,0
+4,5,E,Byculla,-1,0
+5,6,F/N,Matunga,-1,0
+6,7,F/S,Parel,-1,0
+7,8,G/N,Dadar/Plaza,-1,0
+8,9,G/S,Elphinstone,-1,0
+9,10,H/E,Khar/Santacruz,-1,0
+10,11,H/W,Bandra,-1,0
+11,12,K/E,Andheri (East),-1,0
+12,13,K/W,Andheri (West),-1,0
+13,14,L,Kurla,-1,0
+14,15,M/E,Chembur (East),-1,0
+15,16,M/W,Chembur (West),-1,0
+16,17,N,Ghatkopar,-1,0
+17,18,P/N,Malad,-1,0
+18,19,P/S,Goregaon,-1,0
+19,20,R/C,Borivali,-1,0
+20,21,R/N,Dahisar,-1,0
+21,22,R/S,Kandivali,-1,0
+22,23,S,Bhandup,-1,0
+23,24,T,Mulund,-1,0
+24,25,A_hd,Colaba_hd,-1,1
+25,26,B_hd,Sandhurst Road_hd,-1,1
+26,27,C_hd,Marine Lines_hd,-1,1
+27,28,D_hd,Grant Road_hd,-1,1
+28,29,E_hd,Byculla_hd,-1,1
+29,30,F/N_hd,Matunga_hd,-1,1
+30,31,F/S_hd,Parel_hd,-1,1
+31,32,G/N_hd,Dadar/Plaza_hd,-1,1
+32,33,G/S_hd,Elphinstone_hd,-1,1
+33,34,H/E_hd,Khar/Santacruz_hd,-1,1
+34,35,H/W_hd,Bandra_hd,-1,1
+35,36,K/E_hd,Andheri (East)_hd,-1,1
+36,37,K/W_hd,Andheri (West)_hd,-1,1
+37,38,L_hd,Kurla_hd,-1,1
+38,39,M/E_hd,Chembur (East)_hd,-1,1
+39,40,M/W_hd,Chembur (West)_hd,-1,1
+40,41,N_hd,Ghatkopar_hd,-1,1
+41,42,P/N_hd,Malad_hd,-1,1
+42,43,P/S_hd,Goregaon_hd,-1,1
+43,44,R/C_hd,Borivali_hd,-1,1
+44,45,R/N_hd,Dahisar_hd,-1,1
+45,46,R/S_hd,Kandivali_hd,-1,1
+46,47,S_hd,Bhandup_hd,-1,1
+47,48,T_hd,Mulund_hd,-1,1
