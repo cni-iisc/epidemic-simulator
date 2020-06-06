@@ -1,0 +1,7 @@
+[{
+	"num_days": 1,
+	"compliance" : 0.9,
+	"lockdown": {
+		"active": true
+	}
+}]

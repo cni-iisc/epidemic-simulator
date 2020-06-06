@@ -79,10 +79,9 @@ above.  Note that the INTERVENTION parameter must be a positive integer.  The
 following interventions are implemented (along with the integer value that one
 needs to provide to run them).
 
-|------+-----------------------------------------------|
-| Code | Identifier for intervention                   |
-|------+-----------------------------------------------|
-|    0 | no_intervention,                              |
+| Code | Identifier for intervention|
+| --: | :-- |
+|    0 | no_intervention|
 |    1 | case_isolation                                |
 |    2 | home_quarantine                               |
 |    3 | lockdown                                      |
@@ -93,7 +92,6 @@ needs to provide to run them).
 |    8 | ld_fper_ci_hq_sd65_sc_sper_sc_tper            |
 |    9 | ld_fper_ci_hq_sd65_sc_sper                    |
 |   10 | ld_fper_ci_hq_sd65_sc_oe_sper                 |
-|------+-----------------------------------------------|
 
 
 The output of the program will be generated in the `output_directory` that you
@@ -110,13 +108,13 @@ for Mumbai is called `drive_simulator_mum.sh`.  To run the code in this method,
 you will have to edit the driver script (say `drive_simulator_mum.sh`) where you
 can specify:
 
-1) The input parameters.
+1. The input parameters.
 
-2) The directory where the output will be generated (The `output_directory_base`
+2. The directory where the output will be generated (The `output_directory_base`
 	parameter in the file).  This option can also be passed to the script from
 	the command line as shown below.
 
-3) The directory in which the input files reside. (The `input_directory`
+3. The directory in which the input files reside. (The `input_directory`
 	parameter in the file.)  This option can also be passed to the script from
 	the command line as shown below.
 
@@ -134,11 +132,10 @@ The main simulator executable is still `drive_simulator`.
 
 #### Viewing the output
 
-The output can now be seen by using your favorite browser to open the
-`plots.html` files in the output directories.
+The binary `drive_simulator` generates output as a set of csv files with information during each timestep. It also generates a `gnuplot` script file called `gnuplot_script.gnuplot`. If you have `gnuplot` installed, you may go to the folder and run `gnuplot gnuplot_script.gnuplot` and it will generate some prepecified plots that you can also view on using your favorite browser to open the `plots.html` files in the output directories.
 
-	- There will be one output directory per intervention (inside the directory you specified), containing the plots just for that intervention.
-	- In addition, in the top level directory (the one you specified)q with plots which plot the observable variables for all the interventions on the same plot.
+- There will be one output directory per intervention (inside the directory you specified), containing the plots just for that intervention.
+- In addition, in the top level directory (the one you specified) with plots which plot the observable variables for all the interventions on the same plot.
 
 The per intervention directories also have the raw CSV files from
 which the plots are generated.

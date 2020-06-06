@@ -10,6 +10,7 @@
 #include <vector>
 #include <random>
 #include <string>
+#include <cmath>
 
 #include "models.h"
 #include "initializers.h"
@@ -43,12 +44,28 @@ vector<house> init_homes(){
   auto size = houseJSON.GetArray().Size();
   vector<house> homes(size);
   GLOBAL.num_homes = size;
-
+  double temp_non_compliance_metric = 0;
   count_type index = 0;
   for (auto &elem: houseJSON.GetArray()){
+	temp_non_compliance_metric = get_non_compliance_metric();
 	homes[index].set(elem["lat"].GetDouble(),
 					 elem["lon"].GetDouble(),
-					 compliance());
+					 (temp_non_compliance_metric<=GLOBAL.COMPLIANCE_PROBABILITY)?1.0:0,
+					 temp_non_compliance_metric);
+
+	//Cyclic strategy class
+	if(GLOBAL.CYCLIC_POLICY_ENABLED && GLOBAL.CYCLIC_POLICY_TYPE == Cycle_Type::home){
+	  homes[index].cyclic_strategy_class = uniform_count_type(0, GLOBAL.NUMBER_OF_CYCLIC_CLASSES - 1);
+	}
+
+	if(GLOBAL.ENABLE_CONTAINMENT) { 
+		set_nbr_cell(homes[index]);
+	}
+
+    homes[index].age_independent_mixing = 0;
+	if(GLOBAL.USE_AGE_DEPENDENT_MIXING){
+	  homes[index].age_dependent_mixing.resize(GLOBAL.NUM_AGE_GROUPS, 0);
+	}
 	++index;
   }
   return homes;
@@ -73,14 +90,25 @@ vector<workplace> init_workplaces() {
 	wps[index].set(elem["lat"].GetDouble(),
 				   elem["lon"].GetDouble(),
 				   WorkplaceType::school);
-	++index;
+    
+    wps[index].age_independent_mixing = 0;
+	if(GLOBAL.USE_AGE_DEPENDENT_MIXING){
+	  wps[index].age_dependent_mixing.resize(GLOBAL.NUM_AGE_GROUPS, 0);
+	}
+    ++index;
   }
   assert(index == GLOBAL.num_schools);
   for (auto &elem: wpJSON.GetArray()){
 	wps[index].set(elem["lat"].GetDouble(),
 				   elem["lon"].GetDouble(),
 				   WorkplaceType::office);
-	++index;
+
+    wps[index].office_type = static_cast<OfficeType>(elem["officeType"].GetInt());
+    wps[index].age_independent_mixing = 0;
+	if(GLOBAL.USE_AGE_DEPENDENT_MIXING){
+	  wps[index].age_dependent_mixing.resize(GLOBAL.NUM_AGE_GROUPS, 0);
+	}
+    ++index;
   }
   assert(index == GLOBAL.num_schools + GLOBAL.num_workplaces);
   return wps;
@@ -109,6 +137,134 @@ vector<community> init_community() {
 	   });
   return communities;
 }
+
+matrix<nbr_cell> init_nbr_cells() {
+
+  matrix<nbr_cell> nbr_cells;
+
+  if(GLOBAL.ENABLE_CONTAINMENT){
+	location loc_temp;
+
+	loc_temp.lat = GLOBAL.city_SW.lat;
+	loc_temp.lon = GLOBAL.city_NE.lon;
+	count_type num_x_grids = ceil(earth_distance(GLOBAL.city_SW,loc_temp)/GLOBAL.NBR_CELL_SIZE);
+	nbr_cells.resize(num_x_grids);
+
+	loc_temp.lon = GLOBAL.city_SW.lon;
+	loc_temp.lat = GLOBAL.city_NE.lat;
+	count_type num_y_grids = ceil(earth_distance(GLOBAL.city_SW,loc_temp)/GLOBAL.NBR_CELL_SIZE);
+
+	for(count_type count_x_grid = 0; count_x_grid < num_x_grids; ++count_x_grid){
+		nbr_cells[count_x_grid].resize(num_y_grids);
+		for(count_type count_y_grid = 0; count_y_grid < num_y_grids; ++count_y_grid){
+			nbr_cells[count_x_grid][count_y_grid].neighbourhood.cell_x = count_x_grid;
+			nbr_cells[count_x_grid][count_y_grid].neighbourhood.cell_y = count_y_grid;
+		}
+	} 
+  }  
+  return nbr_cells;
+}
+
+void print_intervention_params(const int index, const intervention_params intv_params){
+	std::cout<<std::endl<<"Index : "<<index<<". num_days = "<<	intv_params.num_days;
+	std::cout<<". Case Isolation : " << intv_params.case_isolation;
+	std::cout<<". Home Quarantine : " << intv_params.home_quarantine;
+	std::cout<<". Lockdown : " << intv_params.lockdown;
+	std::cout<<". SDO : " << intv_params.social_dist_elderly;
+	std::cout<<". School Closed : " << intv_params.school_closed;
+	std::cout<<". workplace_odd_even : " << intv_params.workplace_odd_even;
+	std::cout<<". SC_factor : " << intv_params.SC_factor;
+	std::cout<<". community_factor : " << intv_params.community_factor;
+	std::cout<<". neighbourhood_containment : " << intv_params.neighbourhood_containment;
+	std::cout<<". ward_containment : " << intv_params.ward_containment;
+	std::cout<<". compliance : " << intv_params.compliance;
+	std::cout<<". compliance_hd : " << intv_params.compliance_hd;
+	std::cout<<". trains_active : " << intv_params.trains_active;
+	std::cout<<". fraction_forced_to_take_train : " << intv_params.fraction_forced_to_take_train;
+}
+
+vector<intervention_params> init_intervention_params(){
+  vector<intervention_params> intv_params;
+  if(GLOBAL.INTERVENTION==Intervention::intv_file_read){
+	std::cout<<std::endl<<"Inside init_intervention_params";
+	auto intvJSON = readJSONFile(GLOBAL.input_base + GLOBAL.intervention_filename);
+	//auto num_intervention_periods = intvJSON.GetArray().Size();
+	//intv_params.resize(num_intervention_periods);
+
+	int index = 0;
+	for (auto &elem: intvJSON.GetArray()){
+	  intervention_params temp;
+	  if((elem.HasMember("num_days")) && (elem["num_days"].GetInt() > 0)){
+		temp.num_days = elem["num_days"].GetInt();
+		if(elem.HasMember("compliance")){
+		  temp.compliance = elem["compliance"].GetDouble();
+          temp.compliance_hd = elem["compliance"].GetDouble();
+          //By default, compliance = compliance_hd. Can be reset below
+		} else{
+		  temp.compliance = GLOBAL.COMPLIANCE_PROBABILITY;
+          temp.compliance_hd = GLOBAL.COMPLIANCE_PROBABILITY;
+          //By default, compliance = compliance_hd. Can be reset below
+		}
+        if(elem.HasMember("compliance_hd")){
+		  temp.compliance_hd = elem["compliance_hd"].GetDouble();
+		} else{
+		  temp.compliance_hd = GLOBAL.COMPLIANCE_PROBABILITY;
+		}
+		if(elem.HasMember("case_isolation")){
+		  temp.case_isolation = elem["case_isolation"]["active"].GetBool();
+		}
+		if(elem.HasMember("home_quarantine")){
+		  temp.home_quarantine = elem["home_quarantine"]["active"].GetBool();
+		}
+		if(elem.HasMember("lockdown")){
+		  temp.lockdown = elem["lockdown"]["active"].GetBool();
+		}
+		if(elem.HasMember("social_dist_elderly")){
+		  temp.social_dist_elderly = elem["social_dist_elderly"]["active"].GetBool();
+		}
+		if(elem.HasMember("school_closed")){
+		  temp.school_closed = elem["school_closed"]["active"].GetBool();
+		  if(elem["school_closed"].HasMember("SC_factor")){
+			temp.SC_factor = elem["school_closed"]["SC_factor"].GetDouble();
+		  }
+		}
+		if(elem.HasMember("workplace_odd_even")){
+		  temp.workplace_odd_even = elem["workplace_odd_even"]["active"].GetBool();
+		}
+		if(elem.HasMember("community_factor")){
+		  temp.community_factor = elem["community_factor"].GetDouble();
+		}
+        if(elem.HasMember("trains")){
+          temp.trains_active = elem["trains"]["active"].GetBool();
+          if(elem["trains"].HasMember("fraction_forced_to_take_train")){
+            temp.fraction_forced_to_take_train = elem["trains"]["fraction_forced_to_take_train"].GetDouble();
+          }
+        }
+		if(elem.HasMember("neighbourhood_containment")){
+		  temp.neighbourhood_containment = elem["neighbourhood_containment"]["active"].GetBool() && GLOBAL.ENABLE_CONTAINMENT;
+		  if(!GLOBAL.ENABLE_CONTAINMENT){
+			std::cout<<std::endl<<"To enable containment strategies, add  --ENABLE_CONTAINMENT to argument list. Ignoring neighbourhood containment.";
+		  }
+		}
+		if(elem.HasMember("ward_containment")){
+		  temp.ward_containment = elem["ward_containment"]["active"].GetBool() && GLOBAL.ENABLE_CONTAINMENT;
+		  if(!GLOBAL.ENABLE_CONTAINMENT){
+			std::cout<<std::endl<<"To enable containment strategies, add  --ENABLE_CONTAINMENT to argument list. Ignoring ward containment.";
+		  }
+		}
+		print_intervention_params(index, temp);
+		intv_params.push_back(temp);
+		++index;
+	  }else{
+		std::cout<<std::endl<<"num_days not specified or less than 1. Skipping current index.";
+		assert(false);
+	  }
+	}
+  }
+  std::cout<<std::endl<<"Intervention params size = "<<intv_params.size();
+  return intv_params;
+}
+
 
 
 vector<double> compute_prob_infection_given_community(double infection_probability, bool set_uniform){
@@ -220,13 +376,18 @@ vector<agent> init_nodes(){
 		if(elem["workplace"].IsNumber()){
 		  nodes[i].workplace_type = WorkplaceType::office;
 		  nodes[i].workplace = int(elem["workplace"].GetDouble());
+		  //Travel
+		  nodes[i].has_to_travel = bernoulli(GLOBAL.P_TRAIN);
 		}
 		break;
 	  case 2:
 		if(elem["school"].IsNumber()){
 		  nodes[i].workplace_type = WorkplaceType::school;
 		  nodes[i].workplace = int(elem["school"].GetDouble());
+		  //Travel
+		  nodes[i].has_to_travel = bernoulli(GLOBAL.P_TRAIN);
 		}
+		break;
 	  default:
 		break;
 	  }
@@ -271,9 +432,6 @@ vector<agent> init_nodes(){
 	nodes[i].hospital_regular_period = GLOBAL.HOSPITAL_REGULAR_PERIOD;
 	nodes[i].hospital_critical_period = GLOBAL.HOSPITAL_CRITICAL_PERIOD;
 
-	//Travel
-	nodes[i].has_to_travel = bernoulli(GLOBAL.P_TRAIN);
-
 	//Now procees node to check if it could be an initial seed given
 	//all its other data
 	set_node_initial_infection(nodes[i],
@@ -304,6 +462,68 @@ vector<agent> init_nodes(){
   return nodes;
 }
 
+vector<double> read_JSON_convert_array(const string& file_name){
+  vector<double> return_object;
+  auto file_JSON = readJSONFile(GLOBAL.input_base + "age_tx/" + file_name);
+  auto size = file_JSON.GetArray().Size();
+  return_object.resize(size);
+  int i = 0;
+  for (auto &elem: file_JSON.GetArray()){
+    return_object[i] = elem[to_string(i).c_str()].GetDouble();
+    i += 1;
+  }
+  return return_object;  
+}
+
+matrix<double> read_JSON_convert_matrix(const string& file_name){ 
+  matrix<double> return_object;
+  auto file_JSON = readJSONFile(GLOBAL.input_base + "age_tx/" + file_name);
+  auto size = file_JSON.GetArray().Size();
+  return_object.resize(size, vector<double>(size));
+  int i = 0;
+  for (auto &elem: file_JSON.GetArray()){
+    for (count_type j = 0; j < size; ++j){
+       return_object[i][j] = elem[to_string(j).c_str()].GetDouble();
+    }
+    i += 1;
+  }
+  return return_object; 
+}
+
+void init_age_interaction_matrix(const string& directory_base, svd& svd){
+  string u_file = directory_base + "/U_" + directory_base + ".json";
+  string sigma_file = directory_base + "/Sigma_" + directory_base + ".json";
+  string vT_file = directory_base + "/Vtranspose_" + directory_base + ".json";
+
+  svd.u = read_JSON_convert_matrix(u_file);
+  svd.sigma = read_JSON_convert_array(sigma_file);
+  svd.vT = read_JSON_convert_matrix(vT_file);
+}
+
+svd init_home_age_interaction_matrix(){
+  svd svd;
+  init_age_interaction_matrix("home", svd);
+  return svd;
+}
+
+svd init_school_age_interaction_matrix(){
+  svd svd;
+  init_age_interaction_matrix("school", svd);
+  return svd;
+}
+
+svd init_workplace_age_interaction_matrix(){
+  svd svd;
+  init_age_interaction_matrix("workplace", svd);
+  return svd;
+}
+
+svd init_community_age_interaction_matrix(){
+  svd svd;
+  init_age_interaction_matrix("other", svd);
+  return svd;
+}
+
 matrix<double> compute_community_distances(const vector<community>& communities){
   auto wardDistJSON = readJSONFile(GLOBAL.input_base + "wardCentreDistance.json");
   const rapidjson::Value& mat = wardDistJSON.GetArray();
@@ -319,6 +539,19 @@ matrix<double> compute_community_distances(const vector<community>& communities)
   return dist_matrix;
 }
 
+matrix<double> compute_community_distances_fkernel(const matrix<double>& community_distances){
+  auto size = community_distances.size();
+  matrix<double> fk_matrix(size, vector<double>(size));
+  for(count_type i = 0; i < size; ++i){
+	fk_matrix[i][i] = f_kernel(community_distances[i][i]);
+	for(count_type j = i + 1; j < size; ++j){
+	  fk_matrix[i][j] = f_kernel(community_distances[i][j]);
+	  fk_matrix[j][i] = fk_matrix[i][j];
+	}
+  }
+  return fk_matrix;
+}
+
 void assign_individual_home_community(vector<agent>& nodes, vector<house>& homes, vector<workplace>& workplaces, vector<community>& communities){
   //Assign individuals to homes, workplace, community
   for(count_type i = 0; i < nodes.size(); ++i){
@@ -327,8 +560,28 @@ void assign_individual_home_community(vector<agent>& nodes, vector<house>& homes
 	 //No checking for null as all individuals have a home
 	nodes[i].compliant = homes[home].compliant;
 	//All members of the household are set the same compliance value
+
+	//Assign cyclic strategy class for this node
+	if(GLOBAL.CYCLIC_POLICY_ENABLED){
+	  switch(GLOBAL.CYCLIC_POLICY_TYPE){
+	  case Cycle_Type::home:
+		nodes[i].cyclic_strategy_class = homes[home].cyclic_strategy_class;
+		break;
+	  case Cycle_Type::individual:
+		nodes[i].cyclic_strategy_class = uniform_count_type(0, GLOBAL.NUMBER_OF_CYCLIC_CLASSES - 1);
+		break;
+	  default:
+		assert(false);
+		break;
+	  }
+	  assert(0 <= nodes[i].cyclic_strategy_class &&
+			 nodes[i].cyclic_strategy_class < GLOBAL.NUMBER_OF_CYCLIC_CLASSES);
+	}
 	
 	int workplace = nodes[i].workplace;
+    if(nodes[i].workplace_type == WorkplaceType::office){
+      nodes[i].office_type = workplaces[workplace].office_type;
+    }
 	if(workplace != WORKPLACE_HOME){
 	  workplaces[workplace].individuals.push_back(i);
 
@@ -341,6 +594,16 @@ void assign_individual_home_community(vector<agent>& nodes, vector<house>& homes
 	//No checking for null as all individuals have a community/ward
 	communities[nodes[i].community].individuals.push_back(i);
   }
+}
+
+void assign_homes_nbr_cell(const vector<house>& homes, matrix<nbr_cell>& neighbourhood_cells){
+	if(!GLOBAL.ENABLE_CONTAINMENT){
+		return;
+	}
+	for (count_type home_count = 0; home_count < homes.size(); home_count++){
+		grid_cell my_nbr_cell = homes[home_count].neighbourhood;
+		neighbourhood_cells[my_nbr_cell.cell_x][my_nbr_cell.cell_y].houses_list.push_back(home_count);
+	}
 }
 
 // Compute scale factors for each home, workplace and community. Done once at the beginning.
@@ -389,3 +652,47 @@ void compute_scale_communities(const vector<agent>& nodes, vector<community>& co
 }
 
 
+//Initialize the office attendance
+void initialize_office_attendance(){
+  //No need to read the attendance file if we are specifically asked to ignore
+  //it
+  if(GLOBAL.IGNORE_ATTENDANCE_FILE) return;
+
+  //constexpr count_type NUMBER_OF_OFFICE_TYPES = 6;
+  auto attendanceJSON = readJSONFile(GLOBAL.input_base + GLOBAL.attendance_filename);
+  ATTENDANCE.number_of_entries = attendanceJSON.GetArray().Size();
+  ATTENDANCE.probabilities.reserve(ATTENDANCE.number_of_entries);
+  count_type index = 0;
+  for(auto& elem: attendanceJSON.GetArray()){
+    ATTENDANCE.probabilities.push_back(vector<double>(GLOBAL.NUMBER_OF_OFFICE_TYPES));
+    count_type val;
+    std::string val_s;
+
+    val = static_cast<count_type>(OfficeType::other);
+    val_s = std::to_string(val);
+    ATTENDANCE.probabilities[index].at(val) = elem[val_s.c_str()].GetDouble();
+    
+    val = static_cast<count_type>(OfficeType::sez);
+    val_s = std::to_string(val);
+    ATTENDANCE.probabilities[index].at(val) = elem[val_s.c_str()].GetDouble();
+    
+    val = static_cast<count_type>(OfficeType::government);
+    val_s = std::to_string(val);
+    ATTENDANCE.probabilities[index].at(val) = elem[val_s.c_str()].GetDouble();
+    
+    val = static_cast<count_type>(OfficeType::it);
+    val_s = std::to_string(val);
+    ATTENDANCE.probabilities[index].at(val) = elem[val_s.c_str()].GetDouble();
+    
+    val = static_cast<count_type>(OfficeType::construction);
+    val_s = std::to_string(val);
+    ATTENDANCE.probabilities[index].at(val) = elem[val_s.c_str()].GetDouble();
+    
+    val = static_cast<count_type>(OfficeType::hospital);
+    val_s = std::to_string(val);
+    ATTENDANCE.probabilities[index].at(val) = elem[val_s.c_str()].GetDouble();
+      
+    ++index;
+  }
+  assert(index == ATTENDANCE.number_of_entries);
+}
