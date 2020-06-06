@@ -211,8 +211,11 @@ int main(int argc, char** argv){
   std::string output_dir(optvals["output_directory"].as<std::string>());
 
   GLOBAL.input_base = optvals["input_directory"].as<std::string>();
-  GLOBAL.attendance_filename = optvals["attendance_filename"].as<std::string>();
-  GLOBAL.IGNORE_ATTENDANCE_FILE = optvals["IGNORE_ATTENDANCE_FILE"].count();
+  if(optvals["attendance_filename"].count()){
+    GLOBAL.attendance_filename = optvals["attendance_filename"].as<std::string>();
+    GLOBAL.IGNORE_ATTENDANCE_FILE = false;
+  }
+  //GLOBAL.IGNORE_ATTENDANCE_FILE = optvals["IGNORE_ATTENDANCE_FILE"].count();
 
   GLOBAL.USE_AGE_DEPENDENT_MIXING = optvals["USE_AGE_DEPENDENT_MIXING"].count();
   GLOBAL.SIGNIFICANT_EIGEN_VALUES = optvals["SIGNIFICANT_EIGEN_VALUES"].as<double>();

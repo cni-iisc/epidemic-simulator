@@ -289,7 +289,7 @@ struct global_params{
   count_type INIT_FIXED_NUMBER_INFECTED = 0;
 
   //Whether to ignore the attendance file
-  bool IGNORE_ATTENDANCE_FILE = false;
+  bool IGNORE_ATTENDANCE_FILE = true;
   count_type NUMBER_OF_OFFICE_TYPES = 6; //Number of office types.
   double ATTENDANCE_LEAKAGE = 0.25; // Assume leakage in attendance.
 

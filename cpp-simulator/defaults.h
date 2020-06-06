@@ -32,7 +32,7 @@ struct defaults{
   std::string SEED_HD_AREA_POPULATION = "false";
   std::string SEED_ONLY_NON_COMMUTER = "false";
   std::string SEED_FIXED_NUMBER = "false";
-  std::string IGNORE_ATTENDANCE_FILE = "false";
+  std::string IGNORE_ATTENDANCE_FILE = "true";
   std::string CALIBRATION_DELAY = "0";
   std::string DAYS_BEFORE_LOCKDOWN = "0";
   std::string FIRST_PERIOD = "21";
