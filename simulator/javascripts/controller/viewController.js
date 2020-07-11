@@ -520,6 +520,15 @@ function citySelectionChange(event){
         case 'Bengaluru':
             inputControl.value = 198;
             break;  
+        case 'Wuhan':
+            inputControl.value = 226;
+            break;
+        case 'New York City':
+            inputControl.value = 227;
+            break;  
+        case 'Kochi':
+            inputControl.value = 228;
+            break;          
     }
     inputControl.readonly= true
 }

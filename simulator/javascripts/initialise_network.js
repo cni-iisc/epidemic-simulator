@@ -1,7 +1,7 @@
 //Copyright [2020] [Indian Institute of Science, Bangalore & Tata Institute of Fundamental Research, Mumbai]
 //SPDX-License-Identifier: Apache-2.0
 
-function loadJSON_001(file_path) {   
+function loadJSON(file_path) {   
 
     var xobj = new XMLHttpRequest();
         xobj.overrideMimeType("application/json");
@@ -17,7 +17,7 @@ function loadJSON_001(file_path) {
 function read_json(file_path) 
  {
   // Parse JSON string into object
-  var response = loadJSON_001(file_path) ;
+  var response = loadJSON(file_path) ;
   console.log(response)
    var actual_JSON = JSON.parse(response );
 	

@@ -77,6 +77,7 @@ body {
 }
 .right-pane {
 }
+
 .status-bar {
   border: 1px solid #009933;
   border-radius: 6px;
@@ -269,3 +270,33 @@ input[type="radio"]:checked {
 input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], select:focus, textarea {
   font-size: 16px;
 }
+
+/*close button to delete intervention*/
+.li-close{
+  padding-left: 2%;
+	background-color:gray;
+	color: white;
+  font-weight: 900;
+  height: 34px;
+}
+
+/*list item of each custom intervention*/
+.interv-li{
+	list-style-type:none;
+}
+
+/*drop-down list for intervention*/ 
+.li-interv-select{
+  width:300px;	
+  height: 34px;
+  padding-right: 2%;
+}
+
+
+/*time text box*/
+.li-interv-time{
+  width: 130px;
+  height: 34px;
+}
+
+

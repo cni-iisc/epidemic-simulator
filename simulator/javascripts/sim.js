@@ -197,9 +197,9 @@ function compliance() {
 function compute_prob_infection_given_community(infection_probability, set_uniform) {
 
     var prob_infec_given_community = [];
-    var communities_population_json = JSON.parse(loadJSON_001(inputPath + 'fractionPopulation.json'));
+    var communities_population_json = JSON.parse(loadJSON(inputPath + 'fractionPopulation.json'));
     if (!set_uniform) {
-        var communities_frac_quarantined_json = JSON.parse(loadJSON_001(inputPath + 'quarantinedPopulation.json'));
+        var communities_frac_quarantined_json = JSON.parse(loadJSON(inputPath + 'quarantinedPopulation.json'));
     }
 
     var num_communities = communities_population_json.length;
@@ -233,8 +233,8 @@ function get_age_group(age) {
 // Initialise the nodes with various features.
 function init_nodes() {
 
-    var individuals_json = JSON.parse(loadJSON_001(inputPath + 'individuals.json'));
-    var workplace_json = JSON.parse(loadJSON_001(inputPath + 'workplaces.json'));
+    var individuals_json = JSON.parse(loadJSON(inputPath + 'individuals.json'));
+    var workplace_json = JSON.parse(loadJSON(inputPath + 'workplaces.json'));
     //console.log(individuals_json.length,individuals_json[0]);
     NUM_PEOPLE = individuals_json.length;
     NUM_WORKPLACES = workplace_json.length;
@@ -324,7 +324,7 @@ function init_nodes() {
 
 function load_infection_seed_json(seed_scaling_factor) {
     var seed_array = [];
-    var infection_seeds_json = JSON.parse(loadJSON_001(inputPath + 'infection_seeds.json'));
+    var infection_seeds_json = JSON.parse(loadJSON(inputPath + 'infection_seeds.json'));
     var infection_seeds_json_array = Object.values(infection_seeds_json['seed_fit']);
     var num_seed_days = infection_seeds_json_array.length;
     for (var count = 0; count < num_seed_days * SIM_STEPS_PER_DAY; count++) {
@@ -540,7 +540,7 @@ function compute_scale_public_transport(nodes, public_transports) {
 
 function init_homes() {
 
-    var houses_json = JSON.parse(loadJSON_001(inputPath + 'houses.json'));
+    var houses_json = JSON.parse(loadJSON(inputPath + 'houses.json'));
     NUM_HOMES = houses_json.length;
 
     var homes = [];
@@ -566,8 +566,8 @@ function init_homes() {
 
 // Both schools and offices are treated as workspaces with some differences
 function init_workplaces() {
-    var workplaces_json = JSON.parse(loadJSON_001(inputPath + 'workplaces.json'));
-    var schools_json = JSON.parse(loadJSON_001(inputPath + 'schools.json'));
+    var workplaces_json = JSON.parse(loadJSON(inputPath + 'workplaces.json'));
+    var schools_json = JSON.parse(loadJSON(inputPath + 'schools.json'));
     NUM_WORKPLACES = workplaces_json.length;
     NUM_SCHOOLS = schools_json.length;
 
@@ -627,7 +627,7 @@ function compare_wards(a, b) {
 
 function init_community() {
 
-    var communities_json = JSON.parse(loadJSON_001(inputPath + 'commonArea.json'));
+    var communities_json = JSON.parse(loadJSON(inputPath + 'commonArea.json'));
     communities_json.sort(compare_wards);
     NUM_COMMUNITIES = communities_json.length;
 
@@ -694,7 +694,7 @@ function euclidean(loc1, loc2) {
 
 
 function compute_community_distances(communities) {
-    var inter_ward_distances_json = JSON.parse(loadJSON_001(inputPath + 'wardCentreDistance.json'));
+    var inter_ward_distances_json = JSON.parse(loadJSON(inputPath + 'wardCentreDistance.json'));
 
     var community_dist_matrix = math.zeros([communities.length, communities.length]);
     /// console.log(community_dist_matrix)
@@ -887,9 +887,9 @@ function update_lambda_h_old(nodes, home) {
 
 function get_age_dependent_mixing_matrix_household() {
 
-    var sigma_json = JSON.parse(loadJSON_001(inputPath + 'Sigma_household.json'));
-    var U_matrix_json = JSON.parse(loadJSON_001(inputPath + 'U_household.json'));
-    var V_matrix_json = JSON.parse(loadJSON_001(inputPath + 'Vtranspose_household.json'));
+    var sigma_json = JSON.parse(loadJSON(inputPath + 'Sigma_household.json'));
+    var U_matrix_json = JSON.parse(loadJSON(inputPath + 'U_household.json'));
+    var V_matrix_json = JSON.parse(loadJSON(inputPath + 'Vtranspose_household.json'));
 
     SIGMA_H = math.zeros([NUM_AGE_GROUPS]);
     U_MATRIX_H = math.zeros([NUM_AGE_GROUPS, NUM_AGE_GROUPS]);
@@ -970,9 +970,9 @@ function update_lambda_w_old(nodes, workplace) {
 }
 
 function get_age_dependent_mixing_matrix_workplace() {
-    var sigma_json = JSON.parse(loadJSON_001(inputPath + 'Sigma_workplace.json'));
-    var U_matrix_json = JSON.parse(loadJSON_001(inputPath + 'U_workplace.json'));
-    var V_matrix_json = JSON.parse(loadJSON_001(inputPath + 'Vtranspose_workplace.json'));
+    var sigma_json = JSON.parse(loadJSON(inputPath + 'Sigma_workplace.json'));
+    var U_matrix_json = JSON.parse(loadJSON(inputPath + 'U_workplace.json'));
+    var V_matrix_json = JSON.parse(loadJSON(inputPath + 'Vtranspose_workplace.json'));
 
     SIGMA_OFFICE = math.zeros([NUM_AGE_GROUPS]);
     U_MATRIX_OFFICE = math.zeros([NUM_AGE_GROUPS, NUM_AGE_GROUPS]);
@@ -991,9 +991,9 @@ function get_age_dependent_mixing_matrix_workplace() {
 
     }
 
-    var sigma_json = JSON.parse(loadJSON_001(inputPath + 'Sigma_school.json'));
-    var U_matrix_json = JSON.parse(loadJSON_001(inputPath + 'U_school.json'));
-    var V_matrix_json = JSON.parse(loadJSON_001(inputPath + 'Vtranspose_school.json'));
+    var sigma_json = JSON.parse(loadJSON(inputPath + 'Sigma_school.json'));
+    var U_matrix_json = JSON.parse(loadJSON(inputPath + 'U_school.json'));
+    var V_matrix_json = JSON.parse(loadJSON(inputPath + 'Vtranspose_school.json'));
 
     SIGMA_SCHOOL = math.zeros([NUM_AGE_GROUPS]);
     U_MATRIX_SCHOOL = math.zeros([NUM_AGE_GROUPS, NUM_AGE_GROUPS]);
@@ -1186,6 +1186,7 @@ let csvContent_alltogether = "data:text/csv;charset=utf-8,";
 
 function update_all_kappa(nodes, homes, workplaces, communities, cur_time) {
     var current_time = cur_time;
+    console.log(NUM_DAYS_BEFORE_INTERVENTIONS);
     if (current_time < NUM_DAYS_BEFORE_INTERVENTIONS * SIM_STEPS_PER_DAY) {
         get_kappa_no_intervention(nodes, homes, workplaces, communities, current_time);
     } else {
@@ -1428,10 +1429,26 @@ function run_simulation() {
     call_plotly(plot_tuple);
     document.getElementById("in-progress").style.display = 'none';
     document.getElementById('plots-area').style.display = 'block';
+    
+    let cumul_days = 0;
+    let interv_ind = 0;
 
     const interval = setInterval(function () {
         console.log("inside the interval stuff. time_step = ", time_step);
         document.getElementById("status").innerHTML = "Calculating Simulation for Day: " + time_step / SIM_STEPS_PER_DAY;
+	// Days after intervention commencement
+        let days = time_step / SIM_STEPS_PER_DAY;
+
+        // Checking if allowed
+        if (
+            interv_ind < INTERVENTIONS.length &&
+            days >= NUM_DAYS_BEFORE_INTERVENTIONS + cumul_days
+        ) {
+            cumul_days += INTERVENTIONS[interv_ind].time;
+            INTERVENTION = INTERVENTIONS[interv_ind].value;
+            interv_ind++;
+        }
+        console.log({ days, INTERVENTION });
         time_step = run_simday(time_step + 1, homes, workplaces, communities, public_transports, nodes, community_distance_matrix, seed_array,
             days_num_affected, days_num_critical, days_num_exposed, days_num_fatalities, days_num_hospitalised, days_num_infected, days_num_recovered, lambda_evolution);
         call_plotly(plot_tuple);
@@ -1682,9 +1699,9 @@ function plot_plotly(data, plot_position, title_text, legends) {
     Plotly.newPlot(plot_position, data_plot, layout, btnRemove);
 }
 
+
 //Main function
 function runSimulations() {
-
     //clear_plots();
 
     //get the inputs from the HTML page
@@ -1693,7 +1710,6 @@ function runSimulations() {
 
     // initFrac is actually number Exposed, now input as percentage instead of fraction
     INIT_FRAC_INFECTED = parseFloat(document.getElementById("initFrac").value) / 100.0;
-//	COMPLIANCE_PROBABILITY = document.getElementById("compliance").value;
 
     INCUBATION_PERIOD = parseFloat(document.getElementById("Incubation").value) / 2;
     INCUBATION_PERIOD_SCALE = INCUBATION_PERIOD * SIM_STEPS_PER_DAY; // 2.29 days
@@ -1718,8 +1734,36 @@ function runSimulations() {
     BETA_S = document.getElementById("betaSchools").value;
     BETA_PT = document.getElementById("betaPT").value;
 
+    INTERVENTIONS = [];
+    INTERVENTION = NO_INTERVENTION;
     //INTERVENTION = parseInt(document.getElementById("interventions").value);
-    INTERVENTION = parseInt(document.querySelector('input[name="interventions2"]:checked').value);
+    if (parseInt(document.querySelector('input[name="interventions2"]:checked').value) == 11){
+        li_interventions = document.getElementsByClassName("interv-li");
+        NUM_DAYS_BEFORE_INTERVENTIONS = 0;
+
+        for (let i = 0; i < li_interventions.length; i++) {
+            div = li_interventions[i].children[0];
+            value = div.children[0].value;
+            console.log(2);
+            time = div.children[1].value;
+            console.log(3);
+            INTERVENTIONS.push({
+                value: parseInt(value),
+                time: parseInt(time),
+            });
+        }
+        //Set the no intervention after all custom interventions are done
+        INTERVENTIONS.push({
+            value: 0,
+            time: 1,
+        });
+    }
+    else{
+        INTERVENTION = parseInt(document.querySelector('input[name="interventions2"]:checked').value);
+    }
+  
+
+
 
     console.log(NUM_DAYS, INIT_FRAC_INFECTED, INTERVENTION);
     console.log("INTERVENTION = ", INTERVENTION);
@@ -1763,12 +1807,7 @@ function set_default_values_html() {
     document.getElementById("symtomaticFraction").value = SYMPTOMATIC_FRACTION;
     document.getElementById("meanHospitalPeriod").value = MEAN_HOSPITAL_REGULAR_PERIOD;
     document.getElementById("meanICUPeriod").value = MEAN_HOSPITAL_CRITICAL_PERIOD;
-    document.getElementById("compliance").value = COMPLIANCE_PROBABILITY;
-    document.getElementById("betaHouse").value = BETA_H;
-    document.getElementById("betaWork").value = BETA_W;
-    document.getElementById("betaCommunity").value = BETA_C;
-    document.getElementById("betaSchools").value = BETA_S;
-    document.getElementById("betaPT").value = BETA_PT;
+
     //document.getElementById("interventions").value = "0";
 
     setCity( document.getElementById("cityname").value );
@@ -1778,12 +1817,75 @@ function set_default_values_html() {
 //
 //}
 
+function setParameters(city){
+    $("#customIntv").hide();
+    if (city === 'bengaluru'){
+        $("input[name=interventions2][value='0']").prop("checked",true);
+        document.getElementById("compliance").value = 0.9;
+        document.getElementById("betaHouse").value = 0.9632;
+        document.getElementById("betaWork").value = 0.5518;
+        document.getElementById("betaCommunity").value = 0.2035;
+        document.getElementById("betaSchools").value = 1.1036;
+        document.getElementById("betaPT").value = 0;
+        CALIBRATION_DELAY = 0; //// Assuming the simulator starts on March 1.
+        NUM_DAYS_BEFORE_INTERVENTIONS = 15 + CALIBRATION_DELAY;
+    }
+    if (city === 'wuhan'){
+        document.getElementById("compliance").value = 0.9;
+        document.getElementById("betaHouse").value = 1;
+        document.getElementById("betaWork").value = 0.65;
+        document.getElementById("betaCommunity").value = 0.353;
+        document.getElementById("betaSchools").value = 1.3;
+        document.getElementById("betaPT").value = 0;
+        CALIBRATION_DELAY = 0; //// Assuming the simulator starts on March 1.
+        NUM_DAYS_BEFORE_INTERVENTIONS = 22 + CALIBRATION_DELAY;
+        $("input[name=interventions2][value='11']").prop("checked",true);
+        $("#customIntv").show();
+    }
+    if (city === 'nyc'){
+        document.getElementById("compliance").value = 0.9;
+        document.getElementById("betaHouse").value = 1.902;
+        document.getElementById("betaWork").value = 1.583;
+        document.getElementById("betaCommunity").value = 0.625;
+        document.getElementById("betaSchools").value = 3.167;
+        document.getElementById("betaPT").value = 0;
+        CALIBRATION_DELAY = 0; //// Assuming the simulator starts on March 1.
+        NUM_DAYS_BEFORE_INTERVENTIONS = 8 + CALIBRATION_DELAY;
+        $("input[name=interventions2][value='11']").prop("checked",true);
+        $("#customIntv").show();
+    }
+    if (city === 'kochi'){
+        $("input[name=interventions2][value='0']").prop("checked",true);
+        document.getElementById("compliance").value = 0.9;
+        document.getElementById("betaHouse").value = 1.065;
+        document.getElementById("betaWork").value = 0.532;
+        document.getElementById("betaCommunity").value = 0.207;
+        document.getElementById("betaSchools").value = 1.064;
+        document.getElementById("betaPT").value = 0;
+        CALIBRATION_DELAY = 0; //// Assuming the simulator starts on March 1.
+        NUM_DAYS_BEFORE_INTERVENTIONS = 15 + CALIBRATION_DELAY;
+    }
+    if (city === 'mumbai'){
+        $("input[name=interventions2][value='0']").prop("checked",true);
+        document.getElementById("compliance").value = 0.9;
+        document.getElementById("betaHouse").value = 0.911;
+        document.getElementById("betaWork").value = 0.488;
+        document.getElementById("betaCommunity").value = 0.22;
+        document.getElementById("betaSchools").value = 0.976;
+        document.getElementById("betaPT").value = 0;
+        CALIBRATION_DELAY = 0; //// Assuming the simulator starts on March 1.
+        NUM_DAYS_BEFORE_INTERVENTIONS = 15 + CALIBRATION_DELAY;
+    }
+}
+
+
 function setCity (city) {
     cityName = city;
-    console.log('City: ', cityName)
     inputPath = INPUTPATHPREFIX + '/' + cityName + '/';
     mapImage.src = IMAGEPREFIX + '/' + cityName + '-wards_v2.png'
+    setParameters(city);
 }
+
 
 //jquery events for the webUI
 //
@@ -1819,6 +1921,8 @@ else {
 }
 });
 
+
+
 function initListner() {
     
     $('#numDays').tooltip({'trigger':'focus', 'title': 'Number of days to run the simulation'});
@@ -1848,6 +1952,11 @@ function initListner() {
 
     $('#compliance').tooltip({'trigger':'focus', 'title': 'What fraction of households are likely to follow the restrictions specified in the chosen intervention?'});
 
+    $('#li-interv-time').tooltip({'trigger':'focus', 'title': 'How long does the chosen intervention last?'});
+    
+    $('#li-interv-select').tooltip({'trigger':'focus', 'title': 'What intervention would you want to select?'});
+    
+
     $('.selectpicker').on('change', function () {
         var selectedItem = $('.selectpicker').val();
         setCity(selectedItem);
@@ -1861,7 +1970,7 @@ function initListner() {
                 htmlInner =  '<img width="100%" src="'+ IMAGEPREFIX +'/InfectionProgression-v2.png" />'
                 break;
             case 'Intervention':
-                htmlInner = `<span>Simulations under all scenarios are assumed to begin on March 1, 2020. Interventions begin on March 25, aligned with the national lockdown start date. They continue for the indicated duration (or indefinitely if not specified)
+                htmlInner = `<span>Simulations under all scenarios are assumed to begin on March 1, 2020. Interventions begin on March 25, aligned with the India lockdown start date.  They continue for the indicated duration (or indefinitely if not specified)
                     <br></br>
                 <b>Case Isolation</b>: One day after onset of symptoms, the individual is assumed to stay isolated at home for a period of seven days.
                 <br></br>
@@ -1905,6 +2014,29 @@ function initListner() {
       if(!$('body').hasClass('mobile')) {
       $(window).resize();
       }
+
+      $("#customIntv").hide();
+      $('input[type="radio"]').on('click, change, input', function(){
+          if ($(this).is(':checked'))
+          {
+              var value = $(this).val();
+              if (value == 11){
+                  var msg = "Click the 'Add Intervention' button to set-up the simulator to run a custom intervention.<br> The simulations with custom interventions, start with 100 infected individuals by default on Day 0. After the last intervention we switch to No Intervention scenario.";
+
+                  $("#interv").html(msg);
+                  $("#customIntv").show();
+                  // Create a new list itemwhen clicking on the "Add" button
+                  $("#intvButton").on('click', function(){
+                        console.log("custom intervention added")
+                        newInterv()
+                  });
+              }
+              else{
+                  $("#customIntv").hide();
+              }
+          }
+  
+      });
 }
 
 
@@ -1921,3 +2053,60 @@ $(window).resize(function() {
     }
 })
 
+
+function newInterv() {
+    let count = 0
+
+    const mapping =  {
+        "0": "No Intervention (NI)",
+        "1": "Case Isolation (CI)",
+        "2": "Home Quarantine (HQ)",
+        "3": "Lockdown (LD)",
+        "4": "CI and HQ of infected household (CIHQ)",
+        "5": "CIHQ and social distancing of those above 65 years of age"
+    };
+
+	let li = document.createElement("li");
+	li.number = count
+	li.className = "interv-li"
+
+	// Create li div for everything
+	let liDiv = document.createElement("div");
+	liDiv.className = "li-interv-div"
+	let selectInterv = document.createElement("select")
+	const createOption = (value, text) => {
+		let option = document.createElement("option");
+		option.appendChild(document.createTextNode(text))
+		option.value = String(value)
+		return option;
+	}
+
+	for (let code in mapping) {
+		selectInterv.appendChild(createOption(code, mapping[code]))
+	}
+	selectInterv.className = "li-interv-select"
+
+	let input = document.createElement("input")
+	input.className = "li-interv-time"
+	input.type = "text"
+	input.placeholder = "Duration in days"
+
+	liDiv.appendChild(selectInterv)
+	liDiv.appendChild(input)
+
+	li.appendChild(liDiv);
+
+	let close = document.createElement("input");
+	close.className = "li-close"
+	close.type = "button"
+	close.value = "\u2715"
+	liDiv.appendChild(close);
+	close.onclick = () => {
+		li.parentNode.removeChild(li);
+	}
+
+
+	document.getElementById("interv").appendChild(li);
+
+	count++;
+};
