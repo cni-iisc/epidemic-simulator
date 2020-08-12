@@ -13,7 +13,7 @@
 
 int main(int argc, char** argv){
   cxxopts::Options options(argv[0],
-						   "Simulate the mean field agent model");
+			   "Simulate the mean field agent model");
 
   options.add_options("Basic")
     ("h,help", "display description of program options")
@@ -25,6 +25,10 @@ int main(int argc, char** argv){
      cxxopts::value<std::string>()->default_value(DEFAULTS.input_base))
     ("PROVIDE_INITIAL_SEED",
      "provide an initial seed to the simulator. If this is not provided, the simulator uses "
+     "std::random_device to get the random seed.",
+     cxxopts::value<count_type>())
+    ("PROVIDE_INITIAL_SEED_GRAPH",
+     "provide the initial seed for the interaction graphs. If this is not provided, the simulator uses "
      "std::random_device to get the random seed.",
      cxxopts::value<count_type>())
     ;
@@ -43,8 +47,8 @@ int main(int argc, char** argv){
     ;
 
   options.add_options("Disease progression")
-    ("INCUBATION_PERIOD", "incubation period",
-     cxxopts::value<double>()->default_value(DEFAULTS.INCUBATION_PERIOD))
+    ("MEAN_INCUBATION_PERIOD", "mean incubation period",
+     cxxopts::value<double>()->default_value(DEFAULTS.MEAN_INCUBATION_PERIOD))
     ("MEAN_ASYMPTOMATIC_PERIOD", "mean asymptomatic period",
      cxxopts::value<double>()->default_value(DEFAULTS.MEAN_ASYMPTOMATIC_PERIOD))
     ("MEAN_SYMPTOMATIC_PERIOD", "mean symptomatic period",
@@ -60,6 +64,8 @@ int main(int argc, char** argv){
   options.add_options("City")
     ("COMPLIANCE_PROBABILITY", "default compliance probability",
      cxxopts::value<double>()->default_value(DEFAULTS.COMPLIANCE_PROBABILITY))
+    ("HD_COMPLIANCE_PROBABILITY", "default compliance probability for high-density areas",
+     cxxopts::value<double>()->default_value(DEFAULTS.COMPLIANCE_PROBABILITY))      
     ("F_KERNEL_A", "the 'a' parameter in the distance kernel, for distance in km",
      cxxopts::value<double>()->default_value(DEFAULTS.F_KERNEL_A))
     ("F_KERNEL_B", "the 'b' parameter in the distance kernel, for distance in km",
@@ -74,6 +80,14 @@ int main(int argc, char** argv){
      cxxopts::value<double>()->default_value(DEFAULTS.BETA_S))
     ("BETA_TRAVEL", "the beta_travel parameter",
      cxxopts::value<double>()->default_value(DEFAULTS.BETA_TRAVEL))
+    ("BETA_CLASS", "the beta_class parameter",
+     cxxopts::value<double>()->default_value(DEFAULTS.BETA_CLASS))
+    ("BETA_PROJECT", "the beta_project parameter",
+     cxxopts::value<double>()->default_value(DEFAULTS.BETA_PROJECT))
+    ("BETA_RANDOM_COMMUNITY", "the beta_random_community parameter",
+     cxxopts::value<double>()->default_value(DEFAULTS.BETA_RANDOM_COMMUNITY))
+    ("BETA_NBR_CELLS", "the beta_travel parameter",
+     cxxopts::value<double>()->default_value(DEFAULTS.BETA_NBR_CELLS))
     ("HD_AREA_FACTOR", "multiplicative factor for high density areas",
      cxxopts::value<double>()->default_value(DEFAULTS.HD_AREA_FACTOR))
     ("HD_AREA_EXPONENT", "exponent for community size for high density areas",
@@ -107,11 +121,19 @@ int main(int argc, char** argv){
      cxxopts::value<double>()->default_value(DEFAULTS.LOCKED_COMMUNITY_LEAKAGE))
     ("COMMUNITY_LOCK_THRESHOLD", "hospitalisation fraction in a ward beyond which the ward will be cordoned off.",
      cxxopts::value<double>()->default_value(DEFAULTS.COMMUNITY_LOCK_THRESHOLD))
-    ;
+	("LOCKED_NEIGHBORHOOD_LEAKAGE", "minimum neighborhood cell infection leakage under containment",
+	 cxxopts::value<double>()->default_value(DEFAULTS.LOCKED_NEIGHBORHOOD_LEAKAGE))
+    ("NEIGHBORHOOD_LOCK_THRESHOLD", "hospitalisation fraction in a neighbourhood cell beyond which the neighbourhood cell will be cordoned off.",
+     cxxopts::value<double>()->default_value(DEFAULTS.NEIGHBORHOOD_LOCK_THRESHOLD))
+	("ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT", "whether neighborhood soft containment is enabled (false if neighborhood cells are not enabled)",
+     cxxopts::value<bool>()->default_value(DEFAULTS.ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT))
+	;
 
   options.add_options("Intervention - neighbourhood containment")
     ("ENABLE_CONTAINMENT", "enable neighborhood containment",
      cxxopts::value<bool>()->default_value(DEFAULTS.ENABLE_CONTAINMENT))
+    ("ENABLE_NBR_CELLS", "Enable neighbourhood cells",
+     cxxopts::value<bool>()->default_value(DEFAULTS.ENABLE_NBR_CELLS))    
     ("CITY_SW_LAT", "south west latitude boundary of the city",
      cxxopts::value<double>()->default_value(DEFAULTS.CITY_SW_LAT))
     ("CITY_SW_LON", "south west longitude boundary of the city",
@@ -128,7 +150,7 @@ int main(int argc, char** argv){
     ;
 
   options.add_options("Age-dependent mixing")
-    ("USE_AGE_DEPENDENT_MIXING", "whether age-stratified interacctions are enabled",
+    ("USE_AGE_DEPENDENT_MIXING", "whether age-stratified interactions are enabled",
      cxxopts::value<bool>()->default_value(DEFAULTS.USE_AGE_DEPENDENT_MIXING))
     ("SIGNIFICANT_EIGEN_VALUES",
 	 "number of principal components of the age-stratification matrix to use",
@@ -144,8 +166,21 @@ int main(int argc, char** argv){
      cxxopts::value<std::string>()->default_value(DEFAULTS.attendance_filename))
     ("intervention_filename", "intervention json filename, relative to input_directory",
      cxxopts::value<std::string>()->default_value(DEFAULTS.intervention_params_filename))
-    ("MASK_ACTIVE", "whether masks factor needs to be incorporated",
+    ("MASK_ACTIVE", "whether masks are to be incorporated",
      cxxopts::value<bool>()->default_value(DEFAULTS.MASK_ACTIVE))
+    ("MASK_FACTOR", "whether masks are to be incorporated",
+     cxxopts::value<double>()->default_value(DEFAULTS.MASK_FACTOR))
+    ("MASK_START_DELAY", "days after which masks are enforced",
+     cxxopts::value<double>()->default_value(DEFAULTS.MASK_START_DELAY))
+    ;
+
+    options.add_options("Testing and contact tracing")
+    ("ENABLE_TESTING", "enable testing (contact-tracing) functionality",
+     cxxopts::value<bool>()->default_value(DEFAULTS.ENABLE_TESTING))
+    ("testing_protocol_filename", "intervention json filename, relative to input_directory",
+    cxxopts::value<std::string>()->default_value(DEFAULTS.testing_protocol_filename))
+    ("TESTING_PROTOCOL", "index of testing protocol",
+     cxxopts::value<count_type>()->default_value(DEFAULTS.TESTING_PROTOCOL))
     ;
 
   auto optvals = options.parse(argc, argv);
@@ -153,14 +188,15 @@ int main(int argc, char** argv){
   if(optvals.count("help")){
     std::cout << options.help({"Basic",
 			       "Infection seeding",
-			       "Disease Progression",
+			       "Disease progression",
 			       "City",
 			       "Intervention - basic",
 			       "Intervention - cyclic strategy",
 			       "Intervention - soft containment zones",
 			       "Intervention - neighbourhood containment",
 			       "Age-dependent mixing",
-			       "Other"
+			       "Other",
+             "Testing and contact tracing"
       }) << std::endl;
     return 0;
   }
@@ -172,13 +208,20 @@ int main(int argc, char** argv){
   GLOBAL.NUM_DAYS = optvals["NUM_DAYS"].as<count_type>();
   GLOBAL.INIT_FRAC_INFECTED = optvals["INIT_FRAC_INFECTED"].as<double>();
   GLOBAL.INIT_FIXED_NUMBER_INFECTED = optvals["INIT_FIXED_NUMBER_INFECTED"].as<count_type>();
-  GLOBAL.INCUBATION_PERIOD = optvals["INCUBATION_PERIOD"].as<double>();
+  GLOBAL.MEAN_INCUBATION_PERIOD = optvals["MEAN_INCUBATION_PERIOD"].as<double>();
   GLOBAL.MEAN_ASYMPTOMATIC_PERIOD = optvals["MEAN_ASYMPTOMATIC_PERIOD"].as<double>();
   GLOBAL.MEAN_SYMPTOMATIC_PERIOD = optvals["MEAN_SYMPTOMATIC_PERIOD"].as<double>();
   GLOBAL.SYMPTOMATIC_FRACTION = optvals["SYMPTOMATIC_FRACTION"].as<double>();
   GLOBAL.MEAN_HOSPITAL_REGULAR_PERIOD = optvals["MEAN_HOSPITAL_REGULAR_PERIOD"].as<double>();
   GLOBAL.MEAN_HOSPITAL_CRITICAL_PERIOD = optvals["MEAN_HOSPITAL_CRITICAL_PERIOD"].as<double>();
   GLOBAL.COMPLIANCE_PROBABILITY = optvals["COMPLIANCE_PROBABILITY"].as<double>();
+  if(optvals["HD_COMPLIANCE_PROBABILITY"].count()){
+	  GLOBAL.HD_COMPLIANCE_PROBABILITY = optvals["HD_COMPLIANCE_PROBABILITY"].as<double>();
+  } else {
+	//If HD_COMPLIANCE_PROBABILITY is not provided then set it equal to whatever
+	//value was provided for COMPLIANCE_PROBABILITY
+	GLOBAL.HD_COMPLIANCE_PROBABILITY = GLOBAL.COMPLIANCE_PROBABILITY;
+  }
   GLOBAL.F_KERNEL_A = optvals["F_KERNEL_A"].as<double>();
   GLOBAL.F_KERNEL_B = optvals["F_KERNEL_B"].as<double>();
 
@@ -187,12 +230,17 @@ int main(int argc, char** argv){
   GLOBAL.BETA_C = optvals["BETA_C"].as<double>();
   GLOBAL.BETA_S = optvals["BETA_S"].as<double>();
   GLOBAL.BETA_TRAVEL = optvals["BETA_TRAVEL"].as<double>();
+  GLOBAL.BETA_CLASS = optvals["BETA_CLASS"].as<double>();
+  GLOBAL.BETA_PROJECT = optvals["BETA_PROJECT"].as<double>();
+  GLOBAL.BETA_RANDOM_COMMUNITY = optvals["BETA_RANDOM_COMMUNITY"].as<double>();
+  GLOBAL.BETA_NBR_CELLS = optvals["BETA_NBR_CELLS"].as<double>();
 
   GLOBAL.HD_AREA_FACTOR = optvals["HD_AREA_FACTOR"].as<double>();
   GLOBAL.HD_AREA_EXPONENT = optvals["HD_AREA_EXPONENT"].as<double>();
   
   GLOBAL.INTERVENTION
 	= static_cast<Intervention>(optvals["INTERVENTION"].as<count_type>());
+  GLOBAL.intervention_filename = optvals["intervention_filename"].as<std::string>();
 
   GLOBAL.CALIBRATION_DELAY = optvals["CALIBRATION_DELAY"].as<double>();
   GLOBAL.DAYS_BEFORE_LOCKDOWN = optvals["DAYS_BEFORE_LOCKDOWN"].as<double>();
@@ -223,17 +271,25 @@ int main(int argc, char** argv){
   
   if(optvals["PROVIDE_INITIAL_SEED"].count()){
 	//Initial seed was provided
-	SEED_RNG_PROVIDED_SEED(optvals["PROVIDE_INITIAL_SEED"].as<count_type>()); 
+	SEED_RNG_PROVIDED_SEED(optvals["PROVIDE_INITIAL_SEED"].as<count_type>());
   } else {
 	SEED_RNG(); //No Initial seed was provided
   }
-  //Done saving options
-  
+  if(optvals["PROVIDE_INITIAL_SEED_GRAPH"].count()){
+	//Initial seed was provided
+	SEED_RNG_GRAPH_PROVIDED_SEED(optvals["PROVIDE_INITIAL_SEED_GRAPH"].as<count_type>());
+  } else {
+	SEED_RNG_GRAPH(); //No Initial seed was provided
+  }
+
   GLOBAL.LOCKED_COMMUNITY_LEAKAGE = optvals["LOCKED_COMMUNITY_LEAKAGE"].as<double>();
   GLOBAL.COMMUNITY_LOCK_THRESHOLD = optvals["COMMUNITY_LOCK_THRESHOLD"].as<double>();
+  GLOBAL.LOCKED_NEIGHBORHOOD_LEAKAGE = optvals["LOCKED_NEIGHBORHOOD_LEAKAGE"].as<double>();
+  GLOBAL.NEIGHBORHOOD_LOCK_THRESHOLD = optvals["NEIGHBORHOOD_LOCK_THRESHOLD"].as<double>();
+
   //Compute parametrs based on options
   GLOBAL.NUM_TIMESTEPS = GLOBAL.NUM_DAYS*GLOBAL.SIM_STEPS_PER_DAY;
-  GLOBAL.INCUBATION_PERIOD_SCALE = GLOBAL.INCUBATION_PERIOD*GLOBAL.SIM_STEPS_PER_DAY;
+  GLOBAL.INCUBATION_PERIOD_SCALE = GLOBAL.MEAN_INCUBATION_PERIOD*GLOBAL.SIM_STEPS_PER_DAY / GLOBAL.INCUBATION_PERIOD_SHAPE;
 
   GLOBAL.ASYMPTOMATIC_PERIOD = GLOBAL.MEAN_ASYMPTOMATIC_PERIOD*GLOBAL.SIM_STEPS_PER_DAY;
   GLOBAL.SYMPTOMATIC_PERIOD = GLOBAL.MEAN_SYMPTOMATIC_PERIOD*GLOBAL.SIM_STEPS_PER_DAY;
@@ -241,7 +297,11 @@ int main(int argc, char** argv){
   GLOBAL.HOSPITAL_CRITICAL_PERIOD = GLOBAL.MEAN_HOSPITAL_CRITICAL_PERIOD*GLOBAL.SIM_STEPS_PER_DAY;
   
   GLOBAL.MASK_ACTIVE = optvals["MASK_ACTIVE"].count();
-  GLOBAL.MASK_START_DATE = GLOBAL.CALIBRATION_DELAY + 40; //masks starts from April 9
+  if(GLOBAL.MASK_ACTIVE){
+    GLOBAL.MASK_FACTOR = optvals["MASK_FACTOR"].as<double>();
+  }
+
+  GLOBAL.MASK_START_DATE = GLOBAL.CALIBRATION_DELAY + optvals["MASK_START_DELAY"].as<double>(); //masks starts from April 9
 
   //initialise city bounding box co-ordinates with Bangalore values. Will read from file later.
   GLOBAL.city_SW.lat = optvals["CITY_SW_LAT"].as<double>();
@@ -250,11 +310,20 @@ int main(int argc, char** argv){
   GLOBAL.city_NE.lon = optvals["CITY_NE_LON"].as<double>();
   GLOBAL.NBR_CELL_SIZE = optvals["NBR_CELL_SIZE"].as<double>();
   GLOBAL.ENABLE_CONTAINMENT = optvals["ENABLE_CONTAINMENT"].count();
+  GLOBAL.ENABLE_NBR_CELLS = optvals["ENABLE_NBR_CELLS"].count();
+  if(GLOBAL.ENABLE_NBR_CELLS){
+	GLOBAL.ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT = optvals["ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT"].count();
+  } else {
+	GLOBAL.ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT = false;
+  }
   GLOBAL.WARD_CONTAINMENT_THRESHOLD = optvals["WARD_CONTAINMENT_THRESHOLD"].as<count_type>();
 
-  GLOBAL.intervention_filename = optvals["intervention_filename"].as<std::string>();
+  GLOBAL.ENABLE_TESTING = optvals["ENABLE_TESTING"].count();
+  GLOBAL.ENABLE_NBR_CELLS = GLOBAL.ENABLE_NBR_CELLS || GLOBAL.ENABLE_CONTAINMENT;
 
-
+  GLOBAL.TESTING_PROTOCOL
+	= static_cast<Testing_Protocol>(optvals["TESTING_PROTOCOL"].as<count_type>());
+  GLOBAL.testing_protocol_filename = optvals["testing_protocol_filename"].as<std::string>();
 
   if(GLOBAL.input_base != ""
 	 && GLOBAL.input_base[GLOBAL.input_base.size() - 1] != '/'){ 

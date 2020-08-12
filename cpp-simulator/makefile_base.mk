@@ -1,5 +1,5 @@
 #this should be 'yes' for the status of the git repository to be checked during compiling
-check_git=
+check_git=yes
 
 #Set this to -DTIMING to enable timing output
 timing = -DTIMING
@@ -20,7 +20,7 @@ GIT_TREE_STATE=not applicable
 endif
 
 include_paths = -Ilibs/ -Ilibs/cxxopts-2.2.0/include/
-obj = initializers.o models.o interventions.o intervention_primitives.o updates.o simulator.o outputs.o drive_simulator.o
+obj = initializers.o models.o interventions.o intervention_primitives.o updates.o simulator.o testing.o outputs.o drive_simulator.o
 
 DEPFLAGS = -MMD -MP -MF $*.d
 

@@ -9,7 +9,7 @@ constexpr int UPPER_AGE = 65;
 
 void set_kappa_base_node(agent& node, double community_factor, int cur_time);
 
-void set_kappa_lockdown_node(agent& node, int cur_time);
+void set_kappa_lockdown_node(agent& node, int cur_time, const intervention_params intv_params);
 
 void modify_kappa_SDE_node(agent& node);
 

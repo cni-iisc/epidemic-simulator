@@ -145,7 +145,8 @@ void output_global_params(const string& output_dir){
 
   fout << "RNG_SEED: " << GLOBAL.RNG_SEED << ";" << endl;
 
-  fout << "COMPLIANCE_PROBABILITY: " << GLOBAL.COMPLIANCE_PROBABILITY << ";" << endl; 
+  fout << "COMPLIANCE_PROBABILITY: " << GLOBAL.COMPLIANCE_PROBABILITY << ";" << endl;
+  fout << "HD_COMPLIANCE_PROBABILITY: " << GLOBAL.HD_COMPLIANCE_PROBABILITY << ";" << endl;
   
   fout << "num_homes: " << GLOBAL.num_homes << ";" << endl; 
   fout << "num_workplaces: " << GLOBAL.num_workplaces << ";" << endl; 
@@ -167,7 +168,7 @@ void output_global_params(const string& output_dir){
   fout << "#Actual number of initial infections: " << GLOBAL.INIT_ACTUALLY_INFECTED << ";" << endl;
 
   
-  fout << "INCUBATION_PERIOD: " << GLOBAL.INCUBATION_PERIOD << ";" << endl; 
+  fout << "MEAN_INCUBATION_PERIOD: " << GLOBAL.MEAN_INCUBATION_PERIOD << ";" << endl; 
   fout << "MEAN_ASYMPTOMATIC_PERIOD: " << GLOBAL.MEAN_ASYMPTOMATIC_PERIOD << ";" << endl; 
   fout << "MEAN_SYMPTOMATIC_PERIOD: " << GLOBAL.MEAN_SYMPTOMATIC_PERIOD << ";" << endl; 
   fout << "MEAN_HOSPITAL_REGULAR_PERIOD: " << GLOBAL.MEAN_HOSPITAL_REGULAR_PERIOD << ";" << endl; 
@@ -230,9 +231,20 @@ void output_global_params(const string& output_dir){
   fout << "MASK_FACTOR: " << GLOBAL.MASK_FACTOR << ";" << endl;
   fout << "MASK_START_DATE: " << GLOBAL.MASK_START_DATE << ";" << endl;
 
-  fout << "WARD_CONTAINMENT_THRESHOLD:" <<GLOBAL.WARD_CONTAINMENT_THRESHOLD << ";"<< endl;
-  fout << "ENABLE_CONTAINMENT:" <<GLOBAL.ENABLE_CONTAINMENT << ";"<< endl;
-  
+  fout << "WARD_CONTAINMENT_THRESHOLD: " <<GLOBAL.WARD_CONTAINMENT_THRESHOLD << ";"<< endl;
+  fout << "ENABLE_CONTAINMENT: " <<GLOBAL.ENABLE_CONTAINMENT << ";"<< endl;
+  fout << "ENABLE_NBR_CELLS: " <<GLOBAL.ENABLE_NBR_CELLS << ";"<< endl;
+
+  //Neighborhood containment
+  fout << "ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT: "
+	   << GLOBAL.ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT << ";" << endl;
+  fout << "LOCKED_NEIGHBORHOOD_LEAKAGE: "
+	   << GLOBAL.LOCKED_NEIGHBORHOOD_LEAKAGE << ";" << endl;
+  fout << "NEIGHBORHOOD_LOCK_THRESHOLD: "
+	   << GLOBAL.NEIGHBORHOOD_LOCK_THRESHOLD << ";" << endl;
+
+  fout << "ENABLE_TESTING:" << GLOBAL.ENABLE_TESTING << ";" <<endl;
+  fout << "TESTING_PROTOCOL: " << static_cast<count_type>(GLOBAL.TESTING_PROTOCOL) << ";" <<endl;
   fout.close();
 
   //Copy the attendance file
@@ -245,6 +257,12 @@ void output_global_params(const string& output_dir){
   if(GLOBAL.INTERVENTION==Intervention::intv_file_read){
 	output_copy_file(GLOBAL.input_base + GLOBAL.intervention_filename,
 					 output_dir + "/intervention_params.json");
+  }
+
+  //Copy testing protocol file
+  if(GLOBAL.TESTING_PROTOCOL==Testing_Protocol::testing_protocol_file_read){
+	output_copy_file(GLOBAL.input_base + GLOBAL.testing_protocol_filename,
+					 output_dir + "/testing_protocol.json");
   }
 
 }
@@ -398,4 +416,16 @@ void output_csv_files(const std::string& output_directory,
             "curtailed_interactions"},
     csvfile_path, elem.second);
   }
+  for(const auto& elem: plot_data.disease_label_stats){
+    std::string csvfile_name = elem.first + ".csv";
+    std::string csvfile_path = output_directory + "/" + csvfile_name;
+    //This file contains quarantine_stats
+    output_timed_csv({"primary_contact",
+            "mild_symptomatic_tested",
+            "moderate_symptomatic_tested",
+            "severe_symptomatic_tested",
+            "icu","requested_tests","cumulative_positive_cases"},
+    csvfile_path, elem.second);
+  }
+
 }

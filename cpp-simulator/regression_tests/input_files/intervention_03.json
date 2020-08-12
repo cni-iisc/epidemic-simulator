@@ -2,6 +2,22 @@
 	"num_days": 1,
 	"compliance" : 0.9,
 	"lockdown": {
-		"active": true
+		"active": true,
+		"kappa_values_compliant" : {
+			"kappa_H" : 2.0,
+			"kappa_H_incoming" : 1.0,
+			"kappa_W" : 0.25,
+			"kappa_W_incoming" : 0.25,
+			"kappa_C" : 0.25,
+			"kappa_C_incoming" : 0.25
+		},
+		"kappa_values_non_compliant" : {
+			"kappa_H" : 1.25,
+			"kappa_H_incoming" : 1.0,
+			"kappa_W" : 0.25,
+			"kappa_W_incoming" : 0.25,
+			"kappa_C" : 1.0,
+			"kappa_C_incoming" : 1.0
+		}
 	}
 }]

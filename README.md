@@ -50,5 +50,4 @@ This folder contains the cpp-version of the simulator. The CPP simulator evolved
 Please read the  [`cpp-simulator/README.md`](cpp-simulator/README.md) for more details.
 
 ## Copyright and License
-Copyright [2020] [Indian Institute of Science, Bangalore & Tata Institute of Fundamental Research, Mumbai]
-SPDX-License-Identifier: Apache-2.0
+Copyright [2020] [Indian Institute of Science, Bangalore & Tata Institute of Fundamental Research, Mumbai] SPDX-License-Identifier: Apache-2.0

@@ -469,7 +469,7 @@ void get_kappa_custom_modular(std::vector<agent>& nodes, std::vector<house>& hom
   for (count_type count = 0; count < nodes.size(); ++count){
     //choose base kappas
     if(intv_params.lockdown){
-      set_kappa_lockdown_node(nodes[count], cur_time);
+      set_kappa_lockdown_node(nodes[count], cur_time, intv_params);
     }else{
       set_kappa_base_node(nodes[count], intv_params.community_factor, cur_time);
     }

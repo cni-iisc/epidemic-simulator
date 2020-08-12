@@ -16,32 +16,53 @@ import pandas as pd
 import time
 
 NUM_DAYS=120
-INCUBATION_PERIOD=2.3
+INIT_FRAC_INFECTED=0.0001
+MEAN_INCUBATION_PERIOD=4.6
 MEAN_ASYMPTOMATIC_PERIOD=0.5
 MEAN_SYMPTOMATIC_PERIOD=5
-SYMPTOMATIC_FRACTION=0.67
+SYMPTOMATIC_FRACTION=0.66
 MEAN_HOSPITAL_REGULAR_PERIOD=8
 MEAN_HOSPITAL_CRITICAL_PERIOD=8
 COMPLIANCE_PROBABILITY=0.9
 
-##########################################################################################################
-### IMPORTANT: Check if these value fit the city we want to calibrate on. Currently set to Mumbai values #
-##########################################################################################################
+city = "mumbai"
 
-F_KERNEL_A= 2.709
-F_KERNEL_B= 1.278
-BETA_H=0.91100
-BETA_W=0.48803
-BETA_C=0.22089
-BETA_S=0.97607
-BETA_TRAVEL=0
-
+if city=="mumbai":
+    F_KERNEL_A= 2.709
+    F_KERNEL_B= 1.278
+    BETA_H=0.816476
+    BETA_PROJECT=0.519281
+    BETA_NBR_CELLS=0.229229
+    BETA_CLASS=1.03856
+    BETA_TRAVEL=0
+    LAT_S=18.89395643371942
+    LAT_N=19.270176667777736
+    LON_E=72.97973149704592
+    LON_W=72.77633295153348
+elif city=="bangalore":
+    F_KERNEL_A= 10.751
+    F_KERNEL_B= 5.384
+    BETA_H=9
+    BETA_PROJECT=0.4
+    BETA_NBR_CELLS=0.6
+    BETA_CLASS=0.8
+    BETA_TRAVEL=0
+    LAT_S=12.8924010691253
+    LAT_N=13.143666147874784
+    LON_E=77.76003096129057
+    LON_W=77.46010252514884
+    
+BETA_SCALE= 9.0
+BETA_RANDOM_COMMUNITY = BETA_NBR_CELLS
+BETA_W = BETA_PROJECT/BETA_SCALE 
+BETA_S = BETA_CLASS/BETA_SCALE
+BETA_C = BETA_NBR_CELLS/BETA_SCALE
 
 HD_AREA_FACTOR=2.0
 HD_AREA_EXPONENT=0
 INTERVENTION=0
-output_directory_base="../../cpp-simulator/outputs/calibration_2020-05-31/"
-input_directory="../../staticInst/data/mumbai_1million_2020-05-31"
+output_directory_base="../../cpp-simulator/outputs/calibration/2020-06-17_smaller_networks/"
+input_directory="../../staticInst/data/mumbai_1mil_20200617/"
 CALIBRATION_DELAY=0
 DAYS_BEFORE_LOCKDOWN=0
 # Set this to "--SEED_HD_AREA_POPULATION" to seed hd area population
@@ -59,8 +80,11 @@ SEED_FIXED_NUMBER="--SEED_FIXED_NUMBER"
 #SEED_FIXED_NUMBER=" "
 INIT_FIXED_NUMBER_INFECTED=100
 INTERVENTION=0
+USE_AGE_DEPENDENT_MIXING="true"
+IGNORE_ATTENDANCE_FILE="true"
 EXEC_DIR = "./../../cpp-simulator"
 LOGFILE = output_directory_base + "/calibration.log"
+
 ######################
 def calculate_means_fatalities_CPP(output_directory_base, num_sims,results_dir):
     column_names = ['timestep','dead']
@@ -81,8 +105,12 @@ def calculate_means_lambda_CPP(output_directory_base, num_sims,results_dir):
     column_names_lambda_H = ['timestep','lambda H']
     column_names_lambda_W = ['timestep','lambda W']
     column_names_lambda_C = ['timestep','lambda C']
-    column_names = [column_names_lambda_H, column_names_lambda_W, column_names_lambda_C]
-    lambda_array=['lambda_H','lambda_W','lambda_C']
+    column_names_lambda_PROJECT = ['timestep','lambda PROJECT']
+    column_names_lambda_NBR_CELL = ['timestep','lambda NBR_CELL']
+    column_names_lambda_RANDOM_COMMUNITY = ['timestep','lambda RANDOM_COMMUNITY']
+    
+    column_names = [column_names_lambda_H, column_names_lambda_W, column_names_lambda_C, column_names_lambda_PROJECT, column_names_lambda_NBR_CELL, column_names_lambda_RANDOM_COMMUNITY]
+    lambda_array=['lambda_H','lambda_W','lambda_C', 'lambda_PROJECT', 'lambda_NBR_CELL', 'lambda_RANDOM_COMMUNITY']
     for lambda_count,lambda_ in enumerate(lambda_array):
         master_df = pd.DataFrame(columns=column_names[lambda_count])
         val = column_names[lambda_count][1]
@@ -107,8 +135,9 @@ def run_sim(num_sims_count, params):
     command+=params['seedOnlyNonCommuter'] + " "
     command+=params['seedFixedNumber']
     command+=" --NUM_DAYS "+ str(params['numDays'])
+    command+=" --INIT_FRAC_INFECTED " + str(params['initFracInfected'])
     command+=" --INIT_FIXED_NUMBER_INFECTED "+ str(params['initFixedNumberInfected'])
-    command+=" --INCUBATION_PERIOD " +  str(params['incubationPeriod'])
+    command+=" --MEAN_INCUBATION_PERIOD " +  str(params['MeanIncubationPeriod'])
     command+=" --MEAN_ASYMPTOMATIC_PERIOD " +  str(params['MeanAsymptomaticPeriod']) 
     command+=" --MEAN_SYMPTOMATIC_PERIOD " + str(params['MeanSymptomaticPeriod']) 
     command+=" --SYMPTOMATIC_FRACTION " +  str(params['symptomaticFraction']) 
@@ -122,15 +151,21 @@ def run_sim(num_sims_count, params):
     command+=" --BETA_C " + str(params['betaC'])
     command+=" --BETA_S " + str(params['betaS'])
     command+=" --BETA_TRAVEL " + str(params['betaTravel'])
+    command+=" --BETA_PROJECT " + str(params['betaPROJECT'])
+    command+=" --BETA_CLASS " + str(params['betaCLASS'])
+    command+=" --BETA_NBR_CELLS " + str(params['betaNBR'])
+    command+=" --BETA_RANDOM_COMMUNITY " + str(params['betaRANDCOMM'])
     command+=" --HD_AREA_FACTOR " + str(params['hdAreaFactor'])
     command+=" --HD_AREA_EXPONENT " + str(params['hdAreaExponent'])
     command+=" --INTERVENTION " + str(params['intervention'])
-    command+=" --IGNORE_ATTENDANCE_FILE "
     command+=" --output_directory " + str(output_directory)
     command+=" --input_directory " + str(params['inputDirectory'])
     command+=" --CALIBRATION_DELAY " + str(params['calibrationDelay'])
     command+=" --DAYS_BEFORE_LOCKDOWN " + str(params['daysBeforeLockdown'])
-
+    command+=" --ENABLE_NBR_CELLS "
+    command+=f"--CITY_SW_LAT {LAT_S} --CITY_NE_LAT {LAT_N} --CITY_SW_LON {LON_W} --CITY_NE_LON {LON_E} "
+    command+=" --IGNORE_ATTENDANCE_FILE"
+    #command+=" --USE_AGE_DEPENDENT_MIXING"
     print(command)
 
     os.system(command)
@@ -150,11 +185,12 @@ while (continue_run):
    
     params = { 'execDir': EXEC_DIR,'seedHDAreaPopulation': SEED_HD_AREA_POPULATION, 'seedOnlyNonCommuter': SEED_ONLY_NON_COMMUTER,
                'seedFixedNumber':SEED_FIXED_NUMBER, 'seedFixedNumber':SEED_FIXED_NUMBER, 'numDays': NUM_DAYS, 
-               'initFixedNumberInfected': INIT_FIXED_NUMBER_INFECTED, 'incubationPeriod': INCUBATION_PERIOD, 
+               'initFracInfected': INIT_FRAC_INFECTED, 'initFixedNumberInfected': INIT_FIXED_NUMBER_INFECTED, 'MeanIncubationPeriod': MEAN_INCUBATION_PERIOD, 
                'MeanAsymptomaticPeriod': MEAN_ASYMPTOMATIC_PERIOD, 'MeanSymptomaticPeriod': MEAN_SYMPTOMATIC_PERIOD, 'symptomaticFraction': SYMPTOMATIC_FRACTION, 
                'meanHospitalRegularPeriod': MEAN_HOSPITAL_REGULAR_PERIOD, 'meanHospitalCriticalPeriod': MEAN_HOSPITAL_CRITICAL_PERIOD, 
                'complianceProbability': COMPLIANCE_PROBABILITY, 'FKernelA': F_KERNEL_A, 'FKernelB': F_KERNEL_B, 
                'betaH': BETA_H, 'betaW': BETA_W, 'betaC': BETA_C, 'betaS': BETA_S, 'betaTravel': BETA_TRAVEL,
+               'betaCLASS': BETA_CLASS, 'betaPROJECT' : BETA_PROJECT, 'betaNBR':BETA_NBR_CELLS, 'betaRANDCOMM':BETA_RANDOM_COMMUNITY,
                'hdAreaFactor':HD_AREA_FACTOR, 'hdAreaExponent':HD_AREA_EXPONENT, 'intervention': INTERVENTION, 
                'outputDirectoryBase': output_directory_base, 'inputDirectory': input_directory,
                'calibrationDelay': CALIBRATION_DELAY, 'daysBeforeLockdown': DAYS_BEFORE_LOCKDOWN }
@@ -167,9 +203,10 @@ while (continue_run):
 
     ##############################################################
     calculate_means_fatalities_CPP(output_directory_base, num_sims,"./data/")
-    calculate_means_lambda_CPP(output_directory_base, num_sims,"./data/") 
+    calculate_means_lambda_CPP(output_directory_base, num_sims,"./data/")
     
     [flag, BETA_SCALE_FACTOR, step_beta_h, step_beta_w, step_beta_c, delay, slope_diff, lambda_h_diff, lambda_w_diff, lambda_c_diff] = calibrate(resolution,count)
+    
     with open(LOGFILE, "a+") as logfile:
         logfile.write(f"beta_h: {BETA_H}\n")
         logfile.write(f"beta_w: {BETA_W}\n")
@@ -178,17 +215,22 @@ while (continue_run):
         logfile.write(f"slope_diff: {slope_diff}\n")
         logfile.write(f"lambda_h_diff: {lambda_h_diff}\n")
         logfile.write(f"lambda_w_diff: {lambda_w_diff}\n")
-        logfile.write(f"lambda_c_diff: {lambda_c_diff}\n\n\n")        
+        logfile.write(f"lambda_c_diff: {lambda_c_diff}\n\n\n")   
+
     count+=1    
     if flag == True:
         continue_run = False
+        print ("count:", count, '. BETA_H: ', BETA_H, '. BETA_W: ',BETA_W, '. BETA_S: ', BETA_S, '. BETA_C: ', BETA_C, 'Delay: ', delay )
     else:
         BETA_H = max(BETA_H + step_beta_h,0)*BETA_SCALE_FACTOR
         BETA_W = max(BETA_W + step_beta_w,0)*BETA_SCALE_FACTOR
         BETA_S = BETA_W * 2
         BETA_C = max(BETA_C + step_beta_c,0)*BETA_SCALE_FACTOR
+        BETA_PROJECT = BETA_SCALE*BETA_W
+        BETA_CLASS = BETA_SCALE*BETA_S
+        BETA_NBR_CELLS = BETA_SCALE*BETA_C
+        BETA_RANDOM_COMMUNITY = BETA_SCALE*BETA_C
         #INIT_FRAC_SCALE_FACTOR = INIT_FRAC_SCALE_FACTOR*init_frac_mult_factor
-        print("\n\n\n")
         print ("count:", count, '. BETA_H: ', BETA_H, '. BETA_W: ',BETA_W, '. BETA_S: ', BETA_S, '. BETA_C: ', BETA_C, 'Delay: ', delay )
     #continue_run = False
 

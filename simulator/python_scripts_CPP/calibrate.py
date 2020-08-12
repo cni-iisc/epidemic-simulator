@@ -87,8 +87,8 @@ def calibrate(resolution,count):
     
     # read lambda values from the simulation    
     lambda_h = pd.read_csv('data/lambda H_mean.csv')['lambda H'].values[-1]
-    lambda_w = pd.read_csv('data/lambda W_mean.csv')['lambda W'].values[-1]
-    lambda_c = pd.read_csv('data/lambda C_mean.csv')['lambda C'].values[-1]
+    lambda_w = pd.read_csv('data/lambda W_mean.csv')['lambda W'].values[-1]+pd.read_csv('data/lambda PROJECT_mean.csv')['lambda PROJECT'].values[-1]
+    lambda_c = pd.read_csv('data/lambda C_mean.csv')['lambda C'].values[-1]+pd.read_csv('data/lambda NBR_CELL_mean.csv')['lambda NBR_CELL'].values[-1]+pd.read_csv('data/lambda RANDOM_COMMUNITY_mean.csv')['lambda RANDOM_COMMUNITY'].values[-1]
     
     lambda_h_diff = (lambda_h-lambda_h_target)
     lambda_w_diff = (lambda_w-lambda_w_target)

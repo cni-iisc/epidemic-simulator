@@ -27,6 +27,7 @@ struct plot_data_struct{
   std::map<std::string, timed_csv_data<long double>> infections_by_new_infectives;
   std::map<std::string, timed_csv_data<count_type>> quarantined_stats;
   std::map<std::string, timed_csv_data<double>> curtailment_stats;
+  std::map<std::string, timed_csv_data<count_type>> disease_label_stats;
 };
 
 

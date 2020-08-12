@@ -7,7 +7,7 @@ default_options = {}
 default_flags={}
 default_options['--NUM_DAYS'] = 20
 default_options['--INIT_FRAC_INFECTED'] = 0.001
-default_options['--INCUBATION_PERIOD'] = 2.3
+default_options['--MEAN_INCUBATION_PERIOD'] = 2.3 * 2
 default_options['--MEAN_ASYMPTOMATIC_PERIOD'] = 0.5
 default_options['--MEAN_SYMPTOMATIC_PERIOD'] =5
 default_options['--SYMPTOMATIC_FRACTION'] =0.67
@@ -32,6 +32,11 @@ default_options['--FIRST_PERIOD'] =3
 default_options['--SECOND_PERIOD'] =4
 default_options['--THIRD_PERIOD'] =5
 default_options['--OE_SECOND_PERIOD'] =6
+default_options['--BETA_CLASS']=0
+default_options['--BETA_PROJECT']=0
+default_options['--BETA_RANDOM_COMMUNITY']=0
+default_options['--BETA_NBR_CELLS']=0
+default_flags['--ENABLE_TESTING']= False
 # Set this to "--SEED_HD_AREA_POPULATION" to seed hd area population
 # as well.
 # SEED_HD_AREA_POPULATION="--SEED_HD_AREA_POPULATION"
@@ -200,6 +205,142 @@ for intervention in range(16):
 	current_test['test_flags'] = test_flags
 
 	regression_tests.append(current_test)
+
+## configure a new regression text
+#6
+current_test={}
+test_id = 'smaller_networks'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = True
+test_flags['--ENABLE_TESTING'] = False
+
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+## end of regresstion test addition
+
+## configure a new regression text
+#7
+current_test={}
+test_id = 'smaller_networks_testing_001'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+test_options['--TESTING_PROTOCOL']=2
+test_options['--testing_protocol_filename']='../../../../cpp-simulator/regression_tests/input_files/testing_protocol_001.json'
+
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = True
+test_flags['--ENABLE_TESTING'] = True
+
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+## end of regresstion test addition
+
+## configure a new regression text
+#7
+current_test={}
+test_id = 'smaller_networks_testing_002'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+test_options['--TESTING_PROTOCOL']=2
+test_options['--testing_protocol_filename']='../../../../cpp-simulator/regression_tests/input_files/testing_protocol_002.json'
+
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = True
+test_flags['--ENABLE_TESTING'] = True
+
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+## end of regresstion test addition
+
+
+
+## configure a new regression test
+# attendance file based test
+current_test={}
+test_id = 'attendance_file_001'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 8
+test_options['--LOCKED_COMMUNITY_LEAKAGE'] = 0.25
+test_options['--attendance_filename']='../../../../cpp-simulator/regression_tests/input_files/attendance_file_001.json'
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--IGNORE_ATTENDANCE_FILE'] = False
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+
+## configure a new regression test
+# attendance file based test
+current_test={}
+test_id = 'attendance_file_002'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 8
+test_options['--LOCKED_COMMUNITY_LEAKAGE'] = 0.25
+test_options['--attendance_filename']='../../../../cpp-simulator/regression_tests/input_files/attendance_file_002.json'
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--IGNORE_ATTENDANCE_FILE'] = False
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+
+## end of regresstion test addition
 
 
 #remove old output files

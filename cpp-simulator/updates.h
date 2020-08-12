@@ -12,6 +12,8 @@ double update_individual_lambda_w(const agent& node, int cur_time);
 
 double update_individual_lambda_c(const agent& node, int cur_time);
 
+double update_individual_lambda_nbr_cell(const agent& node, int cur_time);
+
 struct node_update_status{
   bool new_infection = false;
   bool new_symptomatic = false;
@@ -24,20 +26,28 @@ node_update_status update_infection(agent& node, int cur_time);
 
 void update_all_kappa(std::vector<agent>& nodes, std::vector<house>& homes, std::vector<workplace>& workplaces, std::vector<community>& communities, matrix<nbr_cell>& nbr_cells, std::vector<intervention_params>& intv_params, int cur_time);
 
-double updated_lambda_w_age_independent(const std::vector<agent>& nodes, const workplace& workplace);
+void updated_lambda_w_age_independent(const std::vector<agent>& nodes, workplace& workplace);
 
-double updated_lambda_h_age_independent(const std::vector<agent>& nodes, const house& home);
+void updated_lambda_h_age_independent(const std::vector<agent>& nodes, house& home);
 
 double updated_travel_fraction(const std::vector<agent>& nodes, int cur_time);
 
-void update_lambdas(agent&node, const std::vector<house>& homes, const std::vector<workplace>& workplaces, const std::vector<community>& communities, double travel_fraction, int cur_time);
+void update_lambdas(agent&node, const std::vector<house>& homes, const std::vector<workplace>& workplaces, const std::vector<community>& communities, const std::vector<std::vector<nbr_cell>>& nbr_cells, double travel_fraction, int cur_time);
 
-double updated_lambda_c_local(const std::vector<agent>& nodes, const community& community);
+void updated_lambda_c_local(const std::vector<agent>& nodes, community& community);
+void updated_lambda_c_local_random_community(const std::vector<agent>& nodes, const std::vector<community>& communities, std::vector<house>& houses);
+void update_lambda_nbr_cells(const std::vector<agent>& nodes, std::vector<std::vector<nbr_cell>>& nbr_cells, const std::vector<house>& houses, const std::vector<community>& communities);
+
+//Update test request and test status
+void update_test_request(std::vector<agent>& nodes, const std::vector<house>& homes, const std::vector<workplace>& workplaces, const std::vector<community>& communities, const std::vector<std::vector<nbr_cell>>& nbr_cells, const count_type current_time, const std::vector<testing_probability>& testing_protocol);
+void update_test_status(std::vector<agent>& nodes, count_type current_time);
+
 
 // Age stratification update functions.
-std::vector<double> updated_lambda_w_age_dependent(const std::vector<agent>& nodes, const workplace& workplace, const matrix<double>& workplace_tx_u, const std::vector<double>& workplace_tx_sigma, const matrix<double>& workplace_tx_vT);
+void updated_lambda_w_age_dependent(const std::vector<agent>& nodes, workplace& workplace, const matrix<double>& workplace_tx_u, const std::vector<double>& workplace_tx_sigma, const matrix<double>& workplace_tx_vT);
+void updated_lambda_project(const std::vector<agent>& nodes, workplace& workplace);
 
-std::vector<double> updated_lambda_h_age_dependent(const std::vector<agent>& nodes, const house& home, const matrix<double>& home_tx_u, const std::vector<double>& home_tx_sigma, const matrix<double>& home_tx_vT);
+void updated_lambda_h_age_dependent(const std::vector<agent>& nodes, house& home, const matrix<double>& home_tx_u, const std::vector<double>& home_tx_sigma, const matrix<double>& home_tx_vT);
 
 std::vector<double> updated_lambda_c_local_age_dependent(const std::vector<agent>& nodes, const community& community, const matrix<double>& community_tx_u, const std::vector<double>& community_tx_sigma, const matrix<double>& community_tx_vT);
 
@@ -76,5 +86,11 @@ struct casualty_stats{
 };
 
 casualty_stats get_infected_community(const std::vector<agent>& nodes, const community& community);
+
+void update_grid_cell_statistics(matrix<nbr_cell>& nbr_cells,
+								 std::vector<house>& homes,
+								 std::vector<agent>& nodes,
+								 double locked_neighborhood_leakage,
+								 double locked_neighborhood_threshold);
 
 #endif

@@ -241,8 +241,24 @@ agebins = cityprofiledata['age']['bins']
 ageweights = cityprofiledata['age']['weights']
 ageweights[0] = ageweights[0] + 1 - sum(ageweights) #Just do a slight adjustment in case they don't sum to 1
 
-def sampleAge():
-    s = np.random.choice(agebins,1,p=ageweights)[0]
+max_HHSize = int(hbins[-1].split('+')[0])  #find the maximum possible HH size
+conditional_HHSize = cityprofiledata['ageGivenHouseholdSize']['householdSize']
+conditional_AgeDist = np.full((max_HHSize,len(agebins)),0.0)
+input_conditional_AgeDist = cityprofiledata['ageGivenHouseholdSize']['weights']
+
+for j in range(0,len(conditional_HHSize)):
+    if '-' in conditional_HHSize[j]:
+        (start_size, end_size) = conditional_HHSize[j].split('-')
+        for i in np.arange(int(start_size),int(end_size)+1,1):
+            conditional_AgeDist[i-1] = input_conditional_AgeDist[j]
+    elif '+' in conditional_HHSize[j]:
+        for i in np.arange(int(conditional_HHSize[j].split('+')[0]), max_HHSize+1,1):
+            conditional_AgeDist[i-1] = input_conditional_AgeDist[j]
+    else:
+        conditional_AgeDist[int(conditional_HHSize[j])-1] = input_conditional_AgeDist[j]    
+    
+def sampleAge(age_weights):
+    s = np.random.choice(agebins,1,p=age_weights)[0]
     if '+' in s:
         n = int(s[:-1])
     else:
@@ -445,7 +461,7 @@ for h in houses:
 
         p["CommunityCentreDistance"] = getCommunityCenterDistance(h["lat"],h["lon"],wardIndex)
 
-        age = sampleAge()
+        age = sampleAge(conditional_AgeDist[s-1])
         p["age"] = age
 
         #initialising most stuff to None
