@@ -14,17 +14,20 @@
 
 #include "models.h"
 #include "initializers.h"
-
-#ifdef DEBUG
 #include <cassert>
-#endif
 
 using std::string;
 using std::vector;
 using std::to_string;
 
-auto readJSONFile(string filename){
+auto readJSONFile(const string& filename){
   std::ifstream ifs(filename, std::ifstream::in);
+
+  // check if file exists.
+  if(! ifs.good()) {
+      throw std::runtime_error(filename + " does not exists or could not be read.");
+  }
+
   rapidjson::IStreamWrapper isw(ifs);
   rapidjson::Document d;
   d.ParseStream(isw);

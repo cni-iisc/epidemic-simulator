@@ -22,7 +22,7 @@ option(WITH_OPENMP "Enable parallelization using openmp" OFF)
 
 # Configuration
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 if(WITH_OPENMP)
     find_package(Threads REQUIRED)
     find_package(OpenMP REQUIRED)
