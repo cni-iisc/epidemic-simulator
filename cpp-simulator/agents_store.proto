@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package cohorts;
+
+message TestStatus {
+  required int32 tested_epoch = 1;
+  required bool tested_positive = 2;
+  required int32 contact_traced_epoch = 3;
+  required bool test_requested = 4;
+  required int32 state = 5;
+  required bool triggered_contact_trace = 6;
+  required int32 node_test_trigger = 7;
+}
+
+message AgentElement {
+  required int32 infection_status = 1;
+  required bool entered_symptomatic_state = 2;
+  required bool entered_hospitalised_state = 3;
+  required int32 state_before_recovery = 4;
+  required bool infective = 5;
+  required int32 disease_label = 6;
+  required TestStatus test_status = 7;
+  required int32 time_of_infection = 8;
+  required int32 time_became_infective = 9;
+}
+
+message AgentStore {
+  repeated AgentElement agents = 1;
+}

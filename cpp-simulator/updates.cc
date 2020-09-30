@@ -4,12 +4,26 @@
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
+#include <unordered_map>
 
 #include "updates.h"
 #include "interventions.h"
+#include "testing.h"
+#include "train_loader.h"
 
 using std::cerr;
 using std::vector;
+
+namespace {
+  void reset_cohort_lambdas(
+    std::unordered_map<count_type, vector<cohort_space>>& cohorts) {
+    for (auto& iter1 : cohorts) {
+      for (auto& iter2 : iter1.second) {
+        iter2.lambda_interaction_external = 0.0;
+      }
+    }
+  }
+}
 
 bool mask_active(int cur_time){
 	int mask_start_date = GLOBAL.MASK_START_DATE;
@@ -50,10 +64,24 @@ double update_individual_lambda_c(const agent& node, int cur_time){
 	* node.funct_d_ck
 	* (1 + node.severity)
 	* node.kappa_C
-	* mask_factor;
+	* mask_factor
+  * node.zeta_a;
 	// optimised version: return node.lambda_h * node.funct_d_ck;
 }
 
+double update_individual_lambda_nbr_cell(const agent& node, int cur_time){
+  double mask_factor = 1.0;
+  if(mask_active(cur_time) && node.compliant){
+	  mask_factor = GLOBAL.MASK_FACTOR;
+  }
+  return (node.infective?1.0:0.0)
+	* node.kappa_T
+	* node.infectiousness
+	* (1 + node.severity)
+	* node.kappa_C
+	* mask_factor
+	* node.zeta_a;
+}
 
 //Returns whether the node was infected or turned symptomatic in this time step
 node_update_status update_infection(agent& node, int cur_time){
@@ -167,6 +195,7 @@ node_update_status update_infection(agent& node, int cur_time){
   node.lambda_h = update_individual_lambda_h(node,cur_time);
   node.lambda_w = update_individual_lambda_w(node,cur_time);
   node.lambda_c = update_individual_lambda_c(node,cur_time);
+  node.lambda_nbr_cell = update_individual_lambda_nbr_cell(node,cur_time);
 
   return update_status;
 }
@@ -262,24 +291,135 @@ void update_all_kappa(vector<agent>& nodes, vector<house>& homes, vector<workpla
   }
 }
 
-double updated_lambda_w_age_independent(const vector<agent>& nodes, const workplace& workplace){
+
+void updated_lambda_project(const vector<agent>& nodes, workplace& workplace){
+  for(count_type i=0; i < workplace.projects.size(); ++i){
+	  double sum_value_project = 0;
+	  for(count_type j=0; j < workplace.projects[i].individuals.size(); ++j){
+		  sum_value_project += nodes[workplace.projects[i].individuals[j]].lambda_w;
+	  }
+	  workplace.projects[i].age_independent_mixing = workplace.projects[i].scale*sum_value_project;
+  }
+}
+
+
+
+double get_individual_lambda_cohort(const agent& node, int cur_time){
+  double mask_factor = 1.0;
+  if(mask_active(cur_time) && node.compliant){
+	  mask_factor = GLOBAL.MASK_FACTOR;
+  }
+  if (!GLOBAL.TRAINS_RUNNING) {
+	  return 0;
+  }
+  return (node.infective?1.0:0.0)
+    * node.my_cohort.edge_weight //TODO[NKV]: We would need to update this edge weight from cohorts.cc, I guess!
+	* node.kappa_T
+	* node.infectiousness
+	* mask_factor
+	* node.kappa_W //Nodes contribution is weighted by kappa_w
+	* node.attending;
+	// /	* (1 + node.severity)
+}
+
+void update_lambda_intra_cohort(std::unordered_map<count_type, vector<cohort_space>>& cohorts, vector<agent>& nodes, int cur_time){
+
+	for (auto& it1: cohorts) { //cohort_hash (src*100) + dst
+		for (auto& cohort_it: it1.second) {
+			double sum_value = 0;
+			if(cur_time % 2){
+				for (auto& j: cohort_it.internal_nodes){
+					sum_value += get_individual_lambda_cohort(nodes[j], cur_time);
+				}
+			}
+			cohort_it.lambda_interaction_internal = cohort_it.scale * sum_value;
+			// if (bernoulli(0.01)){std::cout<<cohort_it.lambda_interaction_internal<<cohort_it.internal_nodes.size()<<std::endl;}
+		}
+	}
+}
+
+void update_cohort_edge_weights(std::unordered_map<count_type, vector<cohort_space>>& cohorts, const vector<agent>& nodes){
+	//TODO[v2]: update this logic for inter cohort interactions - overlap time
+	return;
+}
+
+//TODO[v2]: Update the code to work on the unordered_map
+void update_lambda_inter_cohort(
+    const std::unordered_map<count_type, std::vector<train_coach>>& am_coachs,
+    const std::unordered_map<count_type, std::vector<train_coach>>& pm_coachs,
+    std::unordered_map<count_type, vector<cohort_space>>& cohorts,const TrainLoader& trains, int cur_time){
+  reset_cohort_lambdas(cohorts);
+  //morning trip
+  if (cur_time % GLOBAL.SIM_STEPS_PER_DAY == 1){
+    for (auto& coach_line : am_coachs) {
+      for (auto& coach : coach_line.second) {
+        for (auto& cohort_ptr: coach.cohorts) {
+          // auto current_cohort = cohorts[unordered_index][vector_index];
+          double sum_value = 0.0;
+
+          for (auto& cohort_ptr2: coach.cohorts) {
+            if (cohort_ptr == cohort_ptr2) {
+              continue;
+            }
+            // auto other_cohort = cohorts[unordered_index2][vector_index2];
+            double overlap_time = trains.GetOverlapMinutesAlongLine(
+              coach.trainLine,
+              cohort_ptr->source_station,
+              cohort_ptr->destination_station,
+              cohort_ptr2->source_station,
+              cohort_ptr2->destination_station);
+            sum_value += cohort_ptr2->lambda_interaction_internal * overlap_time;
+          }
+          cohort_ptr->lambda_interaction_external += sum_value;
+        }
+      }
+    }
+  }
+  //evening trip
+  else if (cur_time % GLOBAL.SIM_STEPS_PER_DAY == 3){
+    for (auto& coach_line : pm_coachs) {
+      for (auto& coach : coach_line.second) {
+        for (auto& cohort_ptr: coach.cohorts) {
+          double sum_value = 0.0;
+
+          for (auto& cohort_ptr2: coach.cohorts) {
+            if (cohort_ptr == cohort_ptr2) {
+              continue;
+            }
+			// Reversing src dest for PM.
+            double overlap_time = trains.GetOverlapMinutesAlongLine(
+              coach.trainLine,
+              cohort_ptr->destination_station,
+              cohort_ptr->source_station,
+              cohort_ptr2->destination_station,
+              cohort_ptr2->source_station);
+            sum_value += cohort_ptr2->lambda_interaction_internal * overlap_time;
+          }
+          cohort_ptr->lambda_interaction_external += sum_value;
+        }
+      }
+    }
+  }
+}
+
+void updated_lambda_w_age_independent(const vector<agent>& nodes, workplace& workplace){
   double sum_value = 0;
   vector<double> lambda_age_group(GLOBAL.NUM_AGE_GROUPS);
   for (count_type i=0; i < workplace.individuals.size(); ++i){
 	sum_value += nodes[workplace.individuals[i]].lambda_w;
   }
-  return workplace.scale*sum_value;
+  workplace.age_independent_mixing = workplace.scale*sum_value;
 }
 
-double updated_lambda_h_age_independent(const vector<agent>& nodes, const house& home){
+void updated_lambda_h_age_independent(const vector<agent>& nodes,  house& home){
   double sum_value = 0;
   for (count_type i=0; i<home.individuals.size(); ++i){
 	sum_value += nodes[home.individuals[i]].lambda_h;
   }
-  return  home.scale*sum_value;
+  home.age_independent_mixing =  home.scale*sum_value;
 }
 
-vector<double> updated_lambda_h_age_dependent(const vector<agent>& nodes, const house& home, const matrix<double>& home_tx_u, const vector<double>& home_tx_sigma, const matrix<double>& home_tx_vT){
+void updated_lambda_h_age_dependent(const vector<agent>& nodes,  house& home, const matrix<double>& home_tx_u, const vector<double>& home_tx_sigma, const matrix<double>& home_tx_vT){
   auto size = home_tx_u.size();
 
   vector<double> age_component(GLOBAL.NUM_AGE_GROUPS, 0.0);
@@ -306,11 +446,10 @@ vector<double> updated_lambda_h_age_dependent(const vector<agent>& nodes, const 
     }
 	lambda_age_group[count] *= home.scale;
   }
- return lambda_age_group;
-
+  home.age_dependent_mixing = std::move(lambda_age_group);
 }
 
-vector<double> updated_lambda_w_age_dependent(const vector<agent>& nodes, const workplace& workplace, const matrix<double>& workplace_tx_u, const vector<double>& workplace_tx_sigma, const matrix<double>& workplace_tx_vT){
+void updated_lambda_w_age_dependent(const vector<agent>& nodes, workplace& workplace, const matrix<double>& workplace_tx_u, const vector<double>& workplace_tx_sigma, const matrix<double>& workplace_tx_vT){
 
     auto size = workplace_tx_u.size();
 
@@ -337,7 +476,7 @@ vector<double> updated_lambda_w_age_dependent(const vector<agent>& nodes, const 
       }
 	  lambda_age_group[count] *=  workplace.scale;
     }
-    return lambda_age_group;
+    workplace.age_dependent_mixing = std::move(lambda_age_group);
 }
 
 vector<double> updated_lambda_c_local_age_dependent(const vector<agent>& nodes, const community& community, const matrix<double>& community_tx_u, const vector<double>& community_tx_sigma, const matrix<double>& community_tx_vT){
@@ -377,7 +516,8 @@ double updated_travel_fraction(const vector<agent>& nodes, const int cur_time){
 
   const auto SIZE = nodes.size();
   const auto MASK_FACTOR = GLOBAL.MASK_FACTOR;
-#pragma omp parallel for default(none) shared(nodes) \
+
+#pragma omp parallel for default(none) shared(nodes, SIZE, MASK_FACTOR, cur_time) \
   reduction (+: usual_travellers, actual_travellers,  \
 			 infected_distance, total_distance)
   for(count_type i = 0; i < SIZE; ++i){
@@ -402,11 +542,11 @@ double updated_travel_fraction(const vector<agent>& nodes, const int cur_time){
 	  return (infected_distance/total_distance)
 	* double(actual_travellers)/double(usual_travellers);
   }
-  
+
 }
 
-
-void update_lambdas(agent&node, const vector<house>& homes, const vector<workplace>& workplaces, const vector<community>& communities, const double travel_fraction, const int cur_time){
+//TODO: add cohorts here!!
+void update_lambdas(agent&node, const vector<house>& homes, const vector<workplace>& workplaces, const vector<community>& communities, const vector<vector<nbr_cell>>& nbr_cells, const double travel_fraction, const int cur_time, std::unordered_map<count_type, vector<cohort_space>>& cohorts){
   node.lambda_incoming.set_zero();
   //Contributions from home, workplace, community, and travel
   if (GLOBAL.USE_AGE_DEPENDENT_MIXING){
@@ -418,7 +558,7 @@ void update_lambdas(agent&node, const vector<house>& homes, const vector<workpla
 	  node.lambda_incoming.work = (node.attending?1.0:GLOBAL.ATTENDANCE_LEAKAGE)*node.kappa_W_incoming
 		* workplaces[node.workplace].age_dependent_mixing[node.age_group];
     }
-    
+
   }
   else {
 	//No null check for home as every agent has a home
@@ -434,6 +574,10 @@ void update_lambdas(agent&node, const vector<house>& homes, const vector<workpla
 	  //FEATURE_PROPOSAL: make the mixing dependent on node.age_group;
 	}
   }
+  if(node.workplace != WORKPLACE_HOME){
+	  node.lambda_incoming.project =  (node.attending?1.0:GLOBAL.ATTENDANCE_LEAKAGE)*node.kappa_W_incoming
+		* workplaces[node.workplace].projects[node.workplace_subnetwork].age_independent_mixing;
+  }
   // No null check for community as every node has a community.
   //
   // For all communities add the community lambda with a distance
@@ -447,6 +591,23 @@ void update_lambdas(agent&node, const vector<house>& homes, const vector<workpla
 		  node.hd_area_exponent);
   //If the agent lives in a high population density area, eg, a slum
 
+  node.lambda_incoming.random_community = node.kappa_C_incoming
+	* node.zeta_a
+	* node.funct_d_ck
+	* homes[node.home].random_households.lambda_random_community
+	* node.hd_area_factor;
+
+  if(nbr_cells.size()>0){
+	node.lambda_incoming.nbr_cell = node.kappa_C_incoming
+	  * node.zeta_a
+	  * nbr_cells[homes[node.home].neighbourhood.cell_x][homes[node.home].neighbourhood.cell_y].lambda_nbr
+	  * node.hd_area_factor;
+  }
+  else{
+	node.lambda_incoming.nbr_cell = 0;
+  }
+
+
   //Travel only happens at "odd" times, twice a day
   if((cur_time % 2) && node.travels()){
 	node.lambda_incoming.travel = GLOBAL.BETA_TRAVEL
@@ -454,29 +615,102 @@ void update_lambdas(agent&node, const vector<house>& homes, const vector<workpla
 	  * travel_fraction;
   }
 
+  //Updating the lambdas for agents in cohorts
+
   if(mask_active(cur_time) && node.compliant){
 	node.lambda_incoming.work *= GLOBAL.MASK_FACTOR;
 	node.lambda_incoming.community *= GLOBAL.MASK_FACTOR;
 	node.lambda_incoming.travel *= GLOBAL.MASK_FACTOR;
+	node.lambda_incoming.project *= GLOBAL.MASK_FACTOR;
+	node.lambda_incoming.random_community *= GLOBAL.MASK_FACTOR;
+	node.lambda_incoming.nbr_cell *= GLOBAL.MASK_FACTOR;
+	node.lambda_incoming.cohorts *= GLOBAL.MASK_FACTOR;
   }
 
   node.lambda = node.lambda_incoming.sum();
-
 }
 
+void update_individual_lambda_cohort(vector<agent>&nodes, const int cur_time, std::unordered_map<count_type, vector<cohort_space>>& cohorts){
+	if (!GLOBAL.ENABLE_COHORTS || !GLOBAL.TRAINS_RUNNING || ((cur_time % 2 )==0) ){
+		return;
+	}
+	for (auto& it1:cohorts){
+		for (auto& it2:it1.second){
+			for (auto indiv:it2.internal_nodes){				
+				auto& node=nodes[indiv];
+				if(node.attending){
+					double sum_interactions = it2.lambda_interaction_internal * it2.commute_time + it2.lambda_interaction_external;
+					//FIX: Possible problem related to GLOBAL.SIM_STEPS_PER_DAY. SHould cohorts lambda scale with GLOBAL.SIM_STEPS_PER_DAY?
+					node.lambda_incoming.cohorts = sum_interactions * node.kappa_W_incoming; //
+				
+					if(mask_active(cur_time) && node.compliant){	
+						node.lambda_incoming.cohorts *= GLOBAL.MASK_FACTOR;
+  					}
+				}				
+				node.lambda = node.lambda_incoming.sum();
+			}
+		}
+	}
+	return;
+}
 
-double updated_lambda_c_local(const vector<agent>& nodes, const community& community){
+void updated_lambda_c_local(const vector<agent>& nodes, community& community){
   double sum_value = 0;
   const auto SIZE = community.individuals.size();
 
-#pragma omp parallel for default(none) shared(nodes, community) reduction (+: sum_value)
+#pragma omp parallel for default(none) shared(nodes, community, SIZE) reduction (+: sum_value)
   for(count_type i = 0; i < SIZE; ++i){
-	sum_value += nodes[community.individuals[i]].lambda_c;
+	sum_value
+	  += nodes[community.individuals[i]].lambda_c
+	  * std::min(community.w_c,
+				 nodes[community.individuals[i]].neighborhood_access_factor);
   }
-  //std::fill(lambda_age_group.begin(), lambda_age_group.end(), community.scale*sum_value*community.w_c);
-  //return lambda_age_group;
-  return community.scale*sum_value*community.w_c;
+  community.lambda_community = community.scale*sum_value;
 }
+
+void updated_lambda_c_local_random_community(const vector<agent>& nodes, const vector<community>& communities, vector<house>& houses){
+  const auto HOUSES_SIZE = houses.size();
+#pragma omp parallel for default(none) shared(houses, nodes, HOUSES_SIZE)
+  for(count_type i = 0;  i < HOUSES_SIZE; ++i){
+	double lambda_random_community_outgoing = 0;
+	for(const auto& indiv: houses[i].individuals){
+	  lambda_random_community_outgoing += nodes[indiv].lambda_c;
+	}
+	houses[i].lambda_random_community_outgoing = lambda_random_community_outgoing;
+  }
+#pragma omp parallel for default(none) shared(houses, communities, HOUSES_SIZE)
+  for(count_type i = 0; i < HOUSES_SIZE; ++i){
+	double sum_value_household = 0;
+	for(const auto& neighbouring_household: houses[i].random_households.households){
+	  sum_value_household += houses[neighbouring_household].lambda_random_community_outgoing;
+	}
+	houses[i].random_households.lambda_random_community = houses[i].random_households.scale
+	  * sum_value_household
+	  * std::min(communities[houses[i].community].w_c, houses[i].neighborhood_access_factor);
+  }
+}
+
+void update_lambda_nbr_cells(const vector<agent>& nodes, vector<vector<nbr_cell>>& nbr_cells, const vector<house>& houses, const vector<community>& communities){
+  for(count_type i=0; i<nbr_cells.size(); ++i){
+	for(count_type j=0; j<nbr_cells[i].size(); ++j){
+	  double sum_values = 0;
+#pragma omp parallel for default(none)					\
+  shared(nbr_cells, communities, nodes,					\
+		 houses, i, j)									\
+  reduction (+: sum_values)
+	  for(count_type h=0; h<nbr_cells[i][j].houses_list.size(); ++h){
+		const auto house_index = nbr_cells[i][j].houses_list[h];
+		for(count_type k=0; k<houses[house_index].individuals.size(); ++k){
+		  sum_values += nodes[houses[house_index].individuals[k]].lambda_nbr_cell
+			* std::min(communities[houses[house_index].community].w_c,
+					   houses[house_index].neighborhood_access_factor);
+		}
+	  }
+	  nbr_cells[i][j].lambda_nbr = nbr_cells[i][j].scale*sum_values;
+	}
+  }
+}
+
 
 void update_lambda_c_global(vector<community>& communities,
 							const matrix<double>& community_distance_fk_matrix){
@@ -490,16 +724,81 @@ void update_lambda_c_global(vector<community>& communities,
 	  num += fk_val * communities[c2].lambda_community;
 	  denom += fk_val;
 	}
-	if(denom==0){		
+	if(denom==0){
 		communities[c1].lambda_community_global = 0;
-	} else{		
+	} else{
 		communities[c1].lambda_community_global = communities[c1].w_c*num/denom;
 	}
-	
+
   }
 }
 
+void update_test_request(vector<agent>& nodes, const vector<house>& homes,
+						 const vector<workplace>& workplaces, const vector<community>& communities,
+						 const vector<vector<nbr_cell>>& nbr_cells, const count_type current_time, const vector<testing_probability>& testing_protocol){
+  testing_probability probabilities;
+  if(current_time >= GLOBAL.NUM_DAYS_BEFORE_INTERVENTIONS*GLOBAL.SIM_STEPS_PER_DAY){
+	switch(GLOBAL.TESTING_PROTOCOL){
+	case Testing_Protocol::no_testing:
+		break;
+	case Testing_Protocol::test_household:
+		probabilities.prob_test_index_hospitalised = 1;
+		probabilities.prob_test_household_symptomatic_symptomatic = 0;
+		probabilities.prob_test_household_symptomatic_asymptomatic = 0;
 
+		probabilities.prob_test_household_hospitalised_symptomatic = 1;
+		probabilities.prob_test_household_hospitalised_asymptomatic = 0;
+		probabilities.prob_test_household_positive_symptomatic = 1;
+		probabilities.prob_test_household_positive_asymptomatic = 0;
+
+		probabilities.prob_test_neighbourhood_hospitalised_symptomatic = 0;
+		probabilities.prob_test_neighbourhood_hospitalised_asymptomatic = 0;
+		probabilities.prob_test_neighbourhood_positive_symptomatic = 0;
+		probabilities.prob_test_neighbourhood_positive_asymptomatic = 0;
+
+		probabilities.prob_contact_trace_household_hospitalised = 1;
+		probabilities.prob_contact_trace_household_positive = 1;
+
+		probabilities.prob_retest_recovered = 1;
+		set_test_request(nodes, homes, workplaces, nbr_cells, communities, probabilities, current_time);
+		break;
+	case Testing_Protocol::testing_protocol_file_read:
+		set_test_request_fileread(nodes, homes, workplaces, nbr_cells, communities, testing_protocol, current_time);
+		break;
+	default:
+		break;
+	}
+  }
+}
+
+void update_test_status(vector<agent>& nodes, count_type current_time){
+  for(auto& node: nodes){
+    if(node.test_status.test_requested){
+	  if(node.infection_status == Progression::infective
+		 || node.infection_status == Progression::symptomatic
+		 || node.infection_status == Progression::hospitalised
+		 || node.infection_status == Progression::critical){
+		node.test_status.state = bernoulli(GLOBAL.TEST_FALSE_NEGATIVE)?test_result::negative:test_result::positive;
+		node.test_status.tested_positive = node.test_status.tested_positive || (node.test_status.state == test_result::positive);
+		node.test_status.tested_epoch = current_time;
+	  }
+	  else if(node.infection_status == Progression::exposed
+			  && current_time-node.time_of_infection > GLOBAL.SIM_STEPS_PER_DAY*GLOBAL.TIME_TO_TEST_POSITIVE){
+		node.test_status.state = bernoulli(GLOBAL.TEST_FALSE_NEGATIVE)?test_result::negative:test_result::positive;
+		node.test_status.tested_positive = node.test_status.tested_positive || (node.test_status.state == test_result::positive);
+		//We might want to have higher false negative rate here, depending upon updates in the data.
+		node.test_status.tested_epoch = current_time;
+	  }
+	  else{
+		// Test could come positive for a succeptible/recovered/dead person
+		node.test_status.state = bernoulli(GLOBAL.TEST_FALSE_POSITIVE)?test_result::positive:test_result::negative;
+		node.test_status.tested_positive = node.test_status.tested_positive || (node.test_status.state == test_result::positive);
+		node.test_status.tested_epoch = current_time;
+	  }
+	  node.test_status.test_requested = false;
+    }
+  }
+}
 casualty_stats get_infected_community(const vector<agent>& nodes, const community& community){
   count_type affected = 0;
   count_type hd_area_affected = 0;
@@ -529,10 +828,10 @@ casualty_stats get_infected_community(const vector<agent>& nodes, const communit
   count_type hd_area_recovered_from_critical = 0;
 
   count_type errors = 0;
-  
-  const auto SIZE = community.individuals.size(); 
 
-#pragma omp parallel for default(none) shared(nodes, community)			\
+  const auto SIZE = community.individuals.size();
+
+#pragma omp parallel for default(none) shared(nodes, community, SIZE)			\
   reduction(+: errors,													\
 			susceptible, hd_area_susceptible,							\
 			exposed, hd_area_exposed,									\
@@ -635,7 +934,7 @@ casualty_stats get_infected_community(const vector<agent>& nodes, const communit
 	cerr << "erroneous state_before_recovery found\n";
 	assert(false);
   }
-  
+
   affected = exposed + infective + symptomatic
 	+ hospitalised + critical
 	+ recovered + dead;
@@ -644,7 +943,7 @@ casualty_stats get_infected_community(const vector<agent>& nodes, const communit
 	+ hd_area_hospitalised + hd_area_critical
 	+ hd_area_recovered + hd_area_dead;
 
-  
+
   casualty_stats stat;
   stat.affected = affected;
   stat.hd_area_affected = hd_area_affected;
@@ -675,4 +974,44 @@ casualty_stats get_infected_community(const vector<agent>& nodes, const communit
 
   return stat;
   // Populate it afterwards...
+}
+
+void update_grid_cell_statistics(matrix<nbr_cell>& nbr_cells,
+								 vector<house>& homes,
+								 vector<agent>& nodes,
+								 const double locked_neighborhood_leakage,
+								 const double locked_neighborhood_threshold) {
+  for(auto& nbr_cell_row: nbr_cells){
+	for(auto& nbr_cell: nbr_cell_row){
+
+	  const auto SIZE = nbr_cell.houses_list.size();
+	  count_type num_active_hospitalisations = 0;
+
+#pragma omp parallel for shared(homes, nodes, nbr_cell) \
+  reduction(+: num_active_hospitalisations)
+	  for(count_type i = 0; i < SIZE; ++i){
+		for(const auto individual_index: homes[nbr_cell.houses_list[i]].individuals){
+		  if(nodes[individual_index].infection_status
+			 == Progression::hospitalised){
+			++num_active_hospitalisations;
+		  }
+		}
+	  }
+	  nbr_cell.num_active_hospitalisations = num_active_hospitalisations;
+	  nbr_cell.access_factor = interpolate(1.0, locked_neighborhood_leakage,
+										   double(nbr_cell.num_active_hospitalisations)/double(nbr_cell.population),
+										   locked_neighborhood_threshold);
+
+#pragma omp parallel for shared(homes, nodes, nbr_cell)
+	  for(count_type i = 0; i < SIZE; ++i){
+		homes[nbr_cell.houses_list[i]].neighborhood_access_factor
+		  = nbr_cell.access_factor;
+		for(const auto individual_index: homes[nbr_cell.houses_list[i]].individuals){
+		  nodes[individual_index].neighborhood_access_factor
+			= nbr_cell.access_factor;
+		}
+	  }
+
+	}
+  }
 }

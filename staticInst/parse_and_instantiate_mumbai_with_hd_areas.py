@@ -11,6 +11,7 @@ import geopandas as gpd
 import pandas as pd
 import math
 from shapely.geometry import Point, MultiPolygon
+from geopy.distance import geodesic
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -89,7 +90,9 @@ inputfiles = {
     "demographics":"demographics.csv",
     "employment":"employment.csv",
     "household":"households.csv",
-    "cityprofile":"cityProfile.json"
+    "cityprofile":"cityProfile.json",
+    "train_route":"train_route.json",
+    "travel_time":"travel_time.json"
              }
 outputfiles = {
     "individuals":"individuals.json",
@@ -260,25 +263,23 @@ def sampleRandomLatLong(wardIndex):
     if presampledflag:
         i = random.randint(0,len(presampledpoints[wardIndex])-1)
         (lat,lon) = presampledpoints[wardIndex].loc[i]
-        return (lat,lon)
+        return (round(lat, 4), round(lon, 4))
     else:
         (lon1,lat1,lon2,lat2) = geoDF['wardBounds'][wardIndex]
+        wardPoly = MultiPolygon(geoDF['geometry'][wardIndex])
         while True:
-            lat = random.uniform(lat1,lat2)
-            lon = random.uniform(lon1,lon2)
+            lat = round(random.uniform(lat1,lat2), 4)
+            lon = round(random.uniform(lon1,lon2), 4)
             point = Point(lon,lat) #IMPORTANT: Point takes in order of longitude, latitude
-            if MultiPolygon(geoDF['geometry'][wardIndex]).contains(point):
+            if wardPoly.contains(point):
                 return (lat,lon)
+
+
 def distance(lat1, lon1, lat2, lon2):
-    radius = 6371 # km
-
-    dlat = math.radians(lat2-lat1)
-    dlon = math.radians(lon2-lon1)
-    a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon/2) * math.sin(dlon/2)
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-    d = radius * c
-
-    return d
+    p1 = (lat1, lon1)
+    p2 = (lat2, lon2)
+    d = geodesic(p1, p2).km
+    return round(d, 2)
 
 
 communityCentres = []
@@ -311,6 +312,66 @@ else:
 for i in range(nwards):
     ODMatrix[i][0] = ODMatrix[i][0] + 1 - sum(ODMatrix[i])
     #Adjust in case the rows don't sum to 1
+
+
+# Train & cohorts setup
+route_df = pd.read_json(inputfiles["train_route"])
+travel_df = pd.read_json(inputfiles["travel_time"])
+
+def findRoadTime(aerial_distance):
+    # https://www.cartoq.com/traffic-speeds-indias-fastest-slowest-cities/
+    avg_road_speed_kmph = 21.6
+    # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3835347/
+    aerial_road_detour_index = 1.7 # Increase for India compared to US.
+    road_distance =  aerial_distance * aerial_road_detour_index
+    road_time_min = road_distance * 60.0 / avg_road_speed_kmph
+    return road_time_min
+
+def findShortestTrainRoute(lat1, lon1, lat2, lon2):
+    # Returns time in minutes via train, closest src station, closest dest station
+    route_src_df = route_df.copy()
+    route_dest_df = route_df.copy()
+    route_src_df['station_distance'] = route_src_df.apply(lambda x: distance(lat1, lon1, x.latitude, x.longitude),axis=1)
+    route_dest_df['station_distance'] = route_src_df.apply(lambda x: distance(lat2, lon2, x.latitude, x.longitude),axis=1)
+    route_src_df.sort_values(by=['station_distance'], ascending=True, inplace=True, ignore_index=True)
+    route_dest_df.sort_values(by=['station_distance'], ascending=True, inplace=True, ignore_index=True)
+
+    route_src_df = route_src_df.loc[:3]
+    route_src_df['station_time'] = route_src_df.apply(lambda x: findRoadTime(x.station_distance), axis=1)
+    route_dest_df = route_dest_df.loc[:3]
+    route_dest_df['station_time'] = route_dest_df.apply(lambda x: findRoadTime(x.station_distance), axis=1)
+
+    route_src_df['merge_key'] = 1
+    route_dest_df['merge_key'] = 1
+    route_train_df = route_src_df.merge(route_dest_df, on='merge_key', suffixes=('_src', '_dest'))
+    route_train_df['train_time'] = route_train_df.apply(lambda x:
+        travel_df[(travel_df.start == x.stationId_src) & (travel_df.end == x.stationId_dest)].travel_time_min.values[0], axis=1)
+    route_train_df['total_time'] = route_train_df.apply(lambda x: x.station_time_src + x.train_time + x.station_time_dest, axis=1)
+
+    route_train_df.sort_values(by=['total_time'], ascending=True, inplace=True, ignore_index=True)
+    return route_train_df.loc[0].total_time, route_train_df.loc[0].stationId_src, route_train_df.loc[0].stationId_dest
+
+
+def willTakeTrain(lat1,lon1,lat2,lon2):
+    # Returns if train will be preferred option of travel between src and dest,
+    # along with src, dest station id
+    aerial_distance_km = distance(lat1,lon1,lat2,lon2)
+    # For short distances default to road.
+    if aerial_distance_km <= 1.0:
+        return False, None,None
+    road_time_min = findRoadTime(aerial_distance_km)
+    train_time_min, src, dest = findShortestTrainRoute(lat1, lon1, lat2, lon2)
+    if src == dest:
+        return False, None,None
+
+    # Favor trains, for cost parity of trains, or frequency of buses.
+    road_travel_cost_factor = 2.5
+    if road_time_min*road_travel_cost_factor < train_time_min:
+        return False, None, None
+
+    return True, src, dest
+
+
 
 
 #Now the real city building begins
@@ -384,6 +445,8 @@ for h in houses:
         p["workplace"]=None
         p["workplaceType"]=0
         p["school"]=None
+        p["startStation"]=None
+        p["endStation"]=None
 
         if age < 3:
             p["employed"]=0
@@ -551,6 +614,10 @@ for wardIndex in range(nwards):
         while(i < s and len(workers[wardIndex])>0):
             pid = workers[wardIndex].pop(random.randrange(len(workers[wardIndex])))
             individuals[pid]["workplace"]=wid
+            isTrain, srcStationId, destStationId = willTakeTrain(individuals[pid]["lat"],individuals[pid]["lon"],w["lat"], w["lon"])
+            if isTrain:
+                individuals[pid]["startStation"] = srcStationId
+                individuals[pid]["endStation"] = destStationId
             del individuals[pid]["workplaceward"]
             i+=1
         workplaces.append(w)

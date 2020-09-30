@@ -10,6 +10,7 @@ using std::min;
 
 void set_kappa_base_node(agent& node, double community_factor, const int cur_time){
   //set the basic kappa values for this node according to current time
+  node.quarantined=false;
   node.kappa_T = kappa_T(node, cur_time);
   node.kappa_H = 1.0;
   node.kappa_H_incoming = 1.0;
@@ -24,11 +25,12 @@ void set_kappa_base_node(agent& node, double community_factor, const int cur_tim
   }
 }
 
-void set_kappa_lockdown_node(agent& node, const int cur_time){
+void set_kappa_lockdown_node(agent& node, const int cur_time, const intervention_params intv_params){
   node.kappa_T = kappa_T(node, cur_time);
+  node.quarantined = true; //lockdown implies quarantined
   if(node.workplace_type==WorkplaceType::office){
-    node.kappa_W = 0.25;
-    node.kappa_W_incoming = 0.25;
+    node.kappa_W = intv_params.lockdown_kappas_compliant.kappa_W;
+    node.kappa_W_incoming = intv_params.lockdown_kappas_compliant.kappa_W_incoming;
   }else{
 	//Schools and colleges are assumed closed in all lockdowns
     node.kappa_W = 0.0;
@@ -36,15 +38,15 @@ void set_kappa_lockdown_node(agent& node, const int cur_time){
   }
 
   if(node.compliant){
-    node.kappa_H = 2.0;
-    node.kappa_H_incoming = 1.0;
-    node.kappa_C = 0.25;
-    node.kappa_C_incoming = 0.25;
+    node.kappa_H = intv_params.lockdown_kappas_compliant.kappa_H;
+    node.kappa_H_incoming = intv_params.lockdown_kappas_compliant.kappa_H_incoming;
+    node.kappa_C = intv_params.lockdown_kappas_compliant.kappa_C;
+    node.kappa_C_incoming = intv_params.lockdown_kappas_compliant.kappa_C_incoming;
   }else{
-    node.kappa_H = 1.25;
-    node.kappa_H_incoming = 1.0;
-    node.kappa_C = 1.0;
-    node.kappa_C_incoming = 1.0;
+    node.kappa_H = intv_params.lockdown_kappas_non_compliant.kappa_H;
+    node.kappa_H_incoming = intv_params.lockdown_kappas_non_compliant.kappa_H_incoming;
+    node.kappa_C = intv_params.lockdown_kappas_non_compliant.kappa_C;
+    node.kappa_C_incoming = intv_params.lockdown_kappas_non_compliant.kappa_C_incoming;
   }
 }
 
