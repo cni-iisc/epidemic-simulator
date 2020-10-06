@@ -1,6 +1,6 @@
 # City-Scale epidemic simulator
 
-This repository houses the source code of the city-scale epidemic simulator developed by a team of researchers of IISc Bangalore, and TIFR Mumbai, developed to model the spread of CovID-19 in Indian demographics. This README document will help you familiarize yourself with the directory structure of the project and also provides the steps to run the simulator on your local machines. 
+This repository houses the source code of the city-scale epidemic simulator developed by a team of researchers from the Indian Institute of Science Bangalore, Google Inc. and the University of Virginia, developed to model the spread of CovID-19 in Indian demographics. This README document will help you familiarize yourself with the directory structure of the project and also provides the steps to run the simulator on your local machines. 
 
 The source code for the simulator is organized into three major directories each of which represent one stage of the simulator's workflow.
 
