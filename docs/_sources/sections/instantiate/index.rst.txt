@@ -1,0 +1,13 @@
+Instantiate Synthetic city
+======================================
+
+This stub will be expanded as section to create a new city
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+ 
+   venv.rst
+   data/getData.rst

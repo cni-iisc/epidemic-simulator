@@ -1,0 +1,113 @@
+Syntax of JSON files for interventions
+=======================================
+The json file for specifying the intervention is expected to be an array of dictionaries. Here is an example that we used in one of our reports:
+
+**Note**: For ``CALIBRATION_DELAY`` many days, the simulator runs no-intervention and then starts implementing the intervention according to the definition provided in the json file.
+
+.. code-block:: json
+
+    [
+        {
+            "num_days": 24,
+            "compliance": 0.6,
+            "compliance_hd": 0.4,
+            "lockdown": {
+                "active": true
+            }
+        },
+        {
+            "num_days": 22,
+            "compliance": 0.6,
+            "compliance_hd": 0.4,
+            "lockdown": {
+                "active": true
+            },
+            "mask_factor": 0.8
+        },
+        {
+            "num_days": 17,
+            "compliance": 0.6,
+            "compliance_hd": 0.4,
+            "lockdown": {
+                "active": true
+            },
+            "social_dist_elderly": {
+                "active": true
+            },
+            "mask_factor": 0.8
+        },
+        {
+            "num_days": 14,
+            "compliance": 0.6,
+            "compliance_hd": 0.4,
+            "community_factor": 0.75,
+            "case_isolation": {
+                "active": true
+            },
+            "home_quarantine": {
+                "active": true
+            },
+            "social_dist_elderly": {
+                "active": true
+            },
+            "school_closed": {
+                "active": true
+            },
+            "mask_factor": 0.8
+        },
+        {
+            "num_days": 153,
+            "compliance": 0.6,
+            "compliance_hd": 0.4,
+            "community_factor": 0.75,
+            "case_isolation": {
+                "active": true
+            },
+            "home_quarantine": {
+                "active": true
+            },
+            "social_dist_elderly": {
+                "active": true
+            },
+            "school_closed": {
+                "active": true
+            },
+            "mask_factor": 0.8,
+            "trains": {
+                "active": true,
+                "fraction_forced_to_take_train": 1
+            }
+        },
+        {
+            "num_days": 1,
+            "compliance": 0.6,
+            "compliance_hd": 0.4,
+            "community_factor": 1.0,
+            "case_isolation": {
+                "active": true
+            },
+            "home_quarantine": {
+                "active": true
+            },
+            "social_dist_elderly": {
+                "active": true
+            },
+            "school_closed": {
+                "active": true
+            },
+            "mask_factor": 0.8,
+            "trains": {
+                "active": true,
+                "fraction_forced_to_take_train": 1
+            },
+            "neighbourhood_containment": {
+                "active":true,
+                "leakage": 1.0,
+                "threshold": 0.001
+            }
+        }
+    ]
+
+If the simulator is running for more days than specified in the intervention file, the intervention defined in the last element of the array is used for all subsequent days.
+
+The simulator requires the ``num_days`` key to specify the number of days that a specific intervention is to be used before moving on to the next block. However, it is more convenient to just specify start and end dates. I use a helper script to build this file from a template the specifies start and end dates.

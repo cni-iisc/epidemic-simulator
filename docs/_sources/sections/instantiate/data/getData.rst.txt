@@ -1,0 +1,14 @@
+Preparing the base data for instantiating a city
+=========================================================
+
+This stub will be expanded as section to create a new city
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+   
+
+   dataType/demographics.rst
+   dataType/geographics.rst
+   dataType/mobility.rst
+   dataType/india.rst

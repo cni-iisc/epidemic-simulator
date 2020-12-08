@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Parameter Documentation &mdash; IISc-TIFR City-Scale Agent Based Simulator 0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Syntax of JSON files for interventions" href="interventions.html" />
+    <link rel="prev" title="The Simulator" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> IISc-TIFR City-Scale Agent Based Simulator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getStarted.html">Quick Start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Simulator workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../instantiate/index.html">Instantiate Synthetic city</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibrate/index.html">Calibrating the simulator</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">The Simulator</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Parameter Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interventions.html">Syntax of JSON files for interventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="attendance.html">Syntax for JSON files for attendance profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Syntax for JSON files for testing protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_store.html">Loading and Storing state of the simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test_run.html">Checking if things run</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html#license-and-copyrights">License and Copyrights</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">IISc-TIFR City-Scale Agent Based Simulator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">The Simulator</a> &raquo;</li>
+        
+      <li>Parameter Documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/sections/simulator/params.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="parameter-documentation">
+<h1>Parameter Documentation<a class="headerlink" href="#parameter-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-parameters">
+<h2>Basic Parameters<a class="headerlink" href="#basic-parameters" title="Permalink to this headline">¶</a></h2>
+<p>The following are options that you should explicitly set.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--NUM_DAYS</span> <span class="pre">[num]</span></code>: The number of days for the simulator to run</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--input_directory</span> <span class="pre">[directory]</span></code>: The directory (relative to where you are running the drive_simulator from) that contains the generated city files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output_directory</span> <span class="pre">[directory]</span></code>: The directory (relative to where you are running the drive_simulator from) that contains the generated city files. The program will abort if this directory is not found. Please create the directory if it doesn’t exist.</p></li>
+</ul>
+</div>
+<div class="section" id="seeding-the-initial-infection">
+<h2>Seeding the initial infection<a class="headerlink" href="#seeding-the-initial-infection" title="Permalink to this headline">¶</a></h2>
+<p>You can either seed the initial infection as a fraction of the total population, or you can seed a fixed number. You also have additional options to either choose to seed agents from HD-areas, or agents who take public transportation etc. via these options.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--SEED_FIXED_NUMBER</span></code>: A boolean flag to tell the simulator to seed a fixed number as opposed to seeding a fraction.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--INIT_FIXED_NUMBER_INFECTED</span> <span class="pre">[num]</span></code>: The number of infections to start the simulator with (requires the above –SEED_FIXED_NUMBER to be provided)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--INIT_FRAC_INFECTED</span> <span class="pre">[fraction]</span></code>: Seeding infections as a fraction of the total population</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">--SEED_ONLY_NON_COMMUTER</span></code>: A boolean flag to tell the simulator to only seed infections among agents who do not take public transport
+- <code class="docutils literal notranslate"><span class="pre">--SEED_HD_AREA_POPULATION</span></code>: A boolean flag to tell the simulator to include HD area residents in the pool of initial infections.</p>
+</div>
+<div class="section" id="disease-progression-parameters">
+<h2>Disease progression parameters<a class="headerlink" href="#disease-progression-parameters" title="Permalink to this headline">¶</a></h2>
+<p>The simulator also has a bunch of options to change the default disease progression parameters. The only parameter here that we have changed is the fraction of exposed people who move to the symptomatic branch:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--SYMPTOMATIC_FRACTION</span> <span class="pre">[fraction]</span></code>: What fraction of the people who are exposed move to the symptomatic branch (that is, they do not recover within 5 days of being exposed).</p></li>
+</ul>
+<p>The other options are the following (quite self-explanatory):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--MEAN_INCUBATION_PERIOD</span> <span class="pre">[arg]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--MEAN_ASYMPTOMATIC_PERIOD</span> <span class="pre">[arg]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--MEAN_SYMPTOMATIC_PERIOD</span> <span class="pre">[arg]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--MEAN_HOSPITAL_REGULAR_PERIOD</span> <span class="pre">[arg]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--MEAN_HOSPITAL_CRITICAL_PERIOD</span> <span class="pre">[arg]</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="city-parameters">
+<h2>City parameters<a class="headerlink" href="#city-parameters" title="Permalink to this headline">¶</a></h2>
+<p><strong>Transmission coefficients</strong>: The simulator uses some transmission coefficients in each of the interaction spaces to model the dynamics of the disease spread. They are set to some default values but they should be calibrated and provided via these options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--BETA_H</span> <span class="pre">[arg]</span></code>: Transmission coefficient in the household</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--BETA_C</span> <span class="pre">[arg]</span></code>: Transmission coefficient in the community</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--BETA_W</span> <span class="pre">[arg]</span></code>: Transmission coefficient in the workplace</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--BETA_S</span> <span class="pre">[arg]</span></code>: Transmission coefficient in the school</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--BETA_TRAVEL</span> <span class="pre">[arg]</span></code>: Transmission coefficient in public transport</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--BETA_CLASS</span> <span class="pre">[arg]</span></code>: Transmission coefficient in the ‘class’ subnetwork within school</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--BETA_PROJECT</span> <span class="pre">[arg]</span></code>: Transmission coefficient in the ‘project’ subnetwork within workplace</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--BETA_RANDOM_COMMUNITY</span> <span class="pre">[arg]</span></code>: Transmission coefficient in the “random community” (or “close friends”) subnetwork within community</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--BETA_NBR_CELLS</span> <span class="pre">[arg]</span></code>: Transmission coefficient in the local neighbourhood cell (Note: This requires a few more options to be enabled for the neighbourhood cells to be initialised)</p></li>
+</ul>
+<p><strong>Compliance</strong>: For many of the intervention parameters, we also take into account the compliance of various households. Also, if the city explicitly contains HD areas, then the compliance in the HD and non-HD areas can be set separately via the following options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--COMPLIANCE_PROBABILITY</span> <span class="pre">[arg]</span></code>: Compliance probability in the non-HD areas</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--HD_COMPLIANCE_PROBABILITY</span> <span class="pre">[arg]</span></code>: Compliance probability in the HD areas</p></li>
+</ul>
+<p><strong>Dynamics in HD areas</strong>: The simulator also takes into account an increased spread in the HD areas via two parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--HD_AREA_FACTOR</span> <span class="pre">[arg]</span></code>: A scaling factor for increasing the rate of infection in HD areas (default is 2)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--HD_AREA_EXPONENT</span> <span class="pre">[arg]</span></code>: An exponent to capture some non-linear “crowding” behaviour in HD areas (default is 0; recommend leaving it so)</p></li>
+</ul>
+<p><strong>Other miscellaneous options</strong>: In the simulator, there is a ‘distance kernel’ function that converts commute distances into a probability distribution. This function requires two parameters A and B; these can also be provided as options.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--F_KERNEL_A</span> <span class="pre">[arg]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--F_KERNEL_B</span> <span class="pre">[arg]</span></code></p></li>
+</ul>
+<p><strong>Neighbourhood cells</strong>: If you wish to enable some interaction at the level of neighbourhood cells, you need to explicitly enable this in the simulator. The simulator basically splits the city into a grid of small squares but you need to provide this bounding box. This is provided via the latitude/longitude of the south-west and the north-east corners.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--ENABLE_NBR_CELLS</span></code>: A boolean flag to enable initialisation of neighbourhood cells.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--CITY_SW_LAT</span> <span class="pre">[arg],</span> <span class="pre">--CITY_SW_LON</span> <span class="pre">[arg],</span> <span class="pre">--CITY_NE_LAT</span> <span class="pre">[arg],</span> <span class="pre">--CITY_SW_LON</span> <span class="pre">[arg]</span></code>: Latitude and longitudes of the south-west and north-east corners of the city.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--NBR_CELL_SIZE</span> <span class="pre">[arg]</span></code>: The side-length (in kms) of the neighbourhood cell to be initialised. The default value is 0.178 so that the area of each cell is roughly the area of a 100m circle.</p></li>
+</ul>
+<p><strong>Cohorts</strong>: <code class="docutils literal notranslate"><span class="pre">TBD</span></code></p>
+</div>
+<div class="section" id="interventions">
+<h2>Interventions<a class="headerlink" href="#interventions" title="Permalink to this headline">¶</a></h2>
+<p>The simulator has some primitive interventions coded up and more sophisticated ones can be created by composing many of these primitive interventions. Some of the basic input parameters are the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--INTERVENTION</span> <span class="pre">[num]</span></code>: The index of the basic intervention you wish to simulate (e.g. 0 corresponds to no-intervention)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--CALIBRATION_DELAY</span> <span class="pre">[num]</span></code>: The number of days after which you wish to let the simulator start the intervention (the first num many days will be no-intervention)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--FIRST_PERIOD</span> <span class="pre">[num],</span> <span class="pre">--SECOND_PERIOD</span> <span class="pre">[num],</span> <span class="pre">--THIRD_PERIOD</span> <span class="pre">[num]</span></code>: Some intervention definitions allow the user to explicitly stay how long the first/second/third period is. This is provided using these options.</p></li>
+</ul>
+</div>
+<div class="section" id="containment-implementations">
+<h2>Containment implementations<a class="headerlink" href="#containment-implementations" title="Permalink to this headline">¶</a></h2>
+<p>The simulator has two different forms of implementing containment zones. Both of them correspond to partial locking down a region depending on the number of hospitalised cases currently present in it. There is a “threshold” beyond which no additional containment is enforced, and the “leakage” specifies how accessible this region is beyond the threshold. The parameters are passed on to the simulator using the following options:</p>
+<div class="section" id="community-ward-level-containment">
+<h3>Community/ward-level containment<a class="headerlink" href="#community-ward-level-containment" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--ENABLE_CONTAINMENT</span></code>: A boolean flag to specific if containment zone implementations should be enabled</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--LOCKED_COMMUNITY_LEAKAGE</span> <span class="pre">[arg]</span></code>: The lowest accessibility level of the ward/community (reached when fraction of hospitalisations are above the threshold)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--COMMUNITY_LOCK_THRESHOLD</span> <span class="pre">[arg]</span></code>: The fraction of hospitalisation in the ward/community beyond which the ward/community is locked to its maximum amount (which is specified by the leakage)</p></li>
+</ul>
+</div>
+<div class="section" id="neighbourhood-cell-level-containment">
+<h3>Neighbourhood-cell-level containment<a class="headerlink" href="#neighbourhood-cell-level-containment" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--LOCKED_NEIGHBORHOOD_LEAKAGE</span> <span class="pre">[arg]</span></code>: The lowest accessibility level of the neighbourhood cell (reached when fraction of hospitalisations are above the threshold)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--NEIGHBORHOOD_LOCK_THRESHOLD</span> <span class="pre">[arg]</span></code>: The fraction of hospitalisation in the neighbourhood cell beyond which the neighbourhood cell is locked to its maximum amount (which is specified by the leakage)</p></li>
+</ul>
+</div>
+<div class="section" id="other-options">
+<h3>Other options<a class="headerlink" href="#other-options" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--MASK_ACTIVE</span></code>: A boolean flag to include the use of masks of compliant households in the workplace and community networks</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--MASK_START_DELAY</span> <span class="pre">[arg]</span></code>: When specified, agents start using masks from <code class="docutils literal notranslate"><span class="pre">CALIBRATION_DELAY</span> <span class="pre">+</span> <span class="pre">[arg]</span></code> many days of the simulator</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--MASK_FACTOR</span> <span class="pre">[arg]</span></code>: The factor by which transmissions are dampened if the agent is wearing a mask</p></li>
+</ul>
+</div>
+<div class="section" id="interventions-via-json-file">
+<h3>Interventions via json file<a class="headerlink" href="#interventions-via-json-file" title="Permalink to this headline">¶</a></h3>
+<p>Interventions can also be specified via a json file. The exact format of the json file is described in details here. To use this, run the simulator with <code class="docutils literal notranslate"><span class="pre">--INTERVENTION</span> <span class="pre">16</span></code> (as 16 corresponds to intervention loaded via json file) and use the following option to specify the file:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--intervention_filename</span> <span class="pre">[arg]</span></code>: The path (relative to the input directory) to the json file specifying the intervention</p></li>
+</ul>
+</div>
+<div class="section" id="attendance-profiles">
+<h3>Attendance profiles<a class="headerlink" href="#attendance-profiles" title="Permalink to this headline">¶</a></h3>
+<p>As a part of the intervention, you can also specify the attendance work profile via a json file. The format of the file is discussed in detail here. This can be specified to the simulator via the following options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--IGNORE_ATTENDANCE_FILE</span></code>: A boolean flag explicitly asking the simulator to ignore the attendance file. The default value for this is True.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--attendance_file</span> <span class="pre">[arg]</span></code>: The path to the json file (relative to the input directory) with the attendance profile</p></li>
+</ul>
+</div>
+<div class="section" id="testing-protocols">
+<h3>Testing protocols<a class="headerlink" href="#testing-protocols" title="Permalink to this headline">¶</a></h3>
+<p>The simulator also has the capability to implement testing protocols. The testing protocol is also specified via a json file (details provided here).</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--ENABLE_TESTING</span></code>: A boolean flag to tell the simulator to include testing protocols in the simulation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--testing_protocol_filename</span> <span class="pre">[arg]</span></code>: The path to the json file (relative to the input directory) with the testing protocol</p></li>
+</ul>
+<p><strong>Note</strong>: There are other command-line parameters of the simulator that I have not mentioned here as we do not use them (some are deprecated but are present for legacy reasons).</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="interventions.html" class="btn btn-neutral float-right" title="Syntax of JSON files for interventions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="The Simulator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, IISc - TIFR CoVID-19 Modelling Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

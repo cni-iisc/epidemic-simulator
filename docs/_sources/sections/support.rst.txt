@@ -1,0 +1,10 @@
+
+Support
+==================
+We are still enhancing the features of the simulator, so in the event you are need any technial assistance or support with setting up the simulator's code on your development environment, please create an issue on the public Github repository.
+
+License and Copyrights
+=======================
+The source code in the repository is shared under the Apache2 open-source license. The copyright for the source code is owned by the Indian Institute of Science, Bengaluru and the Tata Institute of Fundamental Research, Mumbai.
+
+The synthetic city generation uses data from mulitple sources and inherits the sharing and distribution licenses from them.
