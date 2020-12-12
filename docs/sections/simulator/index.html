@@ -7,13 +7,13 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Simulator &mdash; IISc-TIFR City-Scale Agent Based Simulator 0 documentation</title>
+  <title>The simulator &mdash; IISc-TIFR City-Scale Agent Based Simulator 0 documentation</title>
   
 
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../assets/css/theme_overrides.css" type="text/css" />
 
   
   
@@ -37,8 +37,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameter Documentation" href="params.html" />
-    <link rel="prev" title="Calibrating the simulator" href="../calibrate/index.html" /> 
+    <link rel="next" title="Simulator parameters" href="parameter.html" />
+    <link rel="prev" title="Generating synthetic city" href="../instantiation/create_synthetic_city.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,19 +85,22 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../getStarted.html">Quick Start guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Simulator workflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../instantiate/index.html">Instantiate Synthetic city</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../calibrate/index.html">Calibrating the simulator</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">The Simulator</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="params.html">Parameter Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interventions.html">Syntax of JSON files for interventions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="attendance.html">Syntax for JSON files for attendance profiles</a></li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html">Syntax for JSON files for testing protocols</a></li>
-<li class="toctree-l2"><a class="reference internal" href="load_store.html">Loading and Storing state of the simulator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="test_run.html">Checking if things run</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../instantiation/index.html">Instantiating a synthetic city</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../instantiation/setting_up_py_env.html">Setting up the python environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../instantiation/prepare_data.html">Preparing the data to instantiate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../instantiation/create_synthetic_city.html">Generating synthetic city</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The simulator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameter.html">Simulator parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameter.html#parameter-documentation">Parameter Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interventions.html">Interventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="attendance.html">Workplace attendance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../support.html#license-and-copyrights">License and Copyrights</a></li>
 </ul>
@@ -146,13 +149,13 @@
     
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>The Simulator</li>
+      <li>The simulator</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/sections/simulator/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/sections/simulator/index.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -166,42 +169,11 @@
            <div itemprop="articleBody">
             
   <div class="section" id="the-simulator">
-<h1>The Simulator<a class="headerlink" href="#the-simulator" title="Permalink to this headline">¶</a></h1>
+<h1>The simulator<a class="headerlink" href="#the-simulator" title="Permalink to this headline">¶</a></h1>
 <p>The simulator takes many input options and it is useful to know what these are so that you can decide which of those should be set to default values and which of those are to be specified.</p>
 <p>In order to see the options, and a brief description of the options, you can just run the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/cpp-simulator &gt; ./drive_simulator -h
-</pre></div>
-</div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="params.html">Parameter Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="params.html#basic-parameters">Basic Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="params.html#seeding-the-initial-infection">Seeding the initial infection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="params.html#disease-progression-parameters">Disease progression parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="params.html#city-parameters">City parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="params.html#interventions">Interventions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="params.html#containment-implementations">Containment implementations</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="params.html#community-ward-level-containment">Community/ward-level containment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="params.html#neighbourhood-cell-level-containment">Neighbourhood-cell-level containment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="params.html#other-options">Other options</a></li>
-<li class="toctree-l3"><a class="reference internal" href="params.html#interventions-via-json-file">Interventions via json file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="params.html#attendance-profiles">Attendance profiles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="params.html#testing-protocols">Testing protocols</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="interventions.html">Syntax of JSON files for interventions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="attendance.html">Syntax for JSON files for attendance profiles</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="attendance.html#some-important-nuances">Some important nuances</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Syntax for JSON files for testing protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="load_store.html">Loading and Storing state of the simulator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="test_run.html">Checking if things run</a></li>
-</ul>
-</div>
+<p>.. code-block:: bash</p>
+<p>(edaDev) $ ~/tutorial/markov_simuls/cpp-simulator &gt; ./drive_simulator -h</p>
 </div>
 
 
@@ -212,10 +184,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="params.html" class="btn btn-neutral float-right" title="Parameter Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="parameter.html" class="btn btn-neutral float-right" title="Simulator parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../calibrate/index.html" class="btn btn-neutral float-left" title="Calibrating the simulator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../instantiation/create_synthetic_city.html" class="btn btn-neutral float-left" title="Generating synthetic city" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

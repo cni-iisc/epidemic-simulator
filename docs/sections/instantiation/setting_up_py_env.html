@@ -7,13 +7,13 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Creating a Virtual Environment in Python &mdash; IISc-TIFR City-Scale Agent Based Simulator 0 documentation</title>
+  <title>Setting up the python environment &mdash; IISc-TIFR City-Scale Agent Based Simulator 0 documentation</title>
   
 
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../../assets/css/theme_overrides.css" type="text/css" />
 
   
   
@@ -37,8 +37,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Preparing the base data for instantiating a city" href="data/getData.html" />
-    <link rel="prev" title="Instantiate Synthetic city" href="index.html" /> 
+    <link rel="next" title="Preparing the data to instantiate" href="prepare_data.html" />
+    <link rel="prev" title="Instantiating a synthetic city" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,15 +85,22 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../getStarted.html">Quick Start guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../design/index.html">Simulator workflow</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Instantiate Synthetic city</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a Virtual Environment in Python</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data/getData.html">Preparing the base data for instantiating a city</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../calibrate/index.html">Calibrating the simulator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../simulator/index.html">The Simulator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Instantiating a synthetic city</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Setting up the python environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prepare_data.html">Preparing the data to instantiate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_synthetic_city.html">Generating synthetic city</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator/index.html">The simulator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator/parameter.html">Simulator parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator/parameter.html#parameter-documentation">Parameter Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator/interventions.html">Interventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator/testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator/testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator/attendance.html">Workplace attendance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator/load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../support.html#license-and-copyrights">License and Copyrights</a></li>
 </ul>
@@ -142,15 +149,13 @@
     
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="index.html">Instantiate Synthetic city</a> &raquo;</li>
-        
-      <li>Creating a Virtual Environment in Python</li>
+      <li>Setting up the python environment</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/sections/instantiate/venv.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/sections/instantiation/setting_up_py_env.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -163,24 +168,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="creating-a-virtual-environment-in-python">
-<h1>Creating a Virtual Environment in Python<a class="headerlink" href="#creating-a-virtual-environment-in-python" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="setting-up-the-python-environment">
+<h1>Setting up the python environment<a class="headerlink" href="#setting-up-the-python-environment" title="Permalink to this headline">¶</a></h1>
 <p>In order to run the city building script, we would need to get a few python packages. It would be easiest to not mess with the internal python distribution and get these packages on a separate virtual environment.</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>$ ~/tutorial/markov_simuls &gt; python3 -m venv edaDev
-$ ~/tutorial/markov_simuls &gt; <span class="nb">source</span> edaDev/bin/activate
-<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls &gt;
+<p>.. code-block:: bash
+:linenos:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ~/tutorial/markov_simuls &gt; python3 -m venv edaDev
+$ ~/tutorial/markov_simuls &gt; source edaDev/bin/activate
+(edaDev) $ ~/tutorial/markov_simuls &gt;
 </pre></div>
-</td></tr></table></div>
-<div class="section" id="installing-the-necessary-packages">
-<h2>Installing the necessary packages<a class="headerlink" href="#installing-the-necessary-packages" title="Permalink to this headline">¶</a></h2>
-<p>This will create a separate folder called <cite>edaDev</cite> which is a local sandbox for everything we are doing. All packages that we will now install within the <cite>edaDev</cite> virtual environment will be installed inside this folder and will not affect the whole system.</p>
-<div class="highlight-bash notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls &gt; pip install -r staticInst/requirements.txt
-</pre></div>
-</td></tr></table></div>
-<p>With these packages installed, we are now ready to actually build the city.</p>
 </div>
+<p>Installing the necessary packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This will create a separate folder called <code class="docutils literal notranslate"><span class="pre">edaDev</span></code> which is a local sandbox for everything we are doing. All packages that we will now install within the <code class="docutils literal notranslate"><span class="pre">edaDev</span></code> virtual environment will be installed inside this folder and will not affect the whole system.</p>
+<p>.. code-block:: bash
+:linenos:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(edaDev) $ ~/tutorial/markov_simuls &gt; pip install -r staticInst/requirements.txt
+</pre></div>
+</div>
+<p>With these packages installed, we are now ready to actually build the city.</p>
 </div>
 
 
@@ -191,10 +197,10 @@ $ ~/tutorial/markov_simuls &gt; <span class="nb">source</span> edaDev/bin/activa
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="data/getData.html" class="btn btn-neutral float-right" title="Preparing the base data for instantiating a city" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="prepare_data.html" class="btn btn-neutral float-right" title="Preparing the data to instantiate" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Instantiate Synthetic city" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Instantiating a synthetic city" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

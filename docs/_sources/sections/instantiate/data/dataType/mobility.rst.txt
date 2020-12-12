@@ -1,9 +1,0 @@
-Preparing Mobility data
-======================================
-
-
-
-
-.. toctree::
-   :maxdepth: 0
-   :caption: Contents:

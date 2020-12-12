@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Support &mdash; IISc-TIFR City-Scale Agent Based Simulator 0 documentation</title>
+  <title>About &mdash; IISc-TIFR City-Scale Agent Based Simulator 0 documentation</title>
   
 
   
@@ -37,7 +37,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Calibrating the simulator" href="calibrate.html" /> 
+    <link rel="next" title="Instantiating a synthetic city" href="instantiation/index.html" />
+    <link rel="prev" title="Quick start guide" href="quick_start.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,7 +87,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="instantiation/index.html">Instantiating a synthetic city</a></li>
 <li class="toctree-l1"><a class="reference internal" href="instantiation/setting_up_py_env.html">Setting up the python environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="instantiation/prepare_data.html">Preparing the data to instantiate</a></li>
@@ -100,8 +101,8 @@
 <li class="toctree-l1"><a class="reference internal" href="simulator/attendance.html">Workplace attendance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/load_store.html">Load – Store feature</a></li>
 <li class="toctree-l1"><a class="reference internal" href="calibrate.html">Calibrating the simulator</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#license-and-copyrights">License and Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="support.html#license-and-copyrights">License and Copyrights</a></li>
 </ul>
 
             
@@ -148,13 +149,13 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Support</li>
+      <li>About</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/sections/support.md.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/sections/about.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -167,14 +168,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="support">
-<h1>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h1>
-<p>We are still enhancing the features of the simulator, so in the event you are need any technial assistance or support with setting up the simulator’s code on your development environment, please create an <a class="reference external" href="https://github.com/cni-iisc/epidemic-simulator/issues/new">issue on the public Github repository</a>.</p>
+  <div class="section" id="about">
+<h1>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="design">
+<h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
+<img src="/assets/images/workflow.png" alt="workflow"><p>The workflow of the simualtor has four stages:</p>
+<ul class="simple">
+<li><p>Prepare data to instantiate a synthetic city</p></li>
+<li><p>Instantiation of a synthetic city with the number of agents being equal to the population of the instantiated city</p></li>
+<li><p>Designing custom interventions to study</p></li>
+<li><p>Running simulations, for large-scale simulations HPCs are required</p></li>
+</ul>
+<p>This page will describe the workflow design of the simulator, the implementation side of things</p>
 </div>
-<div class="section" id="license-and-copyrights">
-<h1>License and Copyrights<a class="headerlink" href="#license-and-copyrights" title="Permalink to this headline">¶</a></h1>
-<p>The source code in the repository is shared under the Apache2 open-source license. The copyright for the source code is owned by the Indian Institute of Science, Bengaluru and the Tata Institute of Fundamental Research, Mumbai.</p>
-<p>The synthetic city generation uses data from mulitple sources and inherits the sharing and distribution licenses from them.</p>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
 
@@ -185,8 +194,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="instantiation/index.html" class="btn btn-neutral float-right" title="Instantiating a synthetic city" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="calibrate.html" class="btn btn-neutral float-left" title="Calibrating the simulator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="quick_start.html" class="btn btn-neutral float-left" title="Quick start guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick start guide &mdash; IISc-TIFR City-Scale Agent Based Simulator 0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../assets/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="About" href="about.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> IISc-TIFR City-Scale Agent Based Simulator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="instantiation/index.html">Instantiating a synthetic city</a></li>
+<li class="toctree-l1"><a class="reference internal" href="instantiation/setting_up_py_env.html">Setting up the python environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="instantiation/prepare_data.html">Preparing the data to instantiate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="instantiation/create_synthetic_city.html">Generating synthetic city</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator/index.html">The simulator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator/parameter.html">Simulator parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator/parameter.html#parameter-documentation">Parameter Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator/interventions.html">Interventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator/testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator/testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator/attendance.html">Workplace attendance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator/load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calibrate.html">Calibrating the simulator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="support.html">Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="support.html#license-and-copyrights">License and Copyrights</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">IISc-TIFR City-Scale Agent Based Simulator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Quick start guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/sections/quick_start.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quick-start-guide">
+<h1>Quick start guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
+<p>Getting the files
+^^^^^^^^^^^^^^^^^^
+Go to the private bitbucket repository and ‘clone’ the repository by clicking on ‘clone’ on the top right of the page and follow the instructions. You can do this in a folder of your choice.</p>
+<p>.. code-block:: bash</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ~/tutorial/markov_simuls &gt; python3 -m venv edaDev
+$ ~/tutorial/markov_simuls &gt; source edaDev/bin/activate
+(edaDev) $ ~/tutorial/markov_simuls &gt;
+</pre></div>
+</div>
+<p>The entire tutorial will be based on a specific state of the repository: <code class="docutils literal notranslate"><span class="pre">3bb22c3</span></code></p>
+<p>.. code-block:: bash</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ~/tutorial &gt; cd markov_simuls
+$ ~/tutorial/markov_simuls &gt; git checkout 3bb22c3
+</pre></div>
+</div>
+<p>Repository structure
+^^^^^^^^^^^^^^^^^^^^^
+The repository has three main components that we would be using which are in three different folders:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">staticInst</span></code>: This folder contains the python code that generates the city once it is provided the demographics/employment etc. information.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cpp_simulator</span></code>: This contains the C++ code for the simulator</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">simulator</span></code>: This contains the javascript version of the simulator</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cpp_simulator_calibration</span></code>: This contains some python scripts that is used for calibrating some of the values.</p></li>
+</ul>
+<p>We will first do the city building.</p>
+<p>Building the synthetic city
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Installing the necessary packages
+“””””””””””””””””””””””””””””””””””
+In order to run the city building script, we would need to get a few python packages. We recommend using a virtual environment to install the packages, since it isolates the pacakges to be installed from your system-wide python setup. More infomration is available here (<code class="docutils literal notranslate"><span class="pre">venv</span> <span class="pre">page</span></code>).</p>
+<p>.. code-block:: bash</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(edaDev) $ ~/tutorial/markov_simuls &gt; pip install -r staticInst/requirements.txt
+</pre></div>
+</div>
+<p>With these packages installed, we are now ready to actually build the city.</p>
+<p>Generating the city
+“””””””””””””””””””””
+The demographics, employment etc. data is present in the folder <code class="docutils literal notranslate"><span class="pre">staticInst/data/base/[city</span> <span class="pre">name]</span></code>. We will work with Mumbai and generate the city.</p>
+<p>.. code-block:: bash</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(edaDev) $ ~/tutorial/markov_simuls &gt; cd staticInst
+(edaDev) $ ~/tutorial/markov_simuls/staticInst &gt; python CityGen.py -h
+usage: CityGen.py [-h] [-n N] [-i I] [-o O] [--validate] [-s S]
+
+Create mini-city for COVID-19 simulation
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -n N        target population
+  -i I        input folder
+  -o O        output folder
+  --validate  script for validation plots on
+  -s S        [for debug] restore random seed from folder
+</pre></div>
+</div>
+<p>With the syntax in mind, let us go ahead and build the city (of 150k size).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    <span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/staticInst &gt; python CityGen.py -n <span class="m">150000</span> -i data/base/mumbai -o data/mumbai_150k --validate
+    input_folder: data/base/mumbai
+    output_folder: data/mumbai_150k
+
+    <span class="o">(</span>Distance kernel parameters provided.<span class="o">)</span>
+    createHouses                  ...	<span class="k">done</span>. <span class="o">(</span><span class="m">6242</span> ms<span class="o">)</span>
+    populateHouses                ...	<span class="k">done</span>. <span class="o">(</span><span class="m">22332</span> ms<span class="o">)</span>
+    assignSchools                 ...	<span class="k">done</span>. <span class="o">(</span><span class="m">287</span> ms<span class="o">)</span>
+    assignWorkplaces              ...	<span class="k">done</span>. <span class="o">(</span><span class="m">6630</span> ms<span class="o">)</span>
+
+    City: mumbai
+    Population: <span class="m">150071</span>
+    Number of wards: <span class="m">48</span>
+    Has slums: True
+
+    Number of houses: <span class="m">33259</span>
+    Number of schools: <span class="m">107</span>
+    Number of workplaces: <span class="m">2899</span>
+    Number of workers: <span class="m">60606</span>
+
+    dump_files                    ...	<span class="k">done</span>. <span class="o">(</span><span class="m">1239</span> ms<span class="o">)</span>
+    validate_ages                 ...	<span class="k">done</span>. <span class="o">(</span><span class="m">452</span> ms<span class="o">)</span>
+    validate_householdsizes       ...	<span class="k">done</span>. <span class="o">(</span><span class="m">158</span> ms<span class="o">)</span>
+    validate_schoolsizes          ...	<span class="k">done</span>. <span class="o">(</span><span class="m">162</span> ms<span class="o">)</span>
+    validate_workplacesizes       ...	<span class="k">done</span>. <span class="o">(</span><span class="m">801</span> ms<span class="o">)</span>
+    validate_commutedistances     ...	<span class="k">done</span>. <span class="o">(</span><span class="m">1819</span> ms<span class="o">)</span>
+</pre></div>
+</div>
+<p>We now have a 150k version of Mumbai instantiated in <code class="docutils literal notranslate"><span class="pre">staticInst/data/mumbai_150k</span></code>.</p>
+<p>Simulating a test run
+“””””””””””””””””””””
+Now that we have generated a city, we can go ahead and execute a test run to see if everything is working fine.</p>
+<p>.. code-block:: bash</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(edaDev) $ ~/tutorial/markov_simuls/staticInst &gt; cd ../cpp-simulator
+(edaDev) $ ~/tutorial/markov_simuls/cpp-simulator &gt; make all
+</pre></div>
+</div>
+<p><strong>Note for Mac users</strong>: The above make command will complain saying that there is no option fopenmp as Mac does not by default have that. In that case, instead run the following command:</p>
+<p>.. code-block:: bash</p>
+<p>(edaDev) $ ~/tutorial/markov_simuls/cpp-simulator &gt; make all -f Makefile_np</p>
+<p>We can now execute a test run. Let us first create the directory where we want to store the outputs of the simulation.</p>
+<p>.. code-block:: bash</p>
+<p>(edaDev) $ ~/tutorial/markov_simuls/cpp-simulator &gt; mkdir -p outputs/mumbai_test_run</p>
+<p>… and now the actual simulation</p>
+<p>.. code-block:: bash</p>
+<p>(edaDev) $ ~/tutorial/markov_simuls/cpp-simulator &gt; ./drive_simulator –NUM_DAYS 10 –SEED_FIXED_NUMBER –INIT_FIXED_NUMBER_INFECTED 100 –INTERVENTION 0 –input_directory ../staticInst/data/mumbai_150k –output_directory outputs/mumbai_test_run</p>
+<p>You should now have a whole bunch of files in the <code class="docutils literal notranslate"><span class="pre">cpp-simulator/outputs/mumbai_test_run</span></code> folder.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="about.html" class="btn btn-neutral float-right" title="About" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, IISc - TIFR CoVID-19 Modelling Team
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

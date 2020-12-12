@@ -1,2 +1,0 @@
-Loading and Storing state of the simulator
-=========================================================
