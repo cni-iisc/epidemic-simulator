@@ -7,7 +7,7 @@ default_options = {}
 default_flags={}
 default_options['--NUM_DAYS'] = 20
 default_options['--INIT_FRAC_INFECTED'] = 0.001
-default_options['--INCUBATION_PERIOD'] = 2.3
+default_options['--MEAN_INCUBATION_PERIOD'] = 2.3 * 2
 default_options['--MEAN_ASYMPTOMATIC_PERIOD'] = 0.5
 default_options['--MEAN_SYMPTOMATIC_PERIOD'] =5
 default_options['--SYMPTOMATIC_FRACTION'] =0.67
@@ -21,8 +21,8 @@ default_options['--BETA_W'] =0.524166
 default_options['--BETA_C'] =0.206177
 default_options['--BETA_S'] =1.04833
 default_options['--BETA_TRAVEL'] =0
-default_options['--HD_AREA_FACTOR'] =1.0
-default_options['--HD_AREA_EXPONENT'] =1.0
+default_options['--HD_AREA_FACTOR'] = 1.0
+default_options['--HD_AREA_EXPONENT'] = 0
 default_options['--INTERVENTION'] =0
 default_options['--output_directory'] ="./output_files/"
 default_options['--input_directory'] ="../../staticInst/data/web_input_files/bengaluru/"
@@ -32,6 +32,11 @@ default_options['--FIRST_PERIOD'] =3
 default_options['--SECOND_PERIOD'] =4
 default_options['--THIRD_PERIOD'] =5
 default_options['--OE_SECOND_PERIOD'] =6
+default_options['--BETA_CLASS']=0
+default_options['--BETA_PROJECT']=0
+default_options['--BETA_RANDOM_COMMUNITY']=0
+default_options['--BETA_NBR_CELLS']=0
+default_flags['--ENABLE_TESTING']= False
 # Set this to "--SEED_HD_AREA_POPULATION" to seed hd area population
 # as well.
 # SEED_HD_AREA_POPULATION="--SEED_HD_AREA_POPULATION"
@@ -201,9 +206,368 @@ for intervention in range(16):
 
 	regression_tests.append(current_test)
 
+## configure a new regression text
+#6
+current_test={}
+test_id = 'smaller_networks'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = True
+test_flags['--ENABLE_TESTING'] = False
+
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+## end of regresstion test addition
+
+## configure a new regression text
+#7
+current_test={}
+test_id = 'smaller_networks_testing_001'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+test_options['--TESTING_PROTOCOL']=2
+test_options['--testing_protocol_filename']='../../../../cpp-simulator/regression_tests/input_files/testing_protocol_001.json'
+
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = True
+test_flags['--ENABLE_TESTING'] = True
+
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+## end of regresstion test addition
+
+## configure a new regression text
+#7
+current_test={}
+test_id = 'smaller_networks_testing_002'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+test_options['--TESTING_PROTOCOL']=2
+test_options['--testing_protocol_filename']='../../../../cpp-simulator/regression_tests/input_files/testing_protocol_002.json'
+
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = True
+test_flags['--ENABLE_TESTING'] = True
+
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+## end of regresstion test addition
+
+
+
+## configure a new regression test
+# attendance file based test
+current_test={}
+test_id = 'attendance_file_001'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 8
+test_options['--LOCKED_COMMUNITY_LEAKAGE'] = 0.25
+test_options['--attendance_filename']='../../../../cpp-simulator/regression_tests/input_files/attendance_file_001.json'
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--IGNORE_ATTENDANCE_FILE'] = False
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+
+## configure a new regression test
+# attendance file based test
+current_test={}
+test_id = 'attendance_file_002'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 8
+test_options['--LOCKED_COMMUNITY_LEAKAGE'] = 0.25
+test_options['--attendance_filename']='../../../../cpp-simulator/regression_tests/input_files/attendance_file_002.json'
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--IGNORE_ATTENDANCE_FILE'] = False
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+
+
+## configure new regression tests for masks
+current_test={}
+test_id = 'masks'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+test_options['--TESTING_PROTOCOL']=2
+test_options['--testing_protocol_filename']='../../../../cpp-simulator/regression_tests/input_files/testing_protocol_002.json'
+test_options['--MASK_START_DELAY'] = 5
+
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = True
+test_flags['--ENABLE_TESTING'] = True
+test_flags['--MASK_ACTIVE'] = True
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+
+
+## configure new regression tests for soft ward containment
+current_test={}
+test_id = 'soft_ward'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+test_options['--TESTING_PROTOCOL']=2
+test_options['--testing_protocol_filename']='../../../../cpp-simulator/regression_tests/input_files/testing_protocol_002.json'
+test_options['--MASK_START_DELAY'] = 5
+test_options['--LOCKED_COMMUNITY_LEAKAGE'] = 0.5
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = False
+test_flags['--ENABLE_TESTING'] = True
+test_flags['--MASK_ACTIVE'] = True
+
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+
+
+## configure new regression tests for soft neighborhood containment 
+current_test={}
+test_id = 'soft_nbr'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+test_options['--TESTING_PROTOCOL']=2
+test_options['--testing_protocol_filename']='../../../../cpp-simulator/regression_tests/input_files/testing_protocol_002.json'
+test_options['--MASK_START_DELAY'] = 5
+test_options['--LOCKED_NEIGHBORHOOD_LEAKAGE'] = 0.5
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = True
+test_flags['--ENABLE_TESTING'] = True
+test_flags['--MASK_ACTIVE'] = True
+
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)  
+
+
+##Regressions for cohorts in mumbai locals
+current_test = {}
+test_id = "cohorts_base"
+
+cohort_options = default_options.copy()
+cohort_options['--CITY_SW_LAT'] = 18.89395643371942
+cohort_options['--CITY_NE_LAT'] = 19.270176667777736
+cohort_options['--CITY_SW_LON'] = 72.77633295153348
+cohort_options['--CITY_NE_LON'] = 72.97973149704592
+cohort_options['--F_KERNEL_A'] = 2.709
+cohort_options['--F_KERNEL_B'] = 1.279
+cohort_options['--BETA_H'] = 0.792844
+cohort_options['--BETA_W'] = 0.141709
+cohort_options['--BETA_C'] = 0.0149375
+cohort_options['--BETA_S'] = 0.283418
+cohort_options['--BETA_TRAVEL'] =0
+cohort_options['--BETA_CLASS']=2.5507
+cohort_options['--BETA_PROJECT']=1.2753
+cohort_options['--BETA_RANDOM_COMMUNITY']=0.1344
+cohort_options['--BETA_NBR_CELLS']=0.1344
+cohort_options['--HD_AREA_FACTOR'] = 2.0
+cohort_options['--INTERVENTION'] = 16
+cohort_options['--output_directory'] += test_id
+cohort_options['--input_directory'] ="../../staticInst/data/web_input_files/mumbai_cohorts_100K/"
+cohort_options['--TESTING_PROTOCOL']=2
+cohort_options['--testing_protocol_filename']='testing_protocol.json'
+cohort_options['--attendance_filename']='mumbai_attendance.json'
+cohort_options['--intervention_filename']='2020091_intervention_params_community_leakage_factor_1_fix_May18-31.json'
+cohort_options['--MASK_START_DELAY'] = 5
+cohort_options['--MASK_FACTOR'] = 0.8
+cohort_options['--PROVIDE_INITIAL_SEED_GRAPH'] = 4123
+cohort_options['--PROVIDE_INITIAL_SEED'] = 1723530071
+
+cohort_options['--STORE_STATE_TIME_STEP'] = 0
+cohort_options['--LOAD_STATE_TIME_STEP'] = 0
+
+cohort_options['--COHORT_SIZE'] = 20
+cohort_options['--BETA_COHORT'] = 0.0005
+cohort_options['--CROWDING_FACTOR_COHORTS'] = 5
+cohort_options['--COHORT_SEVERITY_FRACTION'] = 0.4
+cohort_options['--COHORT_STRATEGY'] = 1
+cohort_options['--ONE_OFF_TRAVELERS_RATIO'] = 0
+
+cohort_flags = default_flags.copy() 
+cohort_flags['--ENABLE_CONTAINMENT'] = True
+cohort_flags['--ENABLE_COHORTS'] = True
+cohort_flags['--ENABLE_NBR_CELLS'] = True
+cohort_flags['--ENABLE_TESTING'] = True
+cohort_flags['--MASK_ACTIVE'] = True
+cohort_flags['--ISOLATE_COHORTS'] = True
+
+current_test['test_id'] = test_id
+current_test['test_options'] = cohort_options
+current_test['test_flags'] = cohort_flags
+
+regression_tests.append(current_test)
+
+#NOTE: RUN THIS ONLY WHEN PROTOBUF IS ENABLED
+### Store simulator state for Bengaluru
+current_test={}
+test_id = 'store_state'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+test_options['--TESTING_PROTOCOL']=2
+test_options['--testing_protocol_filename']='../../../../cpp-simulator/regression_tests/input_files/testing_protocol_002.json'
+test_options['--MASK_START_DELAY'] = 5
+test_options['--LOCKED_COMMUNITY_LEAKAGE'] = 0.5
+test_options['--STORE_STATE_TIME_STEP'] = 40
+test_options['--LOAD_STATE_TIME_STEP'] = 0
+
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = False
+test_flags['--ENABLE_TESTING'] = True
+test_flags['--MASK_ACTIVE'] = True
+
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+
+### Load simulator state for Bengaluru.
+### NOTE: This is dependent on the store_state regression's output
+current_test={}
+test_id = 'load_state'
+
+test_options = default_options.copy()
+test_options['--output_directory'] += test_id
+test_options['--INTERVENTION'] = 15
+test_options['--WARD_CONTAINMENT_THRESHOLD'] = 0
+test_options['--BETA_CLASS']=0.1
+test_options['--BETA_PROJECT']=0.1
+test_options['--BETA_RANDOM_COMMUNITY']=0.1
+test_options['--BETA_NBR_CELLS']=0.1
+test_options['--PROVIDE_INITIAL_SEED_GRAPH']=4123
+test_options['--TESTING_PROTOCOL']=2
+test_options['--testing_protocol_filename']='../../../../cpp-simulator/regression_tests/input_files/testing_protocol_002.json'
+test_options['--MASK_START_DELAY'] = 5
+test_options['--LOCKED_COMMUNITY_LEAKAGE'] = 0.5
+test_options['--STORE_STATE_TIME_STEP'] = 0
+test_options['--LOAD_STATE_TIME_STEP'] = 40
+test_options['--agent_load_file'] = "../../../../cpp-simulator/regression_tests/output_files/store_state/agentStore.pbstore"
+
+test_flags = default_flags.copy()
+test_flags['--ENABLE_CONTAINMENT'] = True
+test_flags['--ENABLE_NBR_CELLS'] = False
+test_flags['--ENABLE_TESTING'] = True
+test_flags['--MASK_ACTIVE'] = True
+
+current_test['test_id'] = test_id
+current_test['test_options'] = test_options
+current_test['test_flags'] = test_flags
+
+regression_tests.append(current_test)
+
+
+
+## end of regresstion test addition
 
 #remove old output files
-os.system('rm -rf ./output_files/')
+# os.system('rm -rf ./output_files/')
 
 # Launch all regresstion tests
 launch_regression(regression_tests)

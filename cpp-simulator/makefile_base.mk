@@ -1,5 +1,6 @@
 #this should be 'yes' for the status of the git repository to be checked during compiling
-check_git=
+check_git=yes
+enable_proto=no
 
 #Set this to -DTIMING to enable timing output
 timing = -DTIMING
@@ -19,18 +20,27 @@ GIT_HASH=checking status of git reposity during compilation was disabled
 GIT_TREE_STATE=not applicable
 endif
 
+
+ifeq ($(enable_proto), yes)
+#set proto flags
+LDLIBS = -lprotobuf
+obj = cohorts.o train_loader.o agents_store.pb.o initializers.o models.o interventions.o intervention_primitives.o updates.o simulator.o testing.o outputs.o drive_simulator.o
+else
+LDLIBS =
+obj = cohorts.o train_loader.o initializers.o models.o interventions.o intervention_primitives.o updates.o simulator.o testing.o outputs.o drive_simulator.o
+endif
+
+
+
 include_paths = -Ilibs/ -Ilibs/cxxopts-2.2.0/include/
-obj = initializers.o models.o interventions.o intervention_primitives.o updates.o simulator.o outputs.o drive_simulator.o
-
 DEPFLAGS = -MMD -MP -MF $*.d
-
 CXX = g++
 CPPFLAGS = -Wall --std=c++14 -O3 $(DEPFLAGS) $(include_paths) $(parallel) $(timing) $(debug) $(random) -D GIT_HASH='"$(GIT_HASH)"' -D GIT_TREE_STATE='"$(GIT_TREE_STATE)"'
 
 all: drive_simulator check
 
 drive_simulator: $(obj)
-	$(CXX) $(CPPFLAGS) $^ -o $@
+	$(CXX) $(CPPFLAGS) $^ -o $@ $(LDLIBS)
 
 %.o : $.cc %.d
 	$(CXX) $(CPPFLAGS) -c $<

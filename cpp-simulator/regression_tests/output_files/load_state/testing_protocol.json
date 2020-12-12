@@ -1,0 +1,60 @@
+[{
+  "num_days": 1,
+  "prob_test_index_symptomatic" : 0.8,
+  "prob_test_index_hospitalised" : 0.8,
+
+  "prob_test_household_positive_symptomatic" : 0.8,
+  "prob_test_household_hospitalised_symptomatic" : 0.8,
+  "prob_test_household_symptomatic_symptomatic" : 0.8,
+  "prob_test_household_positive_asymptomatic" : 0.8,
+  "prob_test_household_hospitalised_asymptomatic" : 0.8,
+  "prob_test_household_symptomatic_asymptomatic" : 0.8,
+
+  "prob_test_workplace_positive_symptomatic" : 0.8,
+  "prob_test_workplace_hospitalised_symptomatic" : 0.8,
+  "prob_test_workplace_symptomatic_symptomatic" : 0.8,  
+  "prob_test_workplace_positive_asymptomatic" : 0.8,
+  "prob_test_workplace_hospitalised_asymptomatic" : 0.8,
+  "prob_test_workplace_symptomatic_asymptomatic" : 0.8,
+  
+  "prob_test_random_community_positive_symptomatic" : 0.8,
+  "prob_test_random_community_hospitalised_symptomatic" : 0.8,
+  "prob_test_random_community_symptomatic_symptomatic" : 0.8,
+  "prob_test_random_community_positive_asymptomatic" : 0.8,
+  "prob_test_random_community_hospitalised_asymptomatic" : 0.8,
+  "prob_test_random_community_symptomatic_asymptomatic" : 0.8,
+
+  "prob_test_neighbourhood_positive_symptomatic" : 0.8,
+  "prob_test_neighbourhood_hospitalised_symptomatic" : 0.8,
+  "prob_test_neighbourhood_symptomatic_symptomatic" : 0.8,
+  "prob_test_neighbourhood_positive_asymptomatic" : 0.8,
+  "prob_test_neighbourhood_hospitalised_asymptomatic" : 0.8,
+  "prob_test_neighbourhood_symptomatic_asymptomatic" : 0.8,
+ 
+  "prob_test_school_positive_symptomatic" : 0.8,
+  "prob_test_school_hospitalised_symptomatic" : 0.8,
+  "prob_test_school_symptomatic_symptomatic" : 0.8,
+  "prob_test_school_positive_asymptomatic" : 0.8,
+  "prob_test_school_hospitalised_asymptomatic" : 0.8,
+  "prob_test_school_symptomatic_asymptomatic" : 0.8,
+ 
+  "prob_retest_recovered" : 0.8,
+  
+  "prob_contact_trace_household_symptomatic" : 0.8,
+  "prob_contact_trace_project_symptomatic" : 0.8,
+  "prob_contact_trace_random_community_symptomatic" : 0.8,
+  "prob_contact_trace_neighbourhood_symptomatic" : 0.8,
+  "prob_contact_trace_class_symptomatic" : 0.8,
+
+  "prob_contact_trace_household_hospitalised" : 0.8,
+  "prob_contact_trace_project_hospitalised" : 0.8,
+  "prob_contact_trace_random_community_hospitalised" : 0.8,
+  "prob_contact_trace_neighbourhood_hospitalised" : 0.8,
+  "prob_contact_trace_class_hospitalised" : 0.8,
+
+  "prob_contact_trace_household_positive" : 0.8,
+  "prob_contact_trace_project_positive" : 0.8,
+  "prob_contact_trace_random_community_positive" : 0.8,
+  "prob_contact_trace_neighbourhood_positive" : 0.8,
+  "prob_contact_trace_class_positive" : 1
+}]

@@ -41,7 +41,7 @@ After setting up the environment, we are ready to run the script to instantiate 
 To instantiate a Bangalore city with the mentioned configurations run the command
 
 ```
-python parse_and_instantiate.py -c city_name -n target_population -i inputPath -o outputPath
+python CityGen.py -n target_population -i inputPath -o outputPath --validate
 ```
 
 The above script instantiates a synthetic Bangalore city where the population of 100,000 people are randomly distributed across the 198 wards of the city with each individual being assigned to a house, school, workplace and community centre based on their age, and commute distance. The instantiated outputs are in the form of JSON files and will be available in the specified output directory (or) `staticInst/data/web_input_files`.
@@ -55,21 +55,6 @@ target_population = 100000
 inputPath = './data/base/bangalore/'
 outputPath = './data/bangalore-100K/'
 ```
-
-#### Instantiating Mumbai
-
-Mumbai base data files are provided in two forms:
-
-- `./data/base/mumbai`: Consisting of 48 wards, where each ward is split into the non-HD area and the HD area.
-- `./data/base/mumbai_no-slums`: Consisting of 24 wards, with no additional subdivision into HD-areas and non-HD areas.
-
-In order to instantiate a version of Mumbai with 48 wards, please use the modified script `parse_and_instantiate_mumbai_with_hd_areas.py`:
-
-```
-python parse_and_instantiate_mumbai_with_hd_areas.py -n target_population -o outputPath
-```
-
-The above script has the input directory preset to `./data/base/mumbai`.
 
 #### Sub-Directory Structure
 The sub-directory structure followed for storing and processing of static data source used for instantiations is outlined as follows.
@@ -107,9 +92,7 @@ The sub-directory structure followed for storing and processing of static data s
                |- 47.csv                               # presampled points for ward index 47
                |- PresamplePoints.ipynb                # python notebook for presampling points from wards subdivisions
                |- slumClusters.geojson                 # geographic boundaries of slum clusters
-   |- computeDistributions.py                          # module to get distributions from the cityProfile.json
-   |- parse_and_instantiate.py                         # script to instantiate a city
-   |- parse_and_instantiate_mumbai_with_hd_areas.sh    # script to instantiate Mumbai City using ./data/base/mumbai
+   |- CityGen.py                                       # script to instantiate a city
 ```
 
 **Suggestion**: For consistency, we can have naming convention in lowercase-only with underscore separators.

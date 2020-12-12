@@ -145,15 +145,16 @@ void output_global_params(const string& output_dir){
 
   fout << "RNG_SEED: " << GLOBAL.RNG_SEED << ";" << endl;
 
-  fout << "COMPLIANCE_PROBABILITY: " << GLOBAL.COMPLIANCE_PROBABILITY << ";" << endl; 
-  
-  fout << "num_homes: " << GLOBAL.num_homes << ";" << endl; 
-  fout << "num_workplaces: " << GLOBAL.num_workplaces << ";" << endl; 
-  fout << "num_schools: " << GLOBAL.num_schools << ";" << endl; 
-  fout << "num_communities: " << GLOBAL.num_communities << ";" << endl; 
-  
-  fout << "num_people: " << GLOBAL.num_people << ";" << endl; 
-  
+  fout << "COMPLIANCE_PROBABILITY: " << GLOBAL.COMPLIANCE_PROBABILITY << ";" << endl;
+  fout << "HD_COMPLIANCE_PROBABILITY: " << GLOBAL.HD_COMPLIANCE_PROBABILITY << ";" << endl;
+
+  fout << "num_homes: " << GLOBAL.num_homes << ";" << endl;
+  fout << "num_workplaces: " << GLOBAL.num_workplaces << ";" << endl;
+  fout << "num_schools: " << GLOBAL.num_schools << ";" << endl;
+  fout << "num_communities: " << GLOBAL.num_communities << ";" << endl;
+
+  fout << "num_people: " << GLOBAL.num_people << ";" << endl;
+
   fout << "NUM_DAYS: " << GLOBAL.NUM_DAYS << ";" << endl;  //Number of days. Simulation duration
   fout << "SIM_STEPS_PER_DAY: " << GLOBAL.SIM_STEPS_PER_DAY << ";" << endl;  //Number of simulation steps per day.
   fout << "NUM_TIMESTEPS: " << GLOBAL.NUM_TIMESTEPS << ";" << endl;  //
@@ -166,28 +167,28 @@ void output_global_params(const string& output_dir){
   }
   fout << "#Actual number of initial infections: " << GLOBAL.INIT_ACTUALLY_INFECTED << ";" << endl;
 
-  
-  fout << "INCUBATION_PERIOD: " << GLOBAL.INCUBATION_PERIOD << ";" << endl; 
-  fout << "MEAN_ASYMPTOMATIC_PERIOD: " << GLOBAL.MEAN_ASYMPTOMATIC_PERIOD << ";" << endl; 
-  fout << "MEAN_SYMPTOMATIC_PERIOD: " << GLOBAL.MEAN_SYMPTOMATIC_PERIOD << ";" << endl; 
-  fout << "MEAN_HOSPITAL_REGULAR_PERIOD: " << GLOBAL.MEAN_HOSPITAL_REGULAR_PERIOD << ";" << endl; 
-  fout << "MEAN_HOSPITAL_CRITICAL_PERIOD: " << GLOBAL.MEAN_HOSPITAL_CRITICAL_PERIOD << ";" << endl; 
-  
-  fout << "INCUBATION_PERIOD_SHAPE: " << GLOBAL.INCUBATION_PERIOD_SHAPE << ";" << endl; 
+
+  fout << "MEAN_INCUBATION_PERIOD: " << GLOBAL.MEAN_INCUBATION_PERIOD << ";" << endl;
+  fout << "MEAN_ASYMPTOMATIC_PERIOD: " << GLOBAL.MEAN_ASYMPTOMATIC_PERIOD << ";" << endl;
+  fout << "MEAN_SYMPTOMATIC_PERIOD: " << GLOBAL.MEAN_SYMPTOMATIC_PERIOD << ";" << endl;
+  fout << "MEAN_HOSPITAL_REGULAR_PERIOD: " << GLOBAL.MEAN_HOSPITAL_REGULAR_PERIOD << ";" << endl;
+  fout << "MEAN_HOSPITAL_CRITICAL_PERIOD: " << GLOBAL.MEAN_HOSPITAL_CRITICAL_PERIOD << ";" << endl;
+
+  fout << "INCUBATION_PERIOD_SHAPE: " << GLOBAL.INCUBATION_PERIOD_SHAPE << ";" << endl;
   fout << "INCUBATION_PERIOD_SCALE: " << GLOBAL.INCUBATION_PERIOD_SCALE << ";" << endl;
-  
-  fout << "INFECTIOUSNESS_SHAPE: " << GLOBAL.INFECTIOUSNESS_SHAPE << ";" << endl; 
-  fout << "INFECTIOUSNESS_SCALE: " << GLOBAL.INFECTIOUSNESS_SCALE << ";" << endl; 
-  
+
+  fout << "INFECTIOUSNESS_SHAPE: " << GLOBAL.INFECTIOUSNESS_SHAPE << ";" << endl;
+  fout << "INFECTIOUSNESS_SCALE: " << GLOBAL.INFECTIOUSNESS_SCALE << ";" << endl;
+
   fout << "SEVERITY_RATE: " << GLOBAL.SEVERITY_RATE << ";" << endl;  //value used in sim.js
 
-  fout << "ASYMPTOMATIC_PERIOD: " << GLOBAL.ASYMPTOMATIC_PERIOD << ";" << endl; 
+  fout << "ASYMPTOMATIC_PERIOD: " << GLOBAL.ASYMPTOMATIC_PERIOD << ";" << endl;
   // half a day
-  fout << "SYMPTOMATIC_PERIOD: " << GLOBAL.SYMPTOMATIC_PERIOD << ";" << endl; 
+  fout << "SYMPTOMATIC_PERIOD: " << GLOBAL.SYMPTOMATIC_PERIOD << ";" << endl;
   // 5 days
-  fout << "HOSPITAL_REGULAR_PERIOD: " << GLOBAL.HOSPITAL_REGULAR_PERIOD << ";" << endl; 
-  fout << "HOSPITAL_CRITICAL_PERIOD: " << GLOBAL.HOSPITAL_CRITICAL_PERIOD << ";" << endl; 
-  fout << "SYMPTOMATIC_FRACTION: " << GLOBAL.SYMPTOMATIC_FRACTION << ";" << endl; 
+  fout << "HOSPITAL_REGULAR_PERIOD: " << GLOBAL.HOSPITAL_REGULAR_PERIOD << ";" << endl;
+  fout << "HOSPITAL_CRITICAL_PERIOD: " << GLOBAL.HOSPITAL_CRITICAL_PERIOD << ";" << endl;
+  fout << "SYMPTOMATIC_FRACTION: " << GLOBAL.SYMPTOMATIC_FRACTION << ";" << endl;
 
   fout << "INTERVENTION: " << static_cast<count_type>(GLOBAL.INTERVENTION)
 	   << ", " << intervention_rep(GLOBAL.INTERVENTION) << ";" << endl;
@@ -202,7 +203,7 @@ void output_global_params(const string& output_dir){
   fout << "BETA_S: " << GLOBAL.BETA_S << ";" << endl;
   fout << "BETA_C: " << GLOBAL.BETA_C << ";" << endl;
 
-  fout << "ALPHA: " << GLOBAL.ALPHA << ";" << endl; 
+  fout << "ALPHA: " << GLOBAL.ALPHA << ";" << endl;
 
   //Transport
   fout << "BETA_TRAVEL: " << GLOBAL.BETA_TRAVEL << ";" << endl;
@@ -219,7 +220,7 @@ void output_global_params(const string& output_dir){
   fout << "SECOND_PERIOD: " << GLOBAL.SECOND_PERIOD << ";" << endl;;
   fout << "THIRD_PERIOD: " << GLOBAL.THIRD_PERIOD << ";" << endl;;
   fout << "OE_SECOND_PERIOD: " << GLOBAL.OE_SECOND_PERIOD << ";" << endl;;
-  
+
   fout << "USE_SAME_INFECTION_PROB_FOR_ALL_WARDS: " << GLOBAL.USE_SAME_INFECTION_PROB_FOR_ALL_WARDS << ";" << endl;
   fout << "SEED_HD_AREA_POPULATION: " << GLOBAL.SEED_HD_AREA_POPULATION << ";" << endl;
   fout << "SEED_ONLY_NON_COMMUTER: " << GLOBAL.SEED_ONLY_NON_COMMUTER << ";" << endl;
@@ -230,9 +231,40 @@ void output_global_params(const string& output_dir){
   fout << "MASK_FACTOR: " << GLOBAL.MASK_FACTOR << ";" << endl;
   fout << "MASK_START_DATE: " << GLOBAL.MASK_START_DATE << ";" << endl;
 
-  fout << "WARD_CONTAINMENT_THRESHOLD:" <<GLOBAL.WARD_CONTAINMENT_THRESHOLD << ";"<< endl;
-  fout << "ENABLE_CONTAINMENT:" <<GLOBAL.ENABLE_CONTAINMENT << ";"<< endl;
-  
+  fout << "WARD_CONTAINMENT_THRESHOLD: " <<GLOBAL.WARD_CONTAINMENT_THRESHOLD << ";"<< endl;
+  fout << "ENABLE_CONTAINMENT: " <<GLOBAL.ENABLE_CONTAINMENT << ";"<< endl;
+  fout << "ENABLE_NBR_CELLS: " <<GLOBAL.ENABLE_NBR_CELLS << ";"<< endl;
+
+  //Neighborhood containment
+  fout << "ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT: "
+	   << GLOBAL.ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT << ";" << endl;
+  fout << "LOCKED_NEIGHBORHOOD_LEAKAGE: "
+	   << GLOBAL.LOCKED_NEIGHBORHOOD_LEAKAGE << ";" << endl;
+  fout << "NEIGHBORHOOD_LOCK_THRESHOLD: "
+	   << GLOBAL.NEIGHBORHOOD_LOCK_THRESHOLD << ";" << endl;
+
+  fout << "ENABLE_TESTING:" << GLOBAL.ENABLE_TESTING << ";" <<endl;
+  fout << "TESTING_PROTOCOL: " << static_cast<count_type>(GLOBAL.TESTING_PROTOCOL) << ";" <<endl;
+
+  //cohorts
+  if(GLOBAL.ENABLE_COHORTS){
+    fout << "ENABLE_COHORTS:" << GLOBAL.ENABLE_COHORTS << ";" <<endl;
+    fout << "ISOLATE_COHORT: " << GLOBAL.ISOLATE_COHORTS << ";" <<endl;
+    fout << "BETA_COHORT: " << GLOBAL.BETA_COHORT << ";" <<endl;
+    fout << "COHORT_SIZE: " << GLOBAL.COHORT_SIZE << ";" <<endl;
+    fout << "COACH_CAPACITY: " << GLOBAL.COACH_SEAT_CAPACITY << ";" <<endl;
+    fout << "CROWDING_FACTOR: " << GLOBAL.crowding_factor << ";" <<endl;
+    fout << "COHORT_SEVERITY_FRACTION: " << GLOBAL.COHORT_SEVERITY_FRACTION << ";" <<endl;
+    fout << "COHORT_STRATEGY: " << (int)GLOBAL.COHORT_STRATEGY << ";" <<endl;
+    fout << "TAKING_TRAIN_FRACTION: " << GLOBAL.taking_train_fraction << ";" <<endl;
+  }
+
+  // store or load state.
+  fout << "STORE_STATE_TIME_STEP: " << GLOBAL.STORE_STATE_TIME_STEP << ";" <<endl;
+  fout << "LOAD_STATE_TIME_STEP: " << GLOBAL.LOAD_STATE_TIME_STEP << ";" <<endl;
+  fout << "ONE_OFF_TRAVELERS_RATIO: " << GLOBAL.ONE_OFF_TRAVELERS_RATIO << ";" <<endl;
+
+
   fout.close();
 
   //Copy the attendance file
@@ -247,6 +279,12 @@ void output_global_params(const string& output_dir){
 					 output_dir + "/intervention_params.json");
   }
 
+  //Copy testing protocol file
+  if(GLOBAL.TESTING_PROTOCOL==Testing_Protocol::testing_protocol_file_read){
+	output_copy_file(GLOBAL.input_base + GLOBAL.testing_protocol_filename,
+					 output_dir + "/testing_protocol.json");
+  }
+
 }
 
 
@@ -258,7 +296,7 @@ gnuplot::gnuplot(const std::string& output_directory){
   std::string plots_path = output_directory + "/plots.html";
   html_out.open(plots_path);
   check_stream(html_out, plots_path);
-  
+
   fout << "set datafile separator ','" << std::endl;
   fout << "set key autotitle columnhead" << std::endl;
   fout << "set term png" << std::endl;
@@ -349,7 +387,7 @@ void output_csv_files(const std::string& output_directory,
 					 elem.second);
 	gnuplot.plot_data(elem.first);
   }
-  
+
   //Now output fractional lambda contributions: mean version
   for(const auto& elem: plot_data.mean_lambda_fractions){
 	std::string csvfile_name = elem.first + ".csv";
@@ -359,7 +397,7 @@ void output_csv_files(const std::string& output_directory,
 					 elem.second);
 	gnuplot.plot_data(elem.first);
   }
-  
+
   //Now output fractional lambda contributions: cumulative mean version
   for(const auto& elem: plot_data.cumulative_mean_lambda_fractions){
 	std::string csvfile_name = elem.first + ".csv";
@@ -379,14 +417,14 @@ void output_csv_files(const std::string& output_directory,
 					 elem.second);
 	gnuplot.plot_data(elem.first);
   }
-  
+
   for(const auto& elem: plot_data.quarantined_stats){
     std::string csvfile_name = elem.first + ".csv";
     std::string csvfile_path = output_directory + "/" + csvfile_name;
     //This file contains quarantine_stats
     output_timed_csv({"quarantined_individuals",
             "quarantined_infectious",
-            "quarantined_cases"},
+            "quarantined_cases","quarantined_individuals_cohorts","quarantined_infectious_cohorts"},
     csvfile_path, elem.second);
   }
 
@@ -397,5 +435,26 @@ void output_csv_files(const std::string& output_directory,
     output_timed_csv({"normal_interactions",
             "curtailed_interactions"},
     csvfile_path, elem.second);
+  }
+  for(const auto& elem: plot_data.disease_label_stats){
+    std::string csvfile_name = elem.first + ".csv";
+    std::string csvfile_path = output_directory + "/" + csvfile_name;
+    //This file contains quarantine_stats
+    output_timed_csv({"primary_contact",
+            "mild_symptomatic_tested",
+            "moderate_symptomatic_tested",
+            "severe_symptomatic_tested",
+            "icu","requested_tests","cumulative_positive_cases"},
+    csvfile_path, elem.second);
+  }
+  if(GLOBAL.ENABLE_COHORTS){
+    for(const auto& elem: plot_data.coach_stats){
+      std::string csvfile_name = elem.first + ".csv";
+      std::string csvfile_path = output_directory + "/" + csvfile_name;
+      //This file contains quarantine_stats
+      output_timed_csv({"train_coaches_am",
+              "train_coaches_pm"},
+      csvfile_path, elem.second);
+    }
   }
 }

@@ -8,7 +8,7 @@ struct defaults{
   std::string NUM_DAYS = "120";
   std::string INIT_FRAC_INFECTED = "0.0001";
   std::string INIT_FIXED_NUMBER_INFECTED = "100";
-  std::string INCUBATION_PERIOD = "2.25";
+  std::string MEAN_INCUBATION_PERIOD = "4.50";
   std::string MEAN_ASYMPTOMATIC_PERIOD = "0.5";
   std::string MEAN_SYMPTOMATIC_PERIOD = "5";
   std::string SYMPTOMATIC_FRACTION = "0.67";
@@ -27,7 +27,7 @@ struct defaults{
   std::string INTERVENTION = "0";
   std::string CYCLIC_POLICY_TYPE = "0";
   std::string output_dir = "outputs/test_output_timing";
-  std::string input_base = "../simulator/input_files";
+  std::string input_base = "../staticInst/data/mumbai-10k/"; // "../simulator/input_files";
   std::string attendance_filename = "attendance.json";
   std::string SEED_HD_AREA_POPULATION = "false";
   std::string SEED_ONLY_NON_COMMUTER = "false";
@@ -41,7 +41,11 @@ struct defaults{
   std::string OE_SECOND_PERIOD = "30";
   std::string LOCKED_COMMUNITY_LEAKAGE = "1.0";
   std::string COMMUNITY_LOCK_THRESHOLD = "0.001";
+  std::string LOCKED_NEIGHBORHOOD_LEAKAGE = "1.0";
+  std::string NEIGHBORHOOD_LOCK_THRESHOLD = "0.001";
   std::string MASK_ACTIVE = "false";
+  std::string MASK_FACTOR = "0.8";
+  std::string MASK_START_DELAY = "40";
   std::string USE_AGE_DEPENDENT_MIXING = "false";
   std::string SIGNIFICANT_EIGEN_VALUES = "3.0";
   std::string NUM_AGE_GROUPS = "16";
@@ -51,8 +55,29 @@ struct defaults{
   std::string CITY_NE_LON = "77.78405146";
   std::string NBR_CELL_SIZE = "0.178"; // in km
   std::string ENABLE_CONTAINMENT = "false";
+  std::string ENABLE_NBR_CELLS = "false";
+  std::string ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT = "false";
   std::string WARD_CONTAINMENT_THRESHOLD  = "0";
   std::string intervention_params_filename = "intervention_params.json";
+  std::string BETA_PROJECT = "0";
+  std::string BETA_CLASS = "0";
+  std::string BETA_RANDOM_COMMUNITY = "0";
+  std::string BETA_NBR_CELLS = "0";
+  std::string ENABLE_TESTING = "false";
+  std::string TESTING_PROTOCOL = "0";
+  std::string testing_protocol_filename = "testing_protocol.json";
+  std::string BETA_COHORT = "0";
+  std::string ENABLE_COHORTS = "false";
+  std::string COHORT_SIZE = "15";
+  std::string FRACTION_IN_TRAINS = "1.0";
+  std::string CROWDING_FACTOR = "1.0";
+  std::string ISOLATE_COHORTS = "false";
+  std::string COHORT_SEVERITY_FRACTION = "0";
+  std::string COHORT_STRATEGY = "1";
+  std::string STORE_STATE_TIME_STEP = "0";
+  std::string LOAD_STATE_TIME_STEP = "0";
+  std::string ONE_OFF_TRAVELERS_RATIO = "0";
+  std::string agent_load_file = "agentStore.pbstore";
 } DEFAULTS;
 
 #endif

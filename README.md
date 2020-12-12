@@ -15,11 +15,27 @@ The source code for the simulator is organized into three major directories each
 
 
 ## `StaticInst/` - Generates static files to instantiate a city based on Demographics data
-The first stage of the simulator workflow is to generate static information required to instantiate a city.  To instantiate a Bangalore city with the mentioned configurations run the command
+The first stage of the simulator workflow is to generate static information required to instantiate a city.  To get the necessary options to instantiate the city:
 
-```python parse_and_instantiate.py -c city_name -n target_population -i inputPath -o outputPath```
+```
+> python CityGen.py -h
+usage: CityGen.py [-h] [-n N] [-i I] [-o O] [--validate] [-s S]
 
-The above script instantiates a synthetic city with the specified population where each individual being assigned to a house, school, workplace and community centre based on their age, and commute distance. The instantiated outputs are in the form of JSON files and will be available in the specified output directory.
+Create mini-city for COVID-19 simulation
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -n N        target population
+  -i I        input folder
+  -o O        output folder
+  --validate  script for validation plots on
+  -s S        [for debug] restore random seed from folder
+```
+
+The above script instantiates a synthetic city with the specified population where each individual being assigned to a house, school, workplace and community centre based on their age, and commute distance (to be provided in the folder added as the `-i` option). The instantiated outputs are in the form of JSON files and will be available in the specified output directory. An example run, to generate a version of Mumbai, would be the following:
+```
+> python CityGen.py -n 10000 -i data/base/mumbai -o data/mumbai_10k --validate 
+```
 
 A detailed description of the input files, the script and instructions to run are available at [`staticInst/README.md`](staticInst/README.md)
 

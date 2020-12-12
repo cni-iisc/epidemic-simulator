@@ -28,6 +28,22 @@ You might then have to point `MSYS` to actually use your Windows
 On Mac and Linux, most of the above programs are typically already there, or
 else are easy to install with a package manager.
 
+## Enabling feature to load--store simulator state
+The simulator has a feature where the state of the infection spread among the agents in the syntheic city can be saved and used at a later simulation run.
+The store and load feature is implemented by storing the agents' state into a [protobuf]() and you will need to install protobuf for cpp in your development or simulation environment if you plan to use the load--store feature.
+
+You can setup protobuf for cpp on a Debian/Ubuntu based Linux distribution with the following commands. Please note that, the simulator uses `protobuf v.3.13.0`.
+- Install prerequisite software: `sudo apt install automake cmake autoconf libtool make g++`
+- Download Protobuf v.3.13.0 as a compressed tarball: `wget https://github.com/protocolbuffers/protobuf/releases/download/v3.13.0/protobuf-cpp-3.13.0.tar.gz`
+- Extract the tarball: `tar -xvf protobuf-cpp-3.13.0.tar.gz`
+- Go to the extracted directory: `cd protobuf-3.13.0`
+- Run the command: `./configure`
+- Run the command: `make`
+- Run the command: `make check`
+- Run the command: `sudo make install`
+- Run the command: `sudo ldconfig`
+
+> **Note**: You will need to setup the same version of protobuf while running simulations also.
 
 ## Compiling the code
 
@@ -43,6 +59,18 @@ parallel libraries, you should instead run
 ```
 make -f Makefile_np all
 ```
+By default, the load--store feature is disabled in the simulator, for backward compatibility. To use this feature, use the following command in `make`.
+
+With `openmp`:
+```
+make enable_proto=yes all
+```
+
+Without `openmp`:
+```
+make enable_proto=yes -f Makefile_np all
+```
+
 
 
 This will generate an executable file called `drive_simulator` in the

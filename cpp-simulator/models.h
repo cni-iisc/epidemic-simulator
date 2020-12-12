@@ -7,6 +7,9 @@
 #include <tuple>
 #include <cmath>
 #include <string>
+#include <algorithm>
+#include <unordered_map>
+
 
 enum class Intervention {
    no_intervention = 0,
@@ -28,6 +31,11 @@ enum class Intervention {
    intv_file_read=16,
    intv_Mum_cyclic=17
 };
+
+enum class cohort_strategy{
+			static_cohorts_static_coaches=0,
+			static_cohorts_dynamic_coaches=1
+		};
 
 enum class Cycle_Type {
   home = 0,
@@ -56,6 +64,9 @@ extern std::default_random_engine GENERATOR;
 void SEED_RNG();
 void SEED_RNG_PROVIDED_SEED(count_type seed);
 
+void SEED_RNG_GRAPH();
+void SEED_RNG_GRAPH_PROVIDED_SEED(count_type seed);
+
 inline double gamma(double shape, double scale){
   return std::gamma_distribution<double>(shape, scale)(GENERATOR);
 }
@@ -73,6 +84,33 @@ inline count_type uniform_count_type(double left, double right){
 }
 
 
+// Random number gnerators for random networks
+#ifdef MERSENNE_TWISTER
+extern std::mt19937_64 GENERATOR_NETWORK;
+#else
+extern std::default_random_engine GENERATOR_NETWORK;
+#endif
+void SEED_RNG();
+void SEED_RNG_PROVIDED_SEED(count_type seed);
+
+template<typename T>
+inline void randomly_shuffle(std::vector<T>& a){
+  std::shuffle(a.begin(), a.end(), GENERATOR_NETWORK);  // Need to add a specific generator.
+}
+
+inline bool bernoulli_network(double p){
+  return std::bernoulli_distribution(p)(GENERATOR_NETWORK);
+}
+
+inline double uniform_real_network(double left, double right){
+  return std::uniform_real_distribution<double>(left, right)(GENERATOR_NETWORK);
+}
+
+inline double uniform_count_type_network(double left, double right){
+  return std::uniform_int_distribution<count_type>(left, right)(GENERATOR_NETWORK);
+}
+
+
 // Global parameters
 //age related transition probabilities, symptomatic to hospitalised to critical to fatality.
 const double STATE_TRAN[][3] =
@@ -87,78 +125,166 @@ const double STATE_TRAN[][3] =
    {0.2430000,   0.4320000,   0.5000000},
    {0.2730000,   0.7090000,   0.5000000}
   };
-/*
-struct intervention_params{
-    count_type num_days = 0;
-    double compliance = 0.9;
-    bool case_isolation = false;
-    bool home_quarantine = false;
-    bool lockdown = false;
-    bool social_dist_elderly = false; 
-    bool school_closed = false;
-    bool workplace_odd_even = false;
-    double SC_factor = 0;
-    double community_factor = 1;
-    bool neighbourhood_containment = false;
-    bool ward_containment = false;
+
+struct testing_probability{
+  count_type num_days = 0; //number of days for which this a protocol is active.
+  double prob_test_index_symptomatic = 0;
+  double prob_test_index_hospitalised = 0;
+
+  double prob_test_household_positive_symptomatic = 0; // network_indexcase_contact
+  double prob_test_household_hospitalised_symptomatic = 0;
+  double prob_test_household_symptomatic_symptomatic = 0;
+  double prob_test_household_positive_asymptomatic = 0;
+  double prob_test_household_hospitalised_asymptomatic = 0;
+  double prob_test_household_symptomatic_asymptomatic = 0;
+
+  double prob_test_workplace_positive_symptomatic = 0;
+  double prob_test_workplace_hospitalised_symptomatic = 0;
+  double prob_test_workplace_symptomatic_symptomatic = 0;
+  double prob_test_workplace_positive_asymptomatic = 0;
+  double prob_test_workplace_hospitalised_asymptomatic = 0;
+  double prob_test_workplace_symptomatic_asymptomatic = 0;
+
+  double prob_test_random_community_positive_symptomatic = 0;
+  double prob_test_random_community_hospitalised_symptomatic = 0;
+  double prob_test_random_community_symptomatic_symptomatic = 0;
+  double prob_test_random_community_positive_asymptomatic = 0;
+  double prob_test_random_community_hospitalised_asymptomatic = 0;
+  double prob_test_random_community_symptomatic_asymptomatic = 0;
+
+  double prob_test_neighbourhood_positive_symptomatic = 0;
+  double prob_test_neighbourhood_hospitalised_symptomatic = 0;
+  double prob_test_neighbourhood_symptomatic_symptomatic = 0;
+  double prob_test_neighbourhood_positive_asymptomatic = 0;
+  double prob_test_neighbourhood_hospitalised_asymptomatic = 0;
+  double prob_test_neighbourhood_symptomatic_asymptomatic = 0;
+
+  double prob_test_school_positive_symptomatic = 0;
+  double prob_test_school_hospitalised_symptomatic = 0;
+  double prob_test_school_symptomatic_symptomatic = 0;
+  double prob_test_school_positive_asymptomatic = 0;
+  double prob_test_school_hospitalised_asymptomatic = 0;
+  double prob_test_school_symptomatic_asymptomatic = 0;
+
+  double prob_retest_recovered = 0;
+
+  double prob_contact_trace_household_symptomatic = 0;
+  double prob_contact_trace_project_symptomatic = 0;
+  double prob_contact_trace_random_community_symptomatic = 0;
+  double prob_contact_trace_neighbourhood_symptomatic = 0;
+  double prob_contact_trace_class_symptomatic = 0;
+
+  double prob_contact_trace_household_hospitalised = 0;
+  double prob_contact_trace_project_hospitalised = 0;
+  double prob_contact_trace_random_community_hospitalised = 0;
+  double prob_contact_trace_neighbourhood_hospitalised = 0;
+  double prob_contact_trace_class_hospitalised = 0;
+
+  double prob_contact_trace_household_positive = 0;
+  double prob_contact_trace_project_positive = 0;
+  double prob_contact_trace_random_community_positive = 0;
+  double prob_contact_trace_neighbourhood_positive = 0;
+  double prob_contact_trace_class_positive = 0;
 };
-*/
+
+
+enum class Testing_Protocol{
+  no_testing,
+  test_household,
+  testing_protocol_file_read
+};
 
 struct svd {
   matrix<double> u, vT;
   std::vector<double> sigma;
 };
 
-struct intervention_params {
-  count_type num_days = 0;
-  double compliance = 0.9;
-  double compliance_hd = 0.9;
-  bool case_isolation = false;
-  bool home_quarantine = false;
-  bool lockdown = false;
-  bool social_dist_elderly = false; 
-  bool school_closed = false;
-  bool workplace_odd_even = false;
-  double SC_factor = 0;
-  double community_factor = 1;
-  bool neighbourhood_containment = false;
-  bool ward_containment = false;
-  bool trains_active = false;
-  double fraction_forced_to_take_train = 1;
-
-  intervention_params& set_case_isolation(bool c){
-	this->case_isolation = c;
-	return *this;
-  }
-  intervention_params& set_home_quarantine(bool c){
-	this->home_quarantine = c;
-	return *this;
-  }
-  intervention_params& set_lockdown(bool c){
-	this->lockdown = c;
-	return *this;
-  }
-  intervention_params& set_social_dist_elderly(bool c){
-	this->social_dist_elderly = c;
-	return *this;
-  }
-  intervention_params& set_school_closed(bool c){
-	this->school_closed = c;
-	return *this;
-  }
-  intervention_params& set_workplace_odd_even(bool c){
-	this->workplace_odd_even = c;
-	return *this;
-  }
-  intervention_params& set_SC_factor(double c){
-	this->SC_factor = c;
-	return *this;
-  }
-  intervention_params& set_community_factor(double c){
-	this->community_factor = c;
-	return *this;
-  }
+struct kappa_values{
+double kappa_H;
+double kappa_H_incoming;
+double kappa_W;
+double kappa_W_incoming;
+double kappa_C;
+double kappa_C_incoming;
 };
+
+// struct intervention_params {
+//   count_type num_days = 0;
+//   double compliance = 0.9;
+//   double compliance_hd = 0.9;
+//   bool case_isolation = false;
+//   bool home_quarantine = false;
+//   bool lockdown = false;
+//   bool social_dist_elderly = false;
+//   bool school_closed = false;
+//   bool workplace_odd_even = false;
+//   double SC_factor = 0;
+//   double community_factor = 1;
+
+//   bool neighbourhood_containment = false;
+//   double neighbourhood_containment_leakage = 1.0;
+//   double neighbourhood_containment_threshold = 0.001;
+
+//   bool ward_containment = false;
+//   double ward_containment_leakage = 1.0;
+//   double ward_containment_threshold = 0.001;
+
+//   double locked_community_leakage = 1;
+//   bool trains_active = false;
+//   double fraction_forced_to_take_train = 1;
+//   kappa_values lockdown_kappas_compliant;
+//   kappa_values lockdown_kappas_non_compliant;
+
+//   intervention_params(){
+//     lockdown_kappas_compliant.kappa_H = 2.0;
+//     lockdown_kappas_compliant.kappa_H_incoming = 1.0;
+//     lockdown_kappas_compliant.kappa_W = 0.25;
+//     lockdown_kappas_compliant.kappa_W_incoming = 0.25;
+//     lockdown_kappas_compliant.kappa_C = 0.25;
+//     lockdown_kappas_compliant.kappa_C_incoming = 0.25;
+
+//     lockdown_kappas_non_compliant.kappa_H = 1.25;
+//     lockdown_kappas_non_compliant.kappa_H_incoming = 1.0;
+//     lockdown_kappas_non_compliant.kappa_W = 0.25;
+//     lockdown_kappas_non_compliant.kappa_W_incoming = 0.25;
+//     lockdown_kappas_non_compliant.kappa_C = 1;
+//     lockdown_kappas_non_compliant.kappa_C_incoming = 1;
+
+//     locked_community_leakage = GLOBAL.LOCKED_COMMUNITY_LEAKAGE;
+//   }
+//   intervention_params& set_case_isolation(bool c){
+// 	this->case_isolation = c;
+// 	return *this;
+//   }
+//   intervention_params& set_home_quarantine(bool c){
+// 	this->home_quarantine = c;
+// 	return *this;
+//   }
+//   intervention_params& set_lockdown(bool c){
+// 	this->lockdown = c;
+// 	return *this;
+//   }
+//   intervention_params& set_social_dist_elderly(bool c){
+// 	this->social_dist_elderly = c;
+// 	return *this;
+//   }
+//   intervention_params& set_school_closed(bool c){
+// 	this->school_closed = c;
+// 	return *this;
+//   }
+//   intervention_params& set_workplace_odd_even(bool c){
+// 	this->workplace_odd_even = c;
+// 	return *this;
+//   }
+//   intervention_params& set_SC_factor(double c){
+// 	this->SC_factor = c;
+// 	return *this;
+//   }
+//   intervention_params& set_community_factor(double c){
+// 	this->community_factor = c;
+// 	return *this;
+//   }
+// };
 
 
 //These are parameters associated with the disease progression
@@ -174,13 +300,14 @@ const double HOME_QUARANTINE_DAYS = 14;
 // when the input files are read.
 struct global_params{
   count_type RNG_SEED;
+  count_type RNG_SEED_NETWORK;
   double COMPLIANCE_PROBABILITY = 1;
-
+  double HD_COMPLIANCE_PROBABILITY = 1;
   count_type num_homes = 25000;
   count_type num_workplaces = 5000;
   count_type num_schools = 0;
   count_type num_communities = 198;
-
+  count_type num_cohorts = 300;
   count_type num_people = 100000;
 
   count_type NUM_DAYS = 120; //Number of days. Simulation duration
@@ -188,7 +315,7 @@ struct global_params{
   count_type NUM_TIMESTEPS = NUM_DAYS*SIM_STEPS_PER_DAY; //
   double INIT_FRAC_INFECTED = 0.0001; // Initial number of people infected
 
-  double INCUBATION_PERIOD = 2.25;
+  double MEAN_INCUBATION_PERIOD = 4.50;
   double MEAN_ASYMPTOMATIC_PERIOD = 0.5;
   double MEAN_SYMPTOMATIC_PERIOD = 5;
   double MEAN_HOSPITAL_REGULAR_PERIOD = 8;
@@ -200,14 +327,14 @@ struct global_params{
   //given city are given at input.
   double F_KERNEL_A = 10.751;
   double F_KERNEL_B = 5.384;
-	
-  
+
+
   const double INCUBATION_PERIOD_SHAPE = 2.0; //Fixing this back to 2.0. To change incubation period, change incubation scale.
-  double INCUBATION_PERIOD_SCALE = INCUBATION_PERIOD*SIM_STEPS_PER_DAY;// 2.29 days
+  double INCUBATION_PERIOD_SCALE = MEAN_INCUBATION_PERIOD*SIM_STEPS_PER_DAY / INCUBATION_PERIOD_SHAPE;// 2.29 days
 
   //Gamma with mean 1 and shape 0.25, as per Imperial College 16 March Report
   double INFECTIOUSNESS_SHAPE = 0.25;
-  double INFECTIOUSNESS_SCALE = 4;  
+  double INFECTIOUSNESS_SCALE = 4;
 
   double SEVERITY_RATE = 0.5; //value used in sim.js
 
@@ -226,6 +353,10 @@ struct global_params{
   double BETA_W = 0.47 *2; //Thailand data
   double BETA_S = 0.94 *2; //Thailand data
   double BETA_C = 0.097*4.85; // Thailand data. Product = 0.47
+  double BETA_PROJECT = 0;
+  double BETA_CLASS = 0;
+  double BETA_RANDOM_COMMUNITY = 0;
+  double BETA_NBR_CELLS = 0;
 
   double ALPHA = 0.8;
   //exponent of number of people in a household while normalising
@@ -269,6 +400,12 @@ struct global_params{
   //crosses this fraction
   double COMMUNITY_LOCK_THRESHOLD = 1E-3; //0.1%
   double LOCKED_COMMUNITY_LEAKAGE = 1.0;
+
+  // Lockdown thresholds for neighborhood cells
+  double NEIGHBORHOOD_LOCK_THRESHOLD = 1E-3; //0.1%
+  double LOCKED_NEIGHBORHOOD_LEAKAGE = 1.0;
+  bool ENABLE_NEIGHBORHOOD_SOFT_CONTAINMENT = false;
+
   count_type WARD_CONTAINMENT_THRESHOLD = 1; // threshold of hospitalised individuals in ward, beyond which the ward is quarantined.
   //Switches
   //If this is false, the file quarantinedPopulation.json is needed
@@ -296,6 +433,8 @@ struct global_params{
   //Input and output
   std::string input_base;
   std::string attendance_filename;
+  std::string output_path;
+  std::string agent_load_file;
 
   //Status
   count_type INIT_ACTUALLY_INFECTED = 0;
@@ -308,7 +447,7 @@ struct global_params{
   bool MASK_ACTIVE = false;
   double MASK_FACTOR = 0.8;
   double MASK_START_DATE = 0;//40+
-  
+
   //Age stratification
   count_type NUM_AGE_GROUPS = 16;
   double SIGNIFICANT_EIGEN_VALUES = 3;
@@ -318,10 +457,122 @@ struct global_params{
   location city_SW, city_NE;
   double NBR_CELL_SIZE = 1; //in km
   bool ENABLE_CONTAINMENT = false;
+  bool ENABLE_NBR_CELLS = false;
 
   std::string intervention_filename = "intervention_params.json";
+
+  double MIN_PROJECT_SIZE = 3; //Min and Max number of members in a project.
+  double MAX_PROJECT_SIZE = 10;
+  double MIN_CLASS_AGE = 5;
+  double MAX_CLASS_AGE = 19;
+  double MIN_RANDOM_COMMUNITY_SIZE = 2; //Min and Max number of households in a random community.
+  double MAX_RANDOM_COMMUNITY_SIZE = 5;
+
+  bool ENABLE_TESTING = false;
+  double TEST_FALSE_NEGATIVE = 0; //Probability of a true positive person tests negative
+  double TEST_FALSE_POSITIVE = 0; //Probability of a true negative person tests positive
+  Testing_Protocol TESTING_PROTOCOL=Testing_Protocol::test_household;
+  double TIME_TO_TEST_POSITIVE = 3;
+  int MINIMUM_TEST_INTERVAL = 7; //Minumum duration between two consecutive tests
+  std::string testing_protocol_filename = "testing_protocol.json";
+
+  bool ENABLE_COHORTS = false;
+  bool ISOLATE_COHORTS = false;
+  double BETA_COHORT = 0;
+  double COHORT_SIZE = 15;
+  double taking_train_fraction = 1.0;
+  double crowding_factor = 5.0; // Ratio of occupancy to seat capacity.
+  double COACH_SEAT_CAPACITY = 100;
+  double COHORT_SEVERITY_FRACTION=0; //Threshold for severity index for an individual, beyond which the individual and the cohort is expected to quarantine.
+  cohort_strategy COHORT_STRATEGY=cohort_strategy::static_cohorts_dynamic_coaches;
+  double ONE_OFF_TRAVELERS_RATIO = 0.0;
+
+  //////////// TO STORE OR LOAD STATE //////////////
+  count_type STORE_STATE_TIME_STEP = 0;
+  count_type LOAD_STATE_TIME_STEP = 0;
+
 };
 extern global_params GLOBAL;
+
+
+struct intervention_params {
+  count_type num_days = 0;
+  double compliance = 0.9;
+  double compliance_hd = 0.9;
+  bool case_isolation = false;
+  bool home_quarantine = false;
+  bool lockdown = false;
+  bool social_dist_elderly = false;
+  bool school_closed = false;
+  bool workplace_odd_even = false;
+  double SC_factor = 0;
+  double community_factor = 1;
+
+  bool neighbourhood_containment = false;
+  double neighbourhood_containment_leakage = 1.0;
+  double neighbourhood_containment_threshold = 0.001;
+
+  bool ward_containment = false;
+  double ward_containment_leakage = 1.0;
+  double ward_containment_threshold = 0.001;
+
+  double locked_community_leakage = 1;
+  bool trains_active = false;
+  double fraction_forced_to_take_train = 1;
+  kappa_values lockdown_kappas_compliant;
+  kappa_values lockdown_kappas_non_compliant;
+
+  intervention_params(){
+    lockdown_kappas_compliant.kappa_H = 2.0;
+    lockdown_kappas_compliant.kappa_H_incoming = 1.0;
+    lockdown_kappas_compliant.kappa_W = 0.25;
+    lockdown_kappas_compliant.kappa_W_incoming = 0.25;
+    lockdown_kappas_compliant.kappa_C = 0.25;
+    lockdown_kappas_compliant.kappa_C_incoming = 0.25;
+
+    lockdown_kappas_non_compliant.kappa_H = 1.25;
+    lockdown_kappas_non_compliant.kappa_H_incoming = 1.0;
+    lockdown_kappas_non_compliant.kappa_W = 0.25;
+    lockdown_kappas_non_compliant.kappa_W_incoming = 0.25;
+    lockdown_kappas_non_compliant.kappa_C = 1;
+    lockdown_kappas_non_compliant.kappa_C_incoming = 1;
+
+    locked_community_leakage = GLOBAL.LOCKED_COMMUNITY_LEAKAGE;
+  }
+  intervention_params& set_case_isolation(bool c){
+	this->case_isolation = c;
+	return *this;
+  }
+  intervention_params& set_home_quarantine(bool c){
+	this->home_quarantine = c;
+	return *this;
+  }
+  intervention_params& set_lockdown(bool c){
+	this->lockdown = c;
+	return *this;
+  }
+  intervention_params& set_social_dist_elderly(bool c){
+	this->social_dist_elderly = c;
+	return *this;
+  }
+  intervention_params& set_school_closed(bool c){
+	this->school_closed = c;
+	return *this;
+  }
+  intervention_params& set_workplace_odd_even(bool c){
+	this->workplace_odd_even = c;
+	return *this;
+  }
+  intervention_params& set_SC_factor(double c){
+	this->SC_factor = c;
+	return *this;
+  }
+  intervention_params& set_community_factor(double c){
+	this->community_factor = c;
+	return *this;
+  }
+};
+
 
 // return a random compliance based on GLOBAL.compliance_probability
 inline bool compliance(){
@@ -366,7 +617,16 @@ enum class Progression {
    dead
 };
 
-
+enum class DiseaseLabel{
+   asymptomatic = 0, //neither contact traced nor tested positive
+   primary_contact, //CCC1
+   mild_symptomatic_tested, //CCC2
+   moderate_symptomatic_tested, //DCHC
+   severe_symptomatic_tested, //DCH
+   icu, //ICU
+   recovered,
+   dead
+};
 
 enum class WorkplaceType{
    home = 0,
@@ -391,16 +651,24 @@ struct lambda_incoming_data {
   double work = 0;
   double community = 0;
   double travel = 0;
+  double project = 0;
+  double random_community = 0;
+  double nbr_cell = 0;
+  double cohorts = 0;
 
   void set_zero(){
-	home = 0;
-	work = 0;
-	community = 0;
-	travel = 0;
-  }
+    home = 0;
+    work = 0;
+    community = 0;
+    travel = 0;
+    project = 0;
+    random_community = 0;
+    nbr_cell = 0;
+    cohorts=0;
+	}
 
   inline double sum() const {
-	return home + work + community + travel;
+	return home + work + community + travel + project + random_community + nbr_cell + cohorts;
   }
 
   inline lambda_incoming_data operator/(long double d) const {
@@ -432,6 +700,9 @@ struct lambda_incoming_data {
 	work /= d;
 	community /= d;
 	travel /= d;
+	project /= d;
+	random_community /= d;
+	nbr_cell /= d;
 	return *this;
   }
 
@@ -440,6 +711,9 @@ struct lambda_incoming_data {
 	work *= d;
 	community *= d;
 	travel *= d;
+	project *= d;
+	random_community *= d;
+	nbr_cell *= d;
 	return *this;
   }
 
@@ -448,6 +722,9 @@ struct lambda_incoming_data {
 	work += rhs.work;
 	community += rhs.community;
 	travel += rhs.travel;
+	project += rhs.project;
+	random_community += rhs.random_community;
+	nbr_cell += rhs.nbr_cell;
 	return *this;
   }
 
@@ -456,6 +733,9 @@ struct lambda_incoming_data {
 	work -= rhs.work;
 	community -= rhs.community;
 	travel -= rhs.travel;
+	project -= rhs.project;
+	random_community -= rhs.random_community;
+	nbr_cell -= rhs.nbr_cell;
 	return *this;
   }
 
@@ -464,7 +744,44 @@ struct lambda_incoming_data {
 	work += (update.work - work)/num;
 	community += (update.community - community)/num;
 	travel += (update.travel - travel)/num;
+	project += (update.project -  project)/num;
+	random_community += (update.random_community - random_community)/num;
+	nbr_cell += (update.nbr_cell - nbr_cell)/num;
   }
+};
+
+enum class test_result{
+  not_yet_tested,
+  positive,
+  negative,
+};
+
+enum class test_trigger{
+  not_yet_requested,
+  symptomatic,
+  hospitalised,
+  contact_traced,
+  re_test
+};
+
+struct test_struct{
+  int tested_epoch = -28; // This is reset in init_nodes
+  bool tested_positive = false; // To indicate if the individual is tested positive at sometime in the past
+  count_type contact_traced_epoch = 0;
+  bool test_requested = false;
+  test_result state = test_result::not_yet_tested;
+  bool triggered_contact_trace = false;
+  test_trigger node_test_trigger=test_trigger::not_yet_requested;
+};
+
+struct cohort{
+  //count_type cohort_id = 0;
+  bool takes_train = false;
+  bool one_off_traveler = false;
+  count_type source_station = 0;
+  count_type destination_station = 0;
+  double edge_weight = 0; //TODO[NKV]: we might need to update this while cohorts are made, I guess!
+  bool quarantined =false;
 };
 
 struct agent{
@@ -476,6 +793,7 @@ struct agent{
   double infectiousness;
   //a.k.a rho
   double severity;
+  double severity_index=0; //severity scale for an individual
   //a.k.a S_k, is 0 or
   int home; //index of household
   int workplace;
@@ -500,6 +818,8 @@ struct agent{
   //individuals contribution to his workplace cluster
   double lambda_c = 0;
   //individuals contribution to his community
+  double lambda_nbr_cell = 0;
+  //individuals contribution to neighbourhood cell
   double lambda = 0;
 
   double kappa_T = 1;
@@ -509,14 +829,23 @@ struct agent{
   WorkplaceType workplace_type;
   //one of school, office, or home
   OfficeType office_type = OfficeType::other;
-  
+  int workplace_subnetwork = 0;
+  int community_subnetwork = 0;
+
+  //cohorts
+  cohort my_cohort;
+
   lambda_incoming_data lambda_incoming;
   //infectiousness from home, workplace, community, travel as seen by
   //individual
 
+  //Neighborhood cell containment
+  double neighborhood_access_factor = 1.0;
+  //access_factor for the neighborhood cell in which this node lives
+  //set to 1 in case neighborhood cell is not enabled.
 
   bool compliant = true;
-  
+
   double kappa_H = 1;
   double kappa_W = 1;
   double kappa_C = 1;
@@ -524,7 +853,7 @@ struct agent{
   double incubation_period;
   double asymptomatic_period;
   double symptomatic_period;
-  
+
 
   double hospital_regular_period;
   double hospital_critical_period;
@@ -545,7 +874,7 @@ struct agent{
 							  //work?
   bool forced_to_take_train = true;
   //Will the agent be forced to take the train today, as employer did not provide transit?
-  
+
   double commute_distance = 0; //in km
 
   bool hd_area_resident = false;
@@ -557,7 +886,7 @@ struct agent{
 
   //Currently attending office or not
   bool attending = true;
-  
+
   agent(){}
   // Is the agent curently traveling?
   inline bool travels() const {
@@ -571,6 +900,16 @@ struct agent{
 
   //attendance probability at given time, for the agent
   double get_attendance_probability(count_type time) const;
+  test_struct test_status;
+  DiseaseLabel disease_label = DiseaseLabel::asymptomatic;
+};
+
+
+struct random_community{
+  double lambda_random_community;
+  count_type community;
+  std::vector<int> households;
+  double scale = 0;
 };
 
 
@@ -580,6 +919,10 @@ struct house{
   double lambda_home = 0;
   std::vector<int> individuals; //list of indices of individuals
   double Q_h = 1;
+  count_type community; // ward index
+  random_community random_households;  //to specify random community network
+
+  double lambda_random_community_outgoing;
 
   //Cyclic strategy class.
   //
@@ -595,6 +938,11 @@ struct house{
   double age_independent_mixing;
   std::vector<double> age_dependent_mixing;
 
+  //Neighborhood cell containment
+  double neighborhood_access_factor = 1.0;
+  //access_factor for the neighborhood cell in which this house is located. Set
+  //to 1 in case neighborhood cell is not enabled.
+
   //age_dependent_mixing not added yet, since it is unused
   house(){}
   house(double latitude, double longitude, bool compliance):
@@ -604,7 +952,22 @@ struct house{
     this->loc = {latitude, longitude};
     this->compliant = compliance;
     this->non_compliance_metric = non_compl_metric;
+	if(GLOBAL.ENABLE_NBR_CELLS){
+	  set_nbr_cell();  //Requires location to be set
+	}
   }
+
+  void set_nbr_cell();
+};
+
+
+struct project{
+  int workplace;
+  std::vector<int> individuals;
+  double scale = 0;
+  double lambda_project = 0;
+  double age_independent_mixing;
+  std::vector<double> age_dependent_mixing;
 };
 
 
@@ -612,6 +975,7 @@ struct workplace {
   location loc;
   double lambda_workplace = 0;
   std::vector<int> individuals; //list of indices of individuals
+  std::vector<project> projects; // list of project indices in the workplace
   double Q_w = 1;
   double scale = 0;
   WorkplaceType workplace_type;
@@ -633,11 +997,67 @@ struct workplace {
 
 };
 
+struct edge{
+  count_type node;
+  count_type cohort_hash;
+  double edge_weight = 0;
+};
+
+struct interaction_space{
+  double lambda_interaction_internal = 0; //intra-cohort infectivity
+  double lambda_interaction_external = 0; //inter-cohort infectivity
+  double scale = 0; //scale = (beta_interaction_space) / (number of interaction spaces)
+  bool quarantined = false;
+  bool enabled = true;              //enable interaction of agents in this space
+  std::vector<count_type> internal_nodes; // index of the individuals within the interaction space
+  std::vector<std::vector <edge>> external_nodes; //nodes that are outside the interaction space, that are connected to the current one
+};
+
+struct train_coach; // Forward declaration.
+//cohort attributes
+struct cohort_space: interaction_space{
+  count_type cohort_id = 0 ;
+  count_type source_station = 0;
+  count_type destination_station = 0;
+  bool is_one_off_cohort = false;
+  double commute_time = 0; //time taken to travel between source and destination stations
+  cohort_space(int id, int src, int dest, double time):
+    cohort_id(id), source_station(src), destination_station(dest), commute_time(time) {
+      enabled = true;
+    }
+};
+
+struct train_coach {
+  count_type coach_id;
+  int trainLine;
+  bool isDown;
+  std::vector<cohort_space*> cohorts; // Pointer to cohort_space.
+  std::unordered_map<int, int> capacity_at_station;
+
+  train_coach(int id, int my_trainline, bool my_isDown, int my_capacity, std::vector<int>& stations){
+      coach_id = id;
+      trainLine = my_trainline;
+      isDown = my_isDown;
+      for (auto& station: stations){
+          capacity_at_station[station] = my_capacity;
+      }
+  }
+  void reset(int id, int my_capacity){
+      coach_id = id;
+      for (auto& it: capacity_at_station){
+          it.second = my_capacity;
+      }
+      cohorts.clear(); // Pointer to cohort_space.
+  }
+};
+
+
 struct community {
   location loc;
   double lambda_community = 0;
   double lambda_community_global = 0;
   std::vector<int> individuals; //list of indices of individuals
+  std::vector<int> households;  //list of households in a community
   double Q_c = 1;
   double scale = 0;
   bool quarantined = false;
@@ -659,11 +1079,25 @@ struct nbr_cell {
   grid_cell neighbourhood;
   std::vector<count_type> houses_list;
   bool quarantined = false;
+  double lambda_nbr = 0;
+  double scale = 0;
+
+  count_type population = 0;
+  count_type num_active_hospitalisations = 0;
+  double access_factor = 1.0; //Corresponds to w_c in the implementation of wardwise containment
+
+  // Stats for the 2-sweep contact-tracing in the neighbourhood cells
+  count_type num_index_hospitalised = 0;
+  count_type num_index_positive= 0;
+  count_type num_index_symptomatic = 0;
+  
 };
 
 struct office_attendance{
   count_type number_of_entries;
   matrix<double> probabilities;
+  bool attendance_new_file_type = false; //new file type gives attendance in intervals rather than in days
+                                         //+ it assumes full attendance for days before intervention.
 };
 
 extern office_attendance ATTENDANCE;

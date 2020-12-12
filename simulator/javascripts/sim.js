@@ -1839,7 +1839,7 @@ function setParameters(city){
         document.getElementById("betaPT").value = 0;
         CALIBRATION_DELAY = 0; //// Assuming the simulator starts on March 1.
         NUM_DAYS_BEFORE_INTERVENTIONS = 22 + CALIBRATION_DELAY;
-        $("input[name=interventions2][value='11']").trigger("click");//.prop("checked",true);
+        $("input[name=interventions2][value='11']").prop("checked",true);
         $("#customIntv").show();
     }
     if (city === 'nyc'){
@@ -1851,7 +1851,7 @@ function setParameters(city){
         document.getElementById("betaPT").value = 0;
         CALIBRATION_DELAY = 0; //// Assuming the simulator starts on March 1.
         NUM_DAYS_BEFORE_INTERVENTIONS = 8 + CALIBRATION_DELAY;
-        $("input[name=interventions2][value='11']").trigger("click");//.prop("checked",true);
+        $("input[name=interventions2][value='11']").prop("checked",true);
         $("#customIntv").show();
     }
     if (city === 'kochi'){
