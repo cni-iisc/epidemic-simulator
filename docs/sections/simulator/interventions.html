@@ -94,15 +94,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../instantiation/create_synthetic_city.html">Generating synthetic city</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">The simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameter.html">Simulator parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parameter.html#parameter-documentation">Parameter Documentation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Interventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="attendance.html">Workplace attendance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_app.html">Javascript simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../support.html#license-and-copyrights">License and Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copyright.html">License and Copyrights</a></li>
 </ul>
 
             
@@ -172,110 +171,175 @@
 <h1>Interventions<a class="headerlink" href="#interventions" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="pre-defined-interventions">
 <h2>Pre-defined interventions<a class="headerlink" href="#pre-defined-interventions" title="Permalink to this headline">¶</a></h2>
-</div>
+<p>The following interventions are implemented (along with the integer value that one
+needs to provide to run them).</p>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-cly1{text-align:left;vertical-align:middle}
+.tg .tg-mwxe{text-align:right;vertical-align:middle}
+.tg .tg-zt7h{font-weight:bold;text-align:right;vertical-align:middle}
+.tg .tg-yla0{font-weight:bold;text-align:left;vertical-align:middle}
+</style><table class="tg">
+<thead>
+  <tr>
+    <th class="tg-zt7h">Code</th>
+    <th class="tg-yla0">Identifier for intervention</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-mwxe">0</td>
+    <td class="tg-cly1">no_intervention</td>
+  </tr>
+  <tr>
+    <td class="tg-mwxe">1</td>
+    <td class="tg-cly1">case_isolation</td>
+  </tr>
+  <tr>
+    <td class="tg-mwxe">2</td>
+    <td class="tg-cly1">home_quarantine</td>
+  </tr>
+  <tr>
+    <td class="tg-mwxe">3</td>
+    <td class="tg-cly1">lockdown</td>
+  </tr>
+  <tr>
+    <td class="tg-mwxe">4</td>
+    <td class="tg-cly1">case_isolation_and_home_quarantine</td>
+  </tr>
+  <tr>
+    <td class="tg-mwxe">5</td>
+    <td class="tg-cly1">case_isolation_and_home_quarantine_sd_70_plus</td>
+  </tr>
+  <tr>
+    <td class="tg-mwxe">6</td>
+    <td class="tg-cly1">lockdown_fper_ci_hq_sd_70_plus_sper_ci</td>
+  </tr>
+  <tr>
+    <td class="tg-mwxe">7</td>
+    <td class="tg-cly1">lockdown_fper</td>
+  </tr>
+  <tr>
+    <td class="tg-mwxe">8</td>
+    <td class="tg-cly1">ld_fper_ci_hq_sd65_sc_sper_sc_tper</td>
+  </tr>
+  <tr>
+    <td class="tg-mwxe">9</td>
+    <td class="tg-cly1">ld_fper_ci_hq_sd65_sc_sper</td>
+  </tr>
+  <tr>
+    <td class="tg-mwxe">10</td>
+    <td class="tg-cly1">ld_fper_ci_hq_sd65_sc_oe_sper</td>
+  </tr>
+</tbody>
+</table>
+<br></div>
 <div class="section" id="user-defined-interventions">
 <h2>User-defined interventions<a class="headerlink" href="#user-defined-interventions" title="Permalink to this headline">¶</a></h2>
 <p>The json file for specifying the intervention is expected to be an array of dictionaries. Here is an example that we used in one of our reports:</p>
 <p><strong>Note</strong>: For <code class="docutils literal notranslate"><span class="pre">CALIBRATION_DELAY</span></code> many days, the simulator runs no-intervention and then starts implementing the intervention according to the definition provided in the json file.</p>
-<p>.. code-block:: json</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">{</span>
-        <span class="s2">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
-        <span class="s2">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
-        <span class="s2">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
-        <span class="s2">&quot;lockdown&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
+        <span class="nt">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+        <span class="nt">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+        <span class="nt">&quot;lockdown&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
-        <span class="s2">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
-        <span class="s2">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
-        <span class="s2">&quot;lockdown&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+        <span class="nt">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+        <span class="nt">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+        <span class="nt">&quot;lockdown&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;mask_factor&quot;</span><span class="p">:</span> <span class="mf">0.8</span>
+        <span class="nt">&quot;mask_factor&quot;</span><span class="p">:</span> <span class="mf">0.8</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
-        <span class="s2">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
-        <span class="s2">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
-        <span class="s2">&quot;lockdown&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
+        <span class="nt">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+        <span class="nt">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+        <span class="nt">&quot;lockdown&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;social_dist_elderly&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;social_dist_elderly&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;mask_factor&quot;</span><span class="p">:</span> <span class="mf">0.8</span>
+        <span class="nt">&quot;mask_factor&quot;</span><span class="p">:</span> <span class="mf">0.8</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
-        <span class="s2">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
-        <span class="s2">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
-        <span class="s2">&quot;community_factor&quot;</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span>
-        <span class="s2">&quot;case_isolation&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+        <span class="nt">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+        <span class="nt">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+        <span class="nt">&quot;community_factor&quot;</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span>
+        <span class="nt">&quot;case_isolation&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;home_quarantine&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;home_quarantine&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;social_dist_elderly&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;social_dist_elderly&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;school_closed&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;school_closed&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;mask_factor&quot;</span><span class="p">:</span> <span class="mf">0.8</span>
+        <span class="nt">&quot;mask_factor&quot;</span><span class="p">:</span> <span class="mf">0.8</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">153</span><span class="p">,</span>
-        <span class="s2">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
-        <span class="s2">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
-        <span class="s2">&quot;community_factor&quot;</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span>
-        <span class="s2">&quot;case_isolation&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">153</span><span class="p">,</span>
+        <span class="nt">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+        <span class="nt">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+        <span class="nt">&quot;community_factor&quot;</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span>
+        <span class="nt">&quot;case_isolation&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;home_quarantine&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;home_quarantine&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;social_dist_elderly&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;social_dist_elderly&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;school_closed&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;school_closed&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;mask_factor&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
-        <span class="s2">&quot;trains&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-            <span class="s2">&quot;fraction_forced_to_take_train&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="nt">&quot;mask_factor&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+        <span class="nt">&quot;trains&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nt">&quot;fraction_forced_to_take_train&quot;</span><span class="p">:</span> <span class="mi">1</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="s2">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
-        <span class="s2">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
-        <span class="s2">&quot;community_factor&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;case_isolation&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="nt">&quot;compliance&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+        <span class="nt">&quot;compliance_hd&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+        <span class="nt">&quot;community_factor&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;case_isolation&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;home_quarantine&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;home_quarantine&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;social_dist_elderly&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;social_dist_elderly&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;school_closed&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="nt">&quot;school_closed&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;mask_factor&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
-        <span class="s2">&quot;trains&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-            <span class="s2">&quot;fraction_forced_to_take_train&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="nt">&quot;mask_factor&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+        <span class="nt">&quot;trains&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nt">&quot;fraction_forced_to_take_train&quot;</span><span class="p">:</span> <span class="mi">1</span>
         <span class="p">},</span>
-        <span class="s2">&quot;neighbourhood_containment&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">:</span><span class="n">true</span><span class="p">,</span>
-            <span class="s2">&quot;leakage&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-            <span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">0.001</span>
+        <span class="nt">&quot;neighbourhood_containment&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;active&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+            <span class="nt">&quot;leakage&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+            <span class="nt">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">0.001</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">]</span>

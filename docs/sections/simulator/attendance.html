@@ -94,15 +94,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../instantiation/create_synthetic_city.html">Generating synthetic city</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">The simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameter.html">Simulator parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parameter.html#parameter-documentation">Parameter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interventions.html">Interventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Workplace attendance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_app.html">Javascript simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../support.html#license-and-copyrights">License and Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copyright.html">License and Copyrights</a></li>
 </ul>
 
             
@@ -171,34 +170,34 @@
   <div class="section" id="workplace-attendance">
 <h1>Workplace attendance<a class="headerlink" href="#workplace-attendance" title="Permalink to this headline">¶</a></h1>
 <p>When the city is built, the workplaces are split into 6 different types (though this is not used at all!). The attendance json file is supposed to provide the attendance probability for each of days of the simulation (including the initial days corresponding to <code class="docutils literal notranslate"><span class="pre">CALIBRATION_DELAY</span></code>). The json file is expected to be be an array of dictionaries specifying these probabilities for each day. An example is as follows:</p>
-<p>.. code-block:: json</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">{</span>
-        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;5&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;0&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;4&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;5&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;5&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="nt">&quot;0&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;1&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;2&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;3&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;4&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nt">&quot;5&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
     <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
 </div>
-<p>Some important nuances
-^^^^^^^^^^^^^^^^^^^^^^^
-As mentioned earlier, the first entry of the array corresponds to the first day of the simulation (which will often be within the <code class="docutils literal notranslate"><span class="pre">CALIBRATION_DELAY</span></code> period).
+<div class="section" id="some-important-nuances">
+<h2>Some important nuances<a class="headerlink" href="#some-important-nuances" title="Permalink to this headline">¶</a></h2>
+<p>As mentioned earlier, the first entry of the array corresponds to the first day of the simulation (which will often be within the <code class="docutils literal notranslate"><span class="pre">CALIBRATION_DELAY</span></code> period).
 During the lockdown, all workplaces interactions are dampened except for a small leakage for essential services. Therefore, reduced attendance is already taken into account. If you additional have smaller attendance probability during the lockdown period, it further dampens these values and that’s probably not what you want to do.</p>
 <p>Once again, I usually write a script to generate the required attendance file.</p>
+</div>
 </div>
 
 

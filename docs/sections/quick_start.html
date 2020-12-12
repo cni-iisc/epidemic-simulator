@@ -94,15 +94,14 @@
 <li class="toctree-l1"><a class="reference internal" href="instantiation/create_synthetic_city.html">Generating synthetic city</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/index.html">The simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/parameter.html">Simulator parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simulator/parameter.html#parameter-documentation">Parameter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/interventions.html">Interventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simulator/testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/attendance.html">Workplace attendance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator/web_app.html">Javascript simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="support.html">Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="support.html#license-and-copyrights">License and Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copyright.html">License and Copyrights</a></li>
 </ul>
 
             
@@ -170,24 +169,23 @@
             
   <div class="section" id="quick-start-guide">
 <h1>Quick start guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
-<p>Getting the files
-^^^^^^^^^^^^^^^^^^
-Go to the private bitbucket repository and ‘clone’ the repository by clicking on ‘clone’ on the top right of the page and follow the instructions. You can do this in a folder of your choice.</p>
-<p>.. code-block:: bash</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ~/tutorial/markov_simuls &gt; python3 -m venv edaDev
-$ ~/tutorial/markov_simuls &gt; source edaDev/bin/activate
-(edaDev) $ ~/tutorial/markov_simuls &gt;
+<div class="section" id="getting-the-files">
+<h2>Getting the files<a class="headerlink" href="#getting-the-files" title="Permalink to this headline">¶</a></h2>
+<p>Go to the private bitbucket repository and ‘clone’ the repository by clicking on ‘clone’ on the top right of the page and follow the instructions. You can do this in a folder of your choice.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ~/tutorial/markov_simuls &gt; python3 -m venv edaDev
+$ ~/tutorial/markov_simuls &gt; <span class="nb">source</span> edaDev/bin/activate
+<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls &gt;
 </pre></div>
 </div>
 <p>The entire tutorial will be based on a specific state of the repository: <code class="docutils literal notranslate"><span class="pre">3bb22c3</span></code></p>
-<p>.. code-block:: bash</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ~/tutorial &gt; cd markov_simuls
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ~/tutorial &gt; <span class="nb">cd</span> markov_simuls
 $ ~/tutorial/markov_simuls &gt; git checkout 3bb22c3
 </pre></div>
 </div>
-<p>Repository structure
-^^^^^^^^^^^^^^^^^^^^^
-The repository has three main components that we would be using which are in three different folders:</p>
+</div>
+<div class="section" id="repository-structure">
+<h2>Repository structure<a class="headerlink" href="#repository-structure" title="Permalink to this headline">¶</a></h2>
+<p>The repository has three main components that we would be using which are in three different folders:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">staticInst</span></code>: This folder contains the python code that generates the city once it is provided the demographics/employment etc. information.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cpp_simulator</span></code>: This contains the C++ code for the simulator</p></li>
@@ -195,83 +193,82 @@ The repository has three main components that we would be using which are in thr
 <li><p><code class="docutils literal notranslate"><span class="pre">cpp_simulator_calibration</span></code>: This contains some python scripts that is used for calibrating some of the values.</p></li>
 </ul>
 <p>We will first do the city building.</p>
-<p>Building the synthetic city
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Installing the necessary packages
-“””””””””””””””””””””””””””””””””””
-In order to run the city building script, we would need to get a few python packages. We recommend using a virtual environment to install the packages, since it isolates the pacakges to be installed from your system-wide python setup. More infomration is available here (<code class="docutils literal notranslate"><span class="pre">venv</span> <span class="pre">page</span></code>).</p>
-<p>.. code-block:: bash</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(edaDev) $ ~/tutorial/markov_simuls &gt; pip install -r staticInst/requirements.txt
+</div>
+<div class="section" id="building-the-synthetic-city">
+<h2>Building the synthetic city<a class="headerlink" href="#building-the-synthetic-city" title="Permalink to this headline">¶</a></h2>
+<p>In order to run the city building script, we would need to get a few python packages. We recommend using a virtual environment to install the packages, since it isolates the pacakges to be installed from your system-wide python setup. More infomration is available in <a class="reference internal" href="instantiation/setting_up_py_env.html"><span class="doc">setting up the python environment</span></a> page.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls &gt; pip install -r staticInst/requirements.txt
 </pre></div>
 </div>
 <p>With these packages installed, we are now ready to actually build the city.</p>
-<p>Generating the city
-“””””””””””””””””””””
-The demographics, employment etc. data is present in the folder <code class="docutils literal notranslate"><span class="pre">staticInst/data/base/[city</span> <span class="pre">name]</span></code>. We will work with Mumbai and generate the city.</p>
-<p>.. code-block:: bash</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(edaDev) $ ~/tutorial/markov_simuls &gt; cd staticInst
-(edaDev) $ ~/tutorial/markov_simuls/staticInst &gt; python CityGen.py -h
-usage: CityGen.py [-h] [-n N] [-i I] [-o O] [--validate] [-s S]
+<p>The demographics, employment etc. data is present in the folder <code class="docutils literal notranslate"><span class="pre">staticInst/data/base/[city</span> <span class="pre">name]</span></code>. We will work with Mumbai and generate the city.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls &gt; <span class="nb">cd</span> staticInst
+<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/staticInst &gt; python CityGen.py -h
+usage: CityGen.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-n N<span class="o">]</span> <span class="o">[</span>-i I<span class="o">]</span> <span class="o">[</span>-o O<span class="o">]</span> <span class="o">[</span>--validate<span class="o">]</span> <span class="o">[</span>-s S<span class="o">]</span>
 
-Create mini-city for COVID-19 simulation
+Create mini-city <span class="k">for</span> COVID-19 simulation
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -h, --help  show this <span class="nb">help</span> message and <span class="nb">exit</span>
   -n N        target population
   -i I        input folder
   -o O        output folder
-  --validate  script for validation plots on
-  -s S        [for debug] restore random seed from folder
+  --validate  script <span class="k">for</span> validation plots on
+  -s S        <span class="o">[</span><span class="k">for</span> debug<span class="o">]</span> restore random seed from folder
 </pre></div>
 </div>
 <p>With the syntax in mind, let us go ahead and build the city (of 150k size).</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    <span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/staticInst &gt; python CityGen.py -n <span class="m">150000</span> -i data/base/mumbai -o data/mumbai_150k --validate
-    input_folder: data/base/mumbai
-    output_folder: data/mumbai_150k
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/staticInst &gt; python CityGen.py -n <span class="m">150000</span> -i data/base/mumbai -o data/mumbai_150k --validate
+input_folder: data/base/mumbai
+output_folder: data/mumbai_150k
 
-    <span class="o">(</span>Distance kernel parameters provided.<span class="o">)</span>
-    createHouses                  ...	<span class="k">done</span>. <span class="o">(</span><span class="m">6242</span> ms<span class="o">)</span>
-    populateHouses                ...	<span class="k">done</span>. <span class="o">(</span><span class="m">22332</span> ms<span class="o">)</span>
-    assignSchools                 ...	<span class="k">done</span>. <span class="o">(</span><span class="m">287</span> ms<span class="o">)</span>
-    assignWorkplaces              ...	<span class="k">done</span>. <span class="o">(</span><span class="m">6630</span> ms<span class="o">)</span>
+<span class="o">(</span>Distance kernel parameters provided.<span class="o">)</span>
+createHouses                  ...	<span class="k">done</span>. <span class="o">(</span><span class="m">6242</span> ms<span class="o">)</span>
+populateHouses                ...	<span class="k">done</span>. <span class="o">(</span><span class="m">22332</span> ms<span class="o">)</span>
+assignSchools                 ...	<span class="k">done</span>. <span class="o">(</span><span class="m">287</span> ms<span class="o">)</span>
+assignWorkplaces              ...	<span class="k">done</span>. <span class="o">(</span><span class="m">6630</span> ms<span class="o">)</span>
 
-    City: mumbai
-    Population: <span class="m">150071</span>
-    Number of wards: <span class="m">48</span>
-    Has slums: True
+City: mumbai
+Population: <span class="m">150071</span>
+Number of wards: <span class="m">48</span>
+Has slums: True
 
-    Number of houses: <span class="m">33259</span>
-    Number of schools: <span class="m">107</span>
-    Number of workplaces: <span class="m">2899</span>
-    Number of workers: <span class="m">60606</span>
+Number of houses: <span class="m">33259</span>
+Number of schools: <span class="m">107</span>
+Number of workplaces: <span class="m">2899</span>
+Number of workers: <span class="m">60606</span>
 
-    dump_files                    ...	<span class="k">done</span>. <span class="o">(</span><span class="m">1239</span> ms<span class="o">)</span>
-    validate_ages                 ...	<span class="k">done</span>. <span class="o">(</span><span class="m">452</span> ms<span class="o">)</span>
-    validate_householdsizes       ...	<span class="k">done</span>. <span class="o">(</span><span class="m">158</span> ms<span class="o">)</span>
-    validate_schoolsizes          ...	<span class="k">done</span>. <span class="o">(</span><span class="m">162</span> ms<span class="o">)</span>
-    validate_workplacesizes       ...	<span class="k">done</span>. <span class="o">(</span><span class="m">801</span> ms<span class="o">)</span>
-    validate_commutedistances     ...	<span class="k">done</span>. <span class="o">(</span><span class="m">1819</span> ms<span class="o">)</span>
+dump_files                    ...	<span class="k">done</span>. <span class="o">(</span><span class="m">1239</span> ms<span class="o">)</span>
+validate_ages                 ...	<span class="k">done</span>. <span class="o">(</span><span class="m">452</span> ms<span class="o">)</span>
+validate_householdsizes       ...	<span class="k">done</span>. <span class="o">(</span><span class="m">158</span> ms<span class="o">)</span>
+validate_schoolsizes          ...	<span class="k">done</span>. <span class="o">(</span><span class="m">162</span> ms<span class="o">)</span>
+validate_workplacesizes       ...	<span class="k">done</span>. <span class="o">(</span><span class="m">801</span> ms<span class="o">)</span>
+validate_commutedistances     ...	<span class="k">done</span>. <span class="o">(</span><span class="m">1819</span> ms<span class="o">)</span>
 </pre></div>
 </div>
 <p>We now have a 150k version of Mumbai instantiated in <code class="docutils literal notranslate"><span class="pre">staticInst/data/mumbai_150k</span></code>.</p>
-<p>Simulating a test run
-“””””””””””””””””””””
-Now that we have generated a city, we can go ahead and execute a test run to see if everything is working fine.</p>
-<p>.. code-block:: bash</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(edaDev) $ ~/tutorial/markov_simuls/staticInst &gt; cd ../cpp-simulator
-(edaDev) $ ~/tutorial/markov_simuls/cpp-simulator &gt; make all
+</div>
+<div class="section" id="simulating-a-test-run">
+<h2>Simulating a test run<a class="headerlink" href="#simulating-a-test-run" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have generated a city, we can go ahead and execute a test run to see if everything is working fine.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/staticInst &gt; <span class="nb">cd</span> ../cpp-simulator
+<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/cpp-simulator &gt; make all
 </pre></div>
 </div>
 <p><strong>Note for Mac users</strong>: The above make command will complain saying that there is no option fopenmp as Mac does not by default have that. In that case, instead run the following command:</p>
-<p>.. code-block:: bash</p>
-<p>(edaDev) $ ~/tutorial/markov_simuls/cpp-simulator &gt; make all -f Makefile_np</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/cpp-simulator &gt; make all -f Makefile_np
+</pre></div>
+</div>
 <p>We can now execute a test run. Let us first create the directory where we want to store the outputs of the simulation.</p>
-<p>.. code-block:: bash</p>
-<p>(edaDev) $ ~/tutorial/markov_simuls/cpp-simulator &gt; mkdir -p outputs/mumbai_test_run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/cpp-simulator &gt; mkdir -p outputs/mumbai_test_run
+</pre></div>
+</div>
 <p>… and now the actual simulation</p>
-<p>.. code-block:: bash</p>
-<p>(edaDev) $ ~/tutorial/markov_simuls/cpp-simulator &gt; ./drive_simulator –NUM_DAYS 10 –SEED_FIXED_NUMBER –INIT_FIXED_NUMBER_INFECTED 100 –INTERVENTION 0 –input_directory ../staticInst/data/mumbai_150k –output_directory outputs/mumbai_test_run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/cpp-simulator &gt; ./drive_simulator --NUM_DAYS <span class="m">10</span> --SEED_FIXED_NUMBER --INIT_FIXED_NUMBER_INFECTED <span class="m">100</span> --INTERVENTION <span class="m">0</span> --input_directory ../staticInst/data/mumbai_150k --output_directory outputs/mumbai_test_run
+</pre></div>
+</div>
 <p>You should now have a whole bunch of files in the <code class="docutils literal notranslate"><span class="pre">cpp-simulator/outputs/mumbai_test_run</span></code> folder.</p>
+</div>
 </div>
 
 

@@ -94,15 +94,14 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Generating synthetic city</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/index.html">The simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/parameter.html">Simulator parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../simulator/parameter.html#parameter-documentation">Parameter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/interventions.html">Interventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../simulator/testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/attendance.html">Workplace attendance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator/web_app.html">Javascript simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../support.html#license-and-copyrights">License and Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copyright.html">License and Copyrights</a></li>
 </ul>
 
             
@@ -170,6 +169,53 @@
             
   <div class="section" id="generating-synthetic-city">
 <h1>Generating synthetic city<a class="headerlink" href="#generating-synthetic-city" title="Permalink to this headline">¶</a></h1>
+<p>With these packages installed, we are now ready to actually build the city.</p>
+<p>The demographics, employment etc. data is present in the folder <code class="docutils literal notranslate"><span class="pre">staticInst/data/base/[city</span> <span class="pre">name]</span></code>. We will work with Mumbai and generate the city.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls &gt; <span class="nb">cd</span> staticInst
+<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/staticInst &gt; python CityGen.py -h
+usage: CityGen.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-n N<span class="o">]</span> <span class="o">[</span>-i I<span class="o">]</span> <span class="o">[</span>-o O<span class="o">]</span> <span class="o">[</span>--validate<span class="o">]</span> <span class="o">[</span>-s S<span class="o">]</span>
+
+Create mini-city <span class="k">for</span> COVID-19 simulation
+
+optional arguments:
+  -h, --help  show this <span class="nb">help</span> message and <span class="nb">exit</span>
+  -n N        target population
+  -i I        input folder
+  -o O        output folder
+  --validate  script <span class="k">for</span> validation plots on
+  -s S        <span class="o">[</span><span class="k">for</span> debug<span class="o">]</span> restore random seed from folder
+</pre></div>
+</div>
+<p>With the syntax in mind, let us go ahead and build the city (of 150k size).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/staticInst &gt; python CityGen.py -n <span class="m">150000</span> -i data/base/mumbai -o data/mumbai_150k --validate
+input_folder: data/base/mumbai
+output_folder: data/mumbai_150k
+
+<span class="o">(</span>Distance kernel parameters provided.<span class="o">)</span>
+createHouses                  ...	<span class="k">done</span>. <span class="o">(</span><span class="m">6242</span> ms<span class="o">)</span>
+populateHouses                ...	<span class="k">done</span>. <span class="o">(</span><span class="m">22332</span> ms<span class="o">)</span>
+assignSchools                 ...	<span class="k">done</span>. <span class="o">(</span><span class="m">287</span> ms<span class="o">)</span>
+assignWorkplaces              ...	<span class="k">done</span>. <span class="o">(</span><span class="m">6630</span> ms<span class="o">)</span>
+
+City: mumbai
+Population: <span class="m">150071</span>
+Number of wards: <span class="m">48</span>
+Has slums: True
+
+Number of houses: <span class="m">33259</span>
+Number of schools: <span class="m">107</span>
+Number of workplaces: <span class="m">2899</span>
+Number of workers: <span class="m">60606</span>
+
+dump_files                    ...	<span class="k">done</span>. <span class="o">(</span><span class="m">1239</span> ms<span class="o">)</span>
+validate_ages                 ...	<span class="k">done</span>. <span class="o">(</span><span class="m">452</span> ms<span class="o">)</span>
+validate_householdsizes       ...	<span class="k">done</span>. <span class="o">(</span><span class="m">158</span> ms<span class="o">)</span>
+validate_schoolsizes          ...	<span class="k">done</span>. <span class="o">(</span><span class="m">162</span> ms<span class="o">)</span>
+validate_workplacesizes       ...	<span class="k">done</span>. <span class="o">(</span><span class="m">801</span> ms<span class="o">)</span>
+validate_commutedistances     ...	<span class="k">done</span>. <span class="o">(</span><span class="m">1819</span> ms<span class="o">)</span>
+</pre></div>
+</div>
+<p>We now have a 150k version of Mumbai instantiated in <code class="docutils literal notranslate"><span class="pre">staticInst/data/mumbai_150k</span></code>.</p>
 </div>
 
 

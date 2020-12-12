@@ -94,15 +94,14 @@
 <li class="toctree-l1"><a class="reference internal" href="instantiation/create_synthetic_city.html">Generating synthetic city</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/index.html">The simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/parameter.html">Simulator parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simulator/parameter.html#parameter-documentation">Parameter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/interventions.html">Interventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simulator/testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/attendance.html">Workplace attendance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulator/load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator/web_app.html">Javascript simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="support.html">Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="support.html#license-and-copyrights">License and Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copyright.html">License and Copyrights</a></li>
 </ul>
 
             
@@ -170,15 +169,47 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<p>This tutorial is going to be based on the code from the public github repo. In order to run these files, you would need an equivalent of the following:</p>
+<ol class="simple">
+<li><p>a recent version of the <code class="docutils literal notranslate"><span class="pre">g++</span></code> compiler (version 7 or later) or <code class="docutils literal notranslate"><span class="pre">clang</span></code>
+(version 11 or later should work, though we have have not tested), and
+optionally <code class="docutils literal notranslate"><span class="pre">openmp</span></code> (this is to enable parallelization, and can be disabled
+easily, see below in the compiling section if your installation does not provide
+it),</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">make</span></code> program.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">bash</span></code> shell.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">gnuplot</span></code> program for generating some of the plots.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span></code> pointing to a <code class="docutils literal notranslate"><span class="pre">python3</span></code> executable with <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> and <code class="docutils literal notranslate"><span class="pre">pandas</span></code>
+installed, in your execution <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. (Otherwise, you will have to edit the
+<code class="docutils literal notranslate"><span class="pre">python</span></code> invocation in the shell script to point to such a <code class="docutils literal notranslate"><span class="pre">python3</span></code>
+installation.)</p></li>
+</ol>
+<p>On windows, the easiest way to get these is to install <code class="docutils literal notranslate"><span class="pre">msys2</span></code> shell
+from <a class="reference external" href="https://www.msys2.org/">here</a>.  However, it may be tricky to get
+an MSYS installation with a <code class="docutils literal notranslate"><span class="pre">python3</span></code> capable of installing <code class="docutils literal notranslate"><span class="pre">pandas</span></code>.
+You might then have to point <code class="docutils literal notranslate"><span class="pre">MSYS</span></code> to actually use your Windows
+<code class="docutils literal notranslate"><span class="pre">python3</span></code> installation. Let me know if you need help.</p>
+<p>On Mac and Linux, most of the above programs are typically already there, or
+else are easy to install with a package manager.</p>
+<p>You can then follow the set-up instructions to install the other required python packages in the <a class="reference internal" href="instantiation/setting_up_py_env.html"><span class="doc">setting up the python environment</span></a> page.</p>
+<div class="section" id="enabling-feature-to-load-store-simulator-state">
+<h2>Enabling feature to load–store simulator state<a class="headerlink" href="#enabling-feature-to-load-store-simulator-state" title="Permalink to this headline">¶</a></h2>
+<p>The simulator has a feature where the state of the infection spread among the agents in the syntheic city can be saved and used at a later simulation run.
+The store and load feature is implemented by storing the agents’ state into a <a class="reference external" href="https://developers.google.com/protocol-buffers/">protobuf</a> and you will need to install protobuf for cpp in your development or simulation environment if you plan to use the load–store feature.</p>
+<p>You can setup protobuf for cpp on a Debian/Ubuntu based Linux distribution with the following commands. Please note that, the simulator uses <code class="docutils literal notranslate"><span class="pre">protobuf</span> <span class="pre">v.3.13.0</span></code>.</p>
 <ul class="simple">
-<li><p>git</p></li>
-<li><p>python3</p></li>
-<li><p>g++ (7 or above)</p></li>
-<li><p>protobuf (v.3.13.0)</p></li>
+<li><p>Install prerequisite software: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">automake</span> <span class="pre">cmake</span> <span class="pre">autoconf</span> <span class="pre">libtool</span> <span class="pre">make</span> <span class="pre">g++</span></code></p></li>
+<li><p>Download Protobuf v.3.13.0 as a compressed tarball: <code class="docutils literal notranslate"><span class="pre">wget</span> <span class="pre">https://github.com/protocolbuffers/protobuf/releases/download/v3.13.0/protobuf-cpp-3.13.0.tar.gz</span></code></p></li>
+<li><p>Extract the tarball: <code class="docutils literal notranslate"><span class="pre">tar</span> <span class="pre">-xvf</span> <span class="pre">protobuf-cpp-3.13.0.tar.gz</span></code></p></li>
+<li><p>Go to the extracted directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">protobuf-3.13.0</span></code></p></li>
+<li><p>Run the command: <code class="docutils literal notranslate"><span class="pre">./configure</span></code></p></li>
+<li><p>Run the command: <code class="docutils literal notranslate"><span class="pre">make</span></code></p></li>
+<li><p>Run the command: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check</span></code></p></li>
+<li><p>Run the command: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></code></p></li>
+<li><p>Run the command: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">ldconfig</span></code></p></li>
 </ul>
+<blockquote>
+<div><p><strong>Note</strong>: You will need to setup the same version of protobuf while running simulations also.</p>
+</div></blockquote>
 </div>
 </div>
 

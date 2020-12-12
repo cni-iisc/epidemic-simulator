@@ -93,15 +93,14 @@
 <li class="toctree-l1"><a class="reference internal" href="sections/instantiation/create_synthetic_city.html">Generating synthetic city</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sections/simulator/index.html">The simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sections/simulator/parameter.html">Simulator parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sections/simulator/parameter.html#parameter-documentation">Parameter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sections/simulator/interventions.html">Interventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sections/simulator/testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sections/simulator/testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sections/simulator/attendance.html">Workplace attendance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sections/simulator/load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sections/simulator/web_app.html">Javascript simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sections/calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sections/support.html">Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sections/support.html#license-and-copyrights">License and Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sections/copyright.html">License and Copyrights</a></li>
 </ul>
 
             
@@ -174,18 +173,29 @@
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="sections/installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sections/installation.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/installation.html#enabling-feature-to-load-store-simulator-state">Enabling feature to load–store simulator state</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sections/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sections/quick_start.html">Quick start guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sections/quick_start.html#getting-the-files">Getting the files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/quick_start.html#repository-structure">Repository structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/quick_start.html#building-the-synthetic-city">Building the synthetic city</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/quick_start.html#simulating-a-test-run">Simulating a test run</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="sections/about.html">About</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sections/about.html#design">Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sections/about.html#implementation">Implementation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="sections/instantiation/index.html">Instantiating a synthetic city</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sections/instantiation/setting_up_py_env.html">Setting up the python environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sections/instantiation/setting_up_py_env.html">Setting up the python environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sections/instantiation/setting_up_py_env.html#installing-the-necessary-packages">Installing the necessary packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/instantiation/setting_up_py_env.html#known-issues">Known issues</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="sections/instantiation/prepare_data.html">Preparing the data to instantiate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sections/instantiation/prepare_data.html#sub-directory-structure">Sub-Directory Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sections/instantiation/prepare_data.html#demographic-data">Demographic Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sections/instantiation/prepare_data.html#geographic">Geographic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sections/instantiation/prepare_data.html#mobility-data">Mobility Data</a></li>
@@ -193,21 +203,55 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="sections/instantiation/create_synthetic_city.html">Generating synthetic city</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sections/simulator/index.html">The simulator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sections/simulator/parameter.html">Simulator parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sections/simulator/parameter.html#parameter-documentation">Parameter Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sections/simulator/index.html">The simulator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sections/simulator/index.html#running-the-code">Running the code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sections/simulator/index.html#method-1-running-drive-simulator-directly">Method 1: Running <code class="docutils literal notranslate"><span class="pre">drive_simulator</span></code> directly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sections/simulator/index.html#method-1-using-the-provided-shell-scripts">Method 1: Using the provided shell scripts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sections/simulator/index.html#viewing-the-output">Viewing the output</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sections/simulator/parameter.html">Simulator parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sections/simulator/parameter.html#basic-parameters">Basic Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/simulator/parameter.html#seeding-the-initial-infection">Seeding the initial infection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/simulator/parameter.html#disease-progression-parameters">Disease progression parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/simulator/parameter.html#city-parameters">City parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/simulator/parameter.html#intervention-parameters">Intervention parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/simulator/parameter.html#containment-implementations">Containment implementations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sections/simulator/parameter.html#community-ward-level-containment">Community/ward-level containment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sections/simulator/parameter.html#neighbourhood-cell-level-containment">Neighbourhood-cell-level containment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sections/simulator/parameter.html#other-options">Other options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sections/simulator/parameter.html#interventions-via-json-file">Interventions via json file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sections/simulator/parameter.html#attendance-profiles">Attendance profiles</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sections/simulator/parameter.html#testing-protocols">Testing protocols</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="sections/simulator/interventions.html">Interventions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sections/simulator/interventions.html#pre-defined-interventions">Pre-defined interventions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sections/simulator/interventions.html#user-defined-interventions">User-defined interventions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sections/simulator/testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sections/simulator/testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sections/simulator/attendance.html">Workplace attendance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sections/simulator/testing.html">Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sections/simulator/testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sections/simulator/testing.html#example-json">Example JSON</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sections/simulator/attendance.html">Workplace attendance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sections/simulator/attendance.html#some-important-nuances">Some important nuances</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="sections/simulator/load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sections/simulator/web_app.html">Javascript simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sections/calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sections/support.html">Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sections/support.html#license-and-copyrights">License and Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sections/copyright.html">License and Copyrights</a></li>
 </ul>
 </div>
 </div>

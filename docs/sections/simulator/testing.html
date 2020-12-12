@@ -94,15 +94,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../instantiation/create_synthetic_city.html">Generating synthetic city</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">The simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameter.html">Simulator parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parameter.html#parameter-documentation">Parameter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interventions.html">Interventions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="attendance.html">Workplace attendance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web_app.html">Javascript simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../support.html#license-and-copyrights">License and Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copyright.html">License and Copyrights</a></li>
 </ul>
 
             
@@ -170,9 +169,8 @@
             
   <div class="section" id="testing">
 <h1>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h1>
-</div>
 <div class="section" id="syntax-for-json-files-for-testing-protocols">
-<h1>Syntax for JSON files for testing protocols<a class="headerlink" href="#syntax-for-json-files-for-testing-protocols" title="Permalink to this headline">¶</a></h1>
+<h2>Syntax for JSON files for testing protocols<a class="headerlink" href="#syntax-for-json-files-for-testing-protocols" title="Permalink to this headline">¶</a></h2>
 <p>The testing protocol is perhaps the most complicated in the sense that there are many parameters that need to be provided. In order to better understand the parameters, it is best to understand how testing is implemented.</p>
 <p>The testing and contact tracing is initiated when an agent goes for a test and it turns out to be positive. To begin with, we assign a probability that a hospitalised agent gets tested and a symptomatic agent gets tested. These are the “initial” index cases. We refer to these index cases as hospitalised_index_case and symptomatic_index_case. There will be a third kind of cases that we shall call positive_index_cases that are cases discovered through contact tracing.</p>
 <p>Once an index case is identified, a certain fraction of their close contacts are taken as their “close contacts” and are quarantined. Among the close contacts, some are chosen and tested. Those positive cases that are identified through this process are called positive_index_cases.</p>
@@ -186,82 +184,83 @@
 </li>
 <li><p>Contact tracing probabilities</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">prob_contact_trace_project_symptomatic</span></code>: The fraction of a symptomatic_index_case’s project members that are chosen as close contacts
-…</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prob_contact_trace_project_symptomatic</span></code>: The fraction of a symptomatic_index_case’s project members that are chosen as close contacts</p></li>
 </ul>
 </li>
 <li><p>Testing probabilities for chosen contacts:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">prob_test_household_hospitalised_symptomatic</span></code>: The probability that a household-contact of a hospitalised_index_case that happens to symptomatic is given a test
-…</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prob_test_household_hospitalised_symptomatic</span></code>: The probability that a household-contact of a hospitalised_index_case that happens to symptomatic is given a test</p></li>
 </ul>
 </li>
 </ul>
+</div>
+<div class="section" id="example-json">
+<h2>Example JSON<a class="headerlink" href="#example-json" title="Permalink to this headline">¶</a></h2>
 <p>All of this is specified in a json file which is also an array of dictionaries specifying these probabilities. An example is provided here:</p>
-<p>.. code-block:: json</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
   <span class="p">{</span>
-    <span class="s2">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
-    <span class="s2">&quot;test_false_negative&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_index_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_index_hospitalised&quot;</span> <span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_retest_recovered&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;num_days&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="nt">&quot;test_false_negative&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_index_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_index_hospitalised&quot;</span> <span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_retest_recovered&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 
-    <span class="s2">&quot;prob_contact_trace_household_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_project_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_random_community_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_neighbourhood_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_class_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_household_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_project_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_random_community_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_neighbourhood_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_class_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 
-    <span class="s2">&quot;prob_contact_trace_household_hospitalised&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_project_hospitalised&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_random_community_hospitalised&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_neighbourhood_hospitalised&quot;</span> <span class="p">:</span> <span class="mf">0.005</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_class_hospitalised&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_household_hospitalised&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_project_hospitalised&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_random_community_hospitalised&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_neighbourhood_hospitalised&quot;</span> <span class="p">:</span> <span class="mf">0.005</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_class_hospitalised&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 
-    <span class="s2">&quot;prob_contact_trace_household_positive&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_project_positive&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_random_community_positive&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_neighbourhood_positive&quot;</span> <span class="p">:</span> <span class="mf">0.005</span><span class="p">,</span>
-    <span class="s2">&quot;prob_contact_trace_class_positive&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_household_positive&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_project_positive&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_random_community_positive&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_neighbourhood_positive&quot;</span> <span class="p">:</span> <span class="mf">0.005</span><span class="p">,</span>
+    <span class="nt">&quot;prob_contact_trace_class_positive&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 
-    <span class="s2">&quot;prob_test_household_positive_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_household_hospitalised_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_household_symptomatic_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_household_positive_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.45</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_household_hospitalised_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.45</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_household_symptomatic_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_household_positive_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_household_hospitalised_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_household_symptomatic_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_household_positive_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.45</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_household_hospitalised_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.45</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_household_symptomatic_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 
-    <span class="s2">&quot;prob_test_workplace_positive_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_workplace_hospitalised_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_workplace_symptomatic_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_workplace_positive_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.1125</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_workplace_hospitalised_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.225</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_workplace_symptomatic_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_workplace_positive_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_workplace_hospitalised_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_workplace_symptomatic_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_workplace_positive_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.1125</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_workplace_hospitalised_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.225</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_workplace_symptomatic_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 
-    <span class="s2">&quot;prob_test_random_community_positive_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.125</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_random_community_hospitalised_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_random_community_symptomatic_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_random_community_positive_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.06</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_random_community_hospitalised_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_random_community_symptomatic_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_random_community_positive_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.125</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_random_community_hospitalised_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_random_community_symptomatic_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_random_community_positive_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.06</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_random_community_hospitalised_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_random_community_symptomatic_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 
-    <span class="s2">&quot;prob_test_neighbourhood_positive_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.125</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_neighbourhood_hospitalised_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_neighbourhood_symptomatic_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_neighbourhood_positive_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.06</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_neighbourhood_hospitalised_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_neighbourhood_symptomatic_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_neighbourhood_positive_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.125</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_neighbourhood_hospitalised_symptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_neighbourhood_symptomatic_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_neighbourhood_positive_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.06</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_neighbourhood_hospitalised_asymptomatic&quot;</span> <span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_neighbourhood_symptomatic_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 
-    <span class="s2">&quot;prob_test_school_positive_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_school_hospitalised_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_school_symptomatic_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_school_positive_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_school_hospitalised_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;prob_test_school_symptomatic_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span>
+    <span class="nt">&quot;prob_test_school_positive_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_school_hospitalised_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_school_symptomatic_symptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_school_positive_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_school_hospitalised_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nt">&quot;prob_test_school_symptomatic_asymptomatic&quot;</span> <span class="p">:</span> <span class="mi">0</span>
   <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
+</div>
 </div>
 </div>
 

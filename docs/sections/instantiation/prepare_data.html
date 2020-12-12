@@ -94,15 +94,14 @@
 <li class="toctree-l1"><a class="reference internal" href="create_synthetic_city.html">Generating synthetic city</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/index.html">The simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/parameter.html">Simulator parameters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../simulator/parameter.html#parameter-documentation">Parameter Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/interventions.html">Interventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../simulator/testing.html#syntax-for-json-files-for-testing-protocols">Syntax for JSON files for testing protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/attendance.html">Workplace attendance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulator/load_store.html">Load – Store feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator/web_app.html">Javascript simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../calibrate.html">Calibrating the simulator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../support.html#license-and-copyrights">License and Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copyright.html">License and Copyrights</a></li>
 </ul>
 
             
@@ -170,7 +169,35 @@
             
   <div class="section" id="preparing-the-data-to-instantiate">
 <h1>Preparing the data to instantiate<a class="headerlink" href="#preparing-the-data-to-instantiate" title="Permalink to this headline">¶</a></h1>
-<p>This stub will be expanded as section to create a new city</p>
+<div class="section" id="sub-directory-structure">
+<h2>Sub-Directory Structure<a class="headerlink" href="#sub-directory-structure" title="Permalink to this headline">¶</a></h2>
+<p>The sub-directory structure followed for storing and processing of static data source used for instantiations is outlined as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|-</span> <span class="n">staticInst</span><span class="o">/</span>
+   <span class="o">|-</span> <span class="n">data</span><span class="o">/</span>
+      <span class="o">|-</span> <span class="n">base</span><span class="o">/</span>                            <span class="c1"># Raw data for each city</span>
+         <span class="o">|-</span> <span class="n">bangalore</span><span class="o">/</span>                    <span class="c1"># Data for Bangalore City</span>
+            <span class="o">|-</span> <span class="n">demographics</span><span class="o">.</span><span class="n">csv</span>           <span class="c1"># demographic data about each ward</span>
+            <span class="o">|-</span> <span class="n">households</span><span class="o">.</span><span class="n">csv</span>             <span class="c1"># number of households in each ward</span>
+            <span class="o">|-</span> <span class="n">ODMatrix</span><span class="o">.</span><span class="n">csv</span>               <span class="c1"># origin-destination matrix for employed</span>
+            <span class="o">|-</span> <span class="n">city</span><span class="o">.</span><span class="n">geojson</span>               <span class="c1"># geographic boundaries of wards</span>
+            <span class="o">|-</span> <span class="n">employment</span><span class="o">.</span><span class="n">csv</span>             <span class="c1"># census data on employed people</span>
+            <span class="o">|-</span> <span class="n">cityProfile</span><span class="o">.</span><span class="n">json</span>           <span class="c1"># age, household size and school size distributions</span>
+         <span class="o">|-</span> <span class="n">mumbai</span><span class="o">/</span>                       <span class="c1"># Data for Mumbai City, with each of the 24 wards split into non-HD areas and HD-areas</span>
+            <span class="o">|-</span> <span class="n">demographics</span><span class="o">.</span><span class="n">csv</span>           <span class="c1"># demographic data about each ward division (48 total)</span>
+            <span class="o">|-</span> <span class="n">households</span><span class="o">.</span><span class="n">json</span>            <span class="c1"># number of households in each ward</span>
+            <span class="o">|-</span> <span class="n">ODMatrix</span><span class="o">.</span><span class="n">csv</span>               <span class="c1"># origin-destination matrix for employed</span>
+            <span class="o">|-</span> <span class="n">city</span><span class="o">.</span><span class="n">geojson</span>               <span class="c1"># geographic boundaries of wards (24 total)</span>
+            <span class="o">|-</span> <span class="n">employment</span><span class="o">.</span><span class="n">csv</span>             <span class="c1"># census data on employed people</span>
+            <span class="o">|-</span> <span class="n">cityProfile</span><span class="o">.</span><span class="n">json</span>           <span class="c1"># age, household size and school size distributions</span>
+            <span class="o">|-</span> <span class="n">presampled</span><span class="o">-</span><span class="n">points</span><span class="o">/</span>         <span class="c1"># presampled latitude-longitudes for 48 ward subdivisions</span>
+               <span class="o">|-</span> <span class="mf">0.</span><span class="n">csv</span>                   <span class="c1"># presampled points for ward index 0</span>
+               <span class="o">...</span>
+               <span class="o">|-</span> <span class="mf">47.</span><span class="n">csv</span>                  <span class="c1"># presampled points for ward index 47</span>
+               <span class="o">|-</span> <span class="n">PresamplePoints</span><span class="o">.</span><span class="n">ipynb</span>   <span class="c1"># python notebook for presampling points from wards subdivisions</span>
+               <span class="o">|-</span> <span class="n">slumClusters</span><span class="o">.</span><span class="n">geojson</span>    <span class="c1"># geographic boundaries of slum clusters</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="demographic-data">
 <h2>Demographic Data<a class="headerlink" href="#demographic-data" title="Permalink to this headline">¶</a></h2>
 </div>
