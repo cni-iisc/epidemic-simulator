@@ -62,14 +62,15 @@ def processParams(params_json):
         betas['RANDOM_COMMUNITY'] = betas['NBR_CELLS']
 
 
-def get_mean_fatalities(outputdir):
+def get_mean_fatalities(outputdir, nruns):
     data_dir = Path(outputdir)
-    files_list = data_dir.glob(f"run*/num_fatalities.csv")
+    glob_str = f"run_[0-{nruns-1}]/num_fatalities.csv"
+    files_list = data_dir.glob(glob_str)
     df = (pd.concat([pd.read_csv(f) for f in files_list], ignore_index = True)
           .groupby('Time').mean())
     return df
 
-def get_mean_lambdas(outputdir):
+def get_mean_lambdas(outputdir, nruns):
     data_dir = Path(outputdir)
     lambdas = {'H': ["lambda_H"], 
                'W': ["lambda_W", "lambda_PROJECT"], 
@@ -79,7 +80,8 @@ def get_mean_lambdas(outputdir):
     for lam in lambdas.keys():
         lam_sum = 0
         for lam_inner in lambdas[lam]:
-            files_list = data_dir.glob(f"run*/cumulative_mean_fraction_{lam_inner}.csv")
+            glob_str = f"run_[0-{nruns-1}]/cumulative_mean_fraction_{lam_inner}.csv"
+            files_list = data_dir.glob(glob_str)
             df = (pd.concat([pd.read_csv(f) for f in files_list], ignore_index = True)
               .groupby('Time').mean())
             lam_sum += df[f"cumulative_mean_fraction_{lam_inner}"].iloc[-1]
@@ -147,8 +149,8 @@ def getTargetSlope():
 # In[ ]:
 
 
-def get_slope(outputdir, low_thresh = 10, up_thresh = 200):
-    df = get_mean_fatalities(outputdir)
+def get_slope(outputdir, nruns, low_thresh = 10, up_thresh = 200):
+    df = get_mean_fatalities(outputdir, nruns)
     df = df[(df['num_fatalities'] > low_thresh)]
     if df.shape[0] < 5:
         raise TypeError("Too few fatalities")
@@ -214,11 +216,11 @@ def run_parallel(nruns, ncores, params, betas):
 def calibrate(nruns, ncores, params, betas, resolution=4):
     run_parallel(nruns, ncores, params, betas)    
     try:
-        slope = get_slope(output_base)
+        slope = get_slope(output_base, nruns)
     except TypeError:
         return -1
 
-    lambdas = get_mean_lambdas(output_base)
+    lambdas = get_mean_lambdas(output_base, nruns)
     [lambda_H, lambda_W, lambda_C] = [lambdas[key] for key in ['H', 'W', 'C']]
     lambda_H_diff = float(lambda_H) - (1.0/3)
     lambda_W_diff = float(lambda_W) - (1.0/3)
