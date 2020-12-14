@@ -1,4 +1,0 @@
-#Set this to -fopenmp to enable compiling with openmp
-parallel =
-
-include makefile_base.mk
