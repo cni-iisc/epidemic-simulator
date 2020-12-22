@@ -2,7 +2,7 @@
 
 ## Design 
 
-<img src="../_static/img/workflow.png" alt="workflow">
+<img src="./workflow.png" alt="workflow">
 
 The workflow of the simualtor has four stages:
 

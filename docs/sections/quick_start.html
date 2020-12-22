@@ -13,7 +13,7 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../assets/css/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
 
   
   
@@ -171,15 +171,11 @@
 <h1>Quick start guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="getting-the-files">
 <h2>Getting the files<a class="headerlink" href="#getting-the-files" title="Permalink to this headline">¶</a></h2>
-<p>Go to the private bitbucket repository and ‘clone’ the repository by clicking on ‘clone’ on the top right of the page and follow the instructions. You can do this in a folder of your choice.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ~/tutorial/markov_simuls &gt; python3 -m venv edaDev
-$ ~/tutorial/markov_simuls &gt; <span class="nb">source</span> edaDev/bin/activate
-<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls &gt;
-</pre></div>
-</div>
-<p>The entire tutorial will be based on a specific state of the repository: <code class="docutils literal notranslate"><span class="pre">3bb22c3</span></code></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ~/tutorial &gt; <span class="nb">cd</span> markov_simuls
-$ ~/tutorial/markov_simuls &gt; git checkout 3bb22c3
+<p>Go to the <a class="reference external" href="https://github.com/cni-iisc/epidemic-simulator/">public repository on Github</a> and ‘clone’ the repository by clicking on the ‘Code’ button and follow the instructions. You can do this in a folder of your choice.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ~/tutorial &gt; <span class="nb">cd</span> epidemic-simulator
+$ ~/tutorial/epidemic-simulator &gt; python3 -m venv edaDev
+$ ~/tutorial/epidemic-simulator &gt; <span class="nb">source</span> edaDev/bin/activate
+<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/epidemic-simulator &gt;
 </pre></div>
 </div>
 </div>
@@ -197,13 +193,13 @@ $ ~/tutorial/markov_simuls &gt; git checkout 3bb22c3
 <div class="section" id="building-the-synthetic-city">
 <h2>Building the synthetic city<a class="headerlink" href="#building-the-synthetic-city" title="Permalink to this headline">¶</a></h2>
 <p>In order to run the city building script, we would need to get a few python packages. We recommend using a virtual environment to install the packages, since it isolates the pacakges to be installed from your system-wide python setup. More infomration is available in <a class="reference internal" href="instantiation/setting_up_py_env.html"><span class="doc">setting up the python environment</span></a> page.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls &gt; pip install -r staticInst/requirements.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/epidemic-simulator &gt; pip install -r staticInst/requirements.txt
 </pre></div>
 </div>
 <p>With these packages installed, we are now ready to actually build the city.</p>
 <p>The demographics, employment etc. data is present in the folder <code class="docutils literal notranslate"><span class="pre">staticInst/data/base/[city</span> <span class="pre">name]</span></code>. We will work with Mumbai and generate the city.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls &gt; <span class="nb">cd</span> staticInst
-<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/staticInst &gt; python CityGen.py -h
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/epidemic-simulator &gt; <span class="nb">cd</span> staticInst
+<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/epidemic-simulator/staticInst &gt; python CityGen.py -h
 usage: CityGen.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-n N<span class="o">]</span> <span class="o">[</span>-i I<span class="o">]</span> <span class="o">[</span>-o O<span class="o">]</span> <span class="o">[</span>--validate<span class="o">]</span> <span class="o">[</span>-s S<span class="o">]</span>
 
 Create mini-city <span class="k">for</span> COVID-19 simulation
@@ -218,7 +214,7 @@ optional arguments:
 </pre></div>
 </div>
 <p>With the syntax in mind, let us go ahead and build the city (of 150k size).</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/staticInst &gt; python CityGen.py -n <span class="m">150000</span> -i data/base/mumbai -o data/mumbai_150k --validate
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/epidemic-simulator/staticInst &gt; python CityGen.py -n <span class="m">150000</span> -i data/base/mumbai -o data/mumbai_150k --validate
 input_folder: data/base/mumbai
 output_folder: data/mumbai_150k
 
@@ -251,20 +247,20 @@ validate_commutedistances     ...	<span class="k">done</span>. <span class="o">(
 <div class="section" id="simulating-a-test-run">
 <h2>Simulating a test run<a class="headerlink" href="#simulating-a-test-run" title="Permalink to this headline">¶</a></h2>
 <p>Now that we have generated a city, we can go ahead and execute a test run to see if everything is working fine.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/staticInst &gt; <span class="nb">cd</span> ../cpp-simulator
-<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/cpp-simulator &gt; make all
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/epidemic-simulator/staticInst &gt; <span class="nb">cd</span> ../cpp-simulator
+<span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/epidemic-simulator/cpp-simulator &gt; make all
 </pre></div>
 </div>
 <p><strong>Note for Mac users</strong>: The above make command will complain saying that there is no option fopenmp as Mac does not by default have that. In that case, instead run the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/cpp-simulator &gt; make all -f Makefile_np
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/epidemic-simulator/cpp-simulator &gt; make all -f Makefile_np
 </pre></div>
 </div>
 <p>We can now execute a test run. Let us first create the directory where we want to store the outputs of the simulation.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/cpp-simulator &gt; mkdir -p outputs/mumbai_test_run
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/epidemic-simulator/cpp-simulator &gt; mkdir -p outputs/mumbai_test_run
 </pre></div>
 </div>
 <p>… and now the actual simulation</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/markov_simuls/cpp-simulator &gt; ./drive_simulator --NUM_DAYS <span class="m">10</span> --SEED_FIXED_NUMBER --INIT_FIXED_NUMBER_INFECTED <span class="m">100</span> --INTERVENTION <span class="m">0</span> --input_directory ../staticInst/data/mumbai_150k --output_directory outputs/mumbai_test_run
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>edaDev<span class="o">)</span> $ ~/tutorial/epidemic-simulator/cpp-simulator &gt; ./drive_simulator --NUM_DAYS <span class="m">10</span> --SEED_FIXED_NUMBER --INIT_FIXED_NUMBER_INFECTED <span class="m">100</span> --INTERVENTION <span class="m">0</span> --input_directory ../staticInst/data/mumbai_150k --output_directory outputs/mumbai_test_run
 </pre></div>
 </div>
 <p>You should now have a whole bunch of files in the <code class="docutils literal notranslate"><span class="pre">cpp-simulator/outputs/mumbai_test_run</span></code> folder.</p>
