@@ -26,6 +26,7 @@ The agent based city-scale simulator is a generic multi-agent simulator which is
    sections/simulator/load_store.md
    sections/simulator/web_app.md
    sections/calibrate.md
+   sections/acks.md
    sections/support.md
    sections/copyright.md
 

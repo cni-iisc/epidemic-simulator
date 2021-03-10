@@ -1,0 +1,7 @@
+# Acknowledgement
+
+IISc thanks:
+	
+- The IISc-Cisco Centre for Networked Intelligence for supporting the initial phases of this work.
+- Google Inc. for support on cohort modelling.
+- Hitachi India Pvt. Ltd. for supporting the interface and transportation modelling effort.
