@@ -309,6 +309,7 @@ struct global_params{
   count_type num_communities = 198;
   count_type num_cohorts = 300;
   count_type num_people = 100000;
+  count_type num_wards = 200;
 
   count_type NUM_DAYS = 120; //Number of days. Simulation duration
   const count_type SIM_STEPS_PER_DAY = 4; //Number of simulation steps per day.
@@ -797,6 +798,9 @@ struct agent{
   //a.k.a S_k, is 0 or
   int home; //index of household
   int workplace;
+
+  int home_ward;
+  int work_ward;
 
   int community;
   double time_of_infection = 0;

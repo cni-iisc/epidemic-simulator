@@ -705,12 +705,13 @@ vector<agent> init_nodes(){
 	assert(elem["household"].IsInt());
 #endif
 	nodes[i].home = elem["household"].GetInt();
-
+	nodes[i].home_ward = elem["wardIndex"].GetInt();
 	nodes[i].workplace = WORKPLACE_HOME; //null workplace, by default
 	nodes[i].workplace_type = WorkplaceType::home; //home, by default
 	nodes[i].workplace_subnetwork = 0;
 
 	if(elem["workplaceType"].IsInt()){
+	  //nodes[i].work_ward = elem["workplaceward"].GetInt();
 	  switch(elem["workplaceType"].GetInt()){
 	  case 1:
 		if(elem["workplace"].IsNumber()){
@@ -732,6 +733,9 @@ vector<agent> init_nodes(){
 	  default:
 		break;
 	  }
+	}
+	else{
+		nodes[i].work_ward = -1;
 	}
 
 	//Initialize cohorts - other definitions are in cohorts.cc
@@ -881,6 +885,7 @@ matrix<double> compute_community_distances(const vector<community>& communities)
   auto wardDistJSON = readJSONFile(GLOBAL.input_base + "wardCentreDistance.json");
   const rapidjson::Value& mat = wardDistJSON.GetArray();
   auto size = mat.Size();
+  GLOBAL.num_wards = size;
   matrix<double> dist_matrix(size, vector<double>(size));
   for(count_type i = 0; i < size; ++i){
 	dist_matrix[i][i] = 0;

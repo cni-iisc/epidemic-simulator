@@ -57,13 +57,10 @@ plot_data_struct run_simulation()
 	auto testing_protocol_file_read = init_testing_protocol();
 	auto train_loader = init_TrainLoader();
 	auto cohorts = make_cohorts(nodes, GLOBAL.COHORT_SIZE, train_loader);
-	auto random_cohorts = make_random_cohorts(nodes, GLOBAL.COHORT_SIZE);
-
 	// std::cout<<"\nNum Cohorts: " << get_num_cohorts(cohorts)<< std::endl;
 	auto one_off_cohorts = make_oneoff_cohorts(nodes, train_loader);
 	// std::cout<<"One Off Cohorts: " << get_num_cohorts(one_off_cohorts)<< std::endl;
 	merge_cohorts(cohorts, one_off_cohorts);
-	merge_cohorts(random_cohorts, one_off_cohorts);
 	// std::cout<<"Merged Cohorts: " << get_num_cohorts(cohorts)<< std::endl;
 	bool coaches_created = false;
 	std::unordered_map<count_type, std::vector<train_coach>> train_coaches_am;
@@ -111,6 +108,15 @@ plot_data_struct run_simulation()
 	double travel_fraction = 0;
 
 	//This needs to be done after the initilization.
+
+	int home_ward_infected[GLOBAL.num_wards];
+	//int work_ward_infected[GLOBAL.num_wards];
+
+	for (int nwards = 0; nwards < GLOBAL.num_wards; nwards++){
+		home_ward_infected[nwards] = 0;
+		//work_ward_infected[nwards] = 0;
+	}
+
 	plot_data_struct plot_data;
 	plot_data.nums =
 		{
@@ -182,6 +188,10 @@ plot_data_struct run_simulation()
 		{
 			{"disease_label_stats", {}},
 		};
+	plot_data.ward_wise_stats =
+	{
+			{"ward_infected", {}}
+	};
 	for (auto &elem : plot_data.susceptible_lambdas)
 	{
 		elem.second.reserve(GLOBAL.NUM_TIMESTEPS);
@@ -351,9 +361,7 @@ plot_data_struct run_simulation()
 
 
 			//update_cohort_edge_weights(cohorts, nodes);
-			// update_kappas_cohorts(cohorts, nodes, time_step); //intervention modeling for cohorts.
-			update_kappas_cohorts(random_cohorts, nodes, time_step);
-
+			update_kappas_cohorts(cohorts, nodes, time_step); //intervention modeling for cohorts.
 			update_lambda_intra_cohort(cohorts, nodes, time_step);
 			update_lambda_inter_cohort(train_coaches_am, train_coaches_pm, cohorts, train_loader, time_step); //TODO[v2]: Enable this function when inter-cohort interactions are done
 			// std::cout<<"cohort kappas, lambdas updated" << std::endl;
@@ -437,8 +445,8 @@ plot_data_struct run_simulation()
 		travel_fraction = updated_travel_fraction(nodes, time_step);
 
 // Update lambdas for the next step
-#pragma omp parallel for default(none) \
-	shared(travel_fraction, time_step, homes, workplaces, communities, nbr_cells, nodes, cohorts, NUM_PEOPLE)
+	#pragma omp parallel for firstprivate(NUM_PEOPLE) default(none) \
+	shared(travel_fraction, time_step, homes, workplaces, communities, nbr_cells, nodes, cohorts)
 		for (count_type j = 0; j < NUM_PEOPLE; ++j)
 		{
 			update_lambdas(nodes[j], homes, workplaces, communities, nbr_cells, travel_fraction, time_step, cohorts);
@@ -483,7 +491,12 @@ plot_data_struct run_simulation()
 			   susceptible_lambda_RANDOM_COMMUNITY = 0;
 		double curtailed_interaction = 0, normal_interaction = 0;
 
-#pragma omp parallel for default(none) shared(nodes, GLOBAL, NUM_PEOPLE)          \
+		//for (int nwards = 0; nwards < GLOBAL.num_wards; nwards++){
+		//	home_ward_infected[nwards] = 0;
+					                //work_ward_infected[nwards] = 0;
+	        //}
+
+#pragma omp parallel for firstprivate(NUM_PEOPLE) default(none) shared(nodes, GLOBAL)          \
 	reduction(+                                                                   \
 			  : n_infected, n_exposed,                                            \
 				n_hospitalised, n_symptomatic,                                    \
@@ -518,6 +531,8 @@ plot_data_struct run_simulation()
 			if (infection_status == Progression::infective || infection_status == Progression::symptomatic || infection_status == Progression::hospitalised || infection_status == Progression::critical)
 			{
 				n_infected += 1;
+				home_ward_infected[nodes[j].home_ward] += 1;
+				//work_ward_infected[nodes[j].work_ward] += 1;
 			}
 			else if (infection_status != Progression::dead)
 			{
@@ -683,6 +698,11 @@ plot_data_struct run_simulation()
 		auto end_time_timestep = std::chrono::high_resolution_clock::now();
 		cerr << "Time step: simulation time (ms): " << duration(start_time_timestep, end_time_timestep) << "\n";
 #endif
+	}
+	
+	for(count_type nwards = 0; nwards < GLOBAL.num_wards; nwards++){
+		std::cout << "Ward: " << nwards <<" Infected: "<< home_ward_infected[nwards] << "\n";
+		plot_data.ward_wise_stats["ward_infected"].push_back({nwards,{home_ward_infected[nwards]}});
 	}
 
 	//Create CSV data out of the date for infections per new infective node

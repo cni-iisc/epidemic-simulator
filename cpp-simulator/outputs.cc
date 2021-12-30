@@ -447,6 +447,11 @@ void output_csv_files(const std::string& output_directory,
             "icu","requested_tests","cumulative_positive_cases"},
     csvfile_path, elem.second);
   }
+  for(const auto& elem: plot_data.ward_wise_stats){
+	std::string csvfile_name = elem.first + ".csv";
+	std::string csvfile_path = output_directory + "/" + csvfile_name;
+	output_timed_csv({elem.first}, csvfile_path, elem.second);	
+  }  
   if(GLOBAL.ENABLE_COHORTS){
     for(const auto& elem: plot_data.coach_stats){
       std::string csvfile_name = elem.first + ".csv";
