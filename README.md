@@ -65,6 +65,17 @@ These subfolders in simulator contains:  1) the main calibration script (tune_mo
 This folder contains the cpp-version of the simulator. The CPP simulator evolved from the JS simulator. 
 Please read the  [`cpp-simulator/README.md`](cpp-simulator/README.md) for more details.
 
+## Simulation v2 Enhancements
+Key updates in the new simulation focus on enhancing realism, data granularity, and user experience.
+
+Surveillance Modelling: A significant new feature is the ability to model the discrepancy between actual infections and those officially reported. This is controlled by a new CASE_INFECTION_RATIO parameter, which specifies the fraction of infections that the surveillance system is able to detect. This results in a new, dedicated plot for "Reported Cases".
+
+Granular Data Tracking: The simulation's data collection is now more detailed. It tracks the flow of individuals between states using new daily and cumulative counters for events like DAILY_NEW_EXPOSED, DAILY_NEW_SYMPTOMATIC, DAILY_NEW_DEATHS, and DAILY_NEW_HOSPITALISED. This provides richer data for both plotting and offline analysis.
+
+Enhanced Plotting and UI: The user interface has been upgraded with toggle switches on all plots, enabling users to instantly switch between daily and cumulative data views.
+
+Improved Performance: To enhance stability, the new version includes a clearSimulationMemory() function that purges large data arrays and properly clears plots between consecutive runs, preventing browser slowdown.
+
 ## Copyright and License
 Copyright [2020] [Indian Institute of Science, Bangalore & Tata Institute of Fundamental Research, Mumbai]
 SPDX-License-Identifier: Apache-2.0
