@@ -1,0 +1,675 @@
+AC No.,address,households,area(sq km),wardNo,district
+21,LNJP Hospital Ranjeet Road,667,14910,81,Central
+21,"64 Khamba Dhobi Gaht No.26, J.N.Marg",79,1840,81,Central
+21,Meer Dard Road,484,29000,81,Central
+21,Shakoor Ki Dandi (Basti Khawza Meer),786,8000,81,Central
+41,"Anna Nagar Sanjay Colony Vikas Kutter near Tilak Bridge I.T.O, New Delhi",3000,23911,154,South East
+41,Balmiki Basti Kabristan behind Express Building,405,15254,153,South East
+21,"Dhobi Ghat ,9,11,12 Press Road",67,5300,81,Central
+41,Gandhi Sahitya Samiti Stadium,452,6313,153,South East
+21,East of Chausath Khamba Meer Dard Road,259,5450,81,Central
+41,JJ Cluster Janta Camp Railway Nursery behind Pragati Maidan ,468,9389,154,South East
+41,Nagla Bharon Road Hafiz Nagar,109,2184,153,South East
+41,Delhi Public School Mathura Road.,212,12200,154,South East
+41,T-Huts Behind MCD School Village Sarai Kale Khan,380,1055,153,South East
+21,Dhobi Ghat No.27 Near Moulana Azad Medical College Meer Dard Road ,42,650,81,Central
+41,Madrasi Camp Jangpura,353,4968,154,South East
+41,Indira Gandhi Camp No-3 near Railway Line Hari Nagar Ashram ,109,1358,154,South East
+41,Near B-Block Double Story Quaters Jangpura,48,1400,154,South East
+21,Mahavat Khan Road Dhobi Ghat No 28.,80,701,81,Central
+20,"Majnu Ka Tila New Block, Aruna Colony.",840,24572,78,Central
+20,"J-Block Majnu Ka Tila, Aruna Colony.",128,5225.55,78,Central
+20,Old Chnadrawal Civil Lines Majnu Ka Tila,761,40471,78,Central
+20,Tibti Camp Majnu Ka Tila,400,45129.38,78,Central
+20,Fauji Jat Dharamshala Yamuna Bazar,57,509.32,77,Central
+20,Press Area Behind Old Secreteriat,100,3679.85,77,Central
+20,Madrasi Basti Mori Gate,180,3481.63,77,Central
+20,Behind Petrol Pump Bulward Road Depot No.23,155,6967,78,Central
+20,Bharon Ki Bagchhi Bulward Road,268,6995,78,Central
+20,Railway Colony Pul Mithai Mori Gate,80,538,80,Central
+20,DRP Line Pilli Kothi Lahori Gate,173,2245,80,Central
+20,Pulmithai Ke Kinare Lahori Gate,41,976,80,Central
+20,Duffrin Bridge Mori Gate,8,60,80,Central
+20,Old Gas Factory Near Red Fort,47,166,80,Central
+20,Madarsa Road Kashmiri Gate,27,424.08,77,Central
+25,B-58 Rama Road,362,15975,97,Central
+25,5/35 Industrial Area Kirti Nagar,908,29971,97,Central
+25,8/35 Industrial Area Kirti Nagar,149,12308,97,Central
+25,Hanuman Mandir Near Railway Station Kirti Nagar,53,558,97,Central
+25,"Dr.Ambedkar Camp 52,53 Furniture Block, Kirti Nagar.",126,1138,97,Central
+25,Dr.Ambedkar Camp Plot No.39-10/67 Industrial Area Kirti Nagar. ,50,1046,97,Central
+25,Dr.Ambedkar Camp Plot No.39 Kirti Nagar Furniture Block.,162,5771,97,Central
+25,Kamla Nehru Camp Lakkar Mandi Kirti Nagar.,1265,2283,98,Central
+25,Behind Fire Station Kirti Nagar.,190,2955,98,Central
+25,Chuna Bhatti Lakkar Mandi Kirti Nagar,1551,16473,98,Central
+25,Chuna Bhatti (Harijan Basti) Lakkar Mandi Kirti Nagar,1053,24000,98,Central
+25,Sanjay Camp Chuna Bhatti Kirti Nagar,143,5438,98,Central
+25,A-198 Railway Line Indira Gandhi Camp Kirti Nagar.,170,2345,98,Central
+25,JJ Jawahar Camp A-2-Block W.H.S. Kirti Nagar,1802,33500,98,Central
+25,A-2 W.H.S. Kirti Nagar.,180,2734,98,Central
+25,"Reshma Camp , Ex-Nehru Camp near WHS-2 Kirti Nagar.",361,11110,98,Central
+25,Front Side of Block 4 and 8 B Between Ramesh Nagar,61,4593,98,Central
+25,"B-Block, Double Storey Quaters Ramesh Nagar.",167,1048,98,Central
+25,Silai Kendra Ramesh Nagar,70,1472,98,Central
+25,"DI Block, Mansorver Garden",12,167,98,Central
+25,Indira Gandhi Camp Maya Puri Chowck Block-C Mansorver Garden,212,3150,98,Central
+25,Kailash Park Basai Dara Pur Moti Nagar.,113,3080,99,Central
+25,Natraj Cinema Back of Nalla Sudama Puri Moti Nagar,315,6485,99,Central
+25,Block A & B Sudershan Park Nalla Moti Nagar.,184,9900,99,Central
+25,Block-F Near Nalla Sudeshkar Park Moti Nagar,12,60,99,Central
+25,Road No.-7 Leather Factory East Punjabi Bagh NG Drain,102,3709,99,Central
+25,Ram Chander Park F-Block Moti Nagar,139,1760,99,Central
+25,Amar Park Zhakira (near Zhakira Chowck),508,27031,100,Central
+25,JJ Camp Rakhi Market Zhakira,12716,105195,100,Central
+25,Chara Mandi Jhakira Flyover,1121,9928,100,Central
+25,"Near Haryana Dharamshala on Najafgarh Drain G-Block, Karam Pura",108,2216,100,Central
+25,JJC Garib Basti,99,1984,100,Central
+25,Shiv Basti Behind Gold Spot Factory Near Railway Station Patel Nagar,216,2436,100,Central
+36,Arjun Camp Mahipal Pur,1300,35250,144,South West
+36,Rangpur Pahari Milkpur Kohi,2511,101612,144,South West
+36,Harijan Balmiki Camp Rangpur Pahadi,182,10053,144,South West
+36,Behind Police Station Vasant Kunj Sector C Pocket-9,990,11720,144,South West
+36,Sonia Gandhi Camp Near Petrol Pump Smalka Phase.II,1234,34200,143,South West
+36,Nehru Camp Behind Satya Rani Farm Bijwasan,207,4169,141,South West
+45,Jhuggies Kholi Wala Baba Mandir Rajokari,71,6406,172,South
+45,Jhuggies Kewal Krishan Chowk Post Rajokari,25,1944,172,South
+45,"Ram Dev Ka Dera BSF Office Rajokari Pahari, Delhi",787,38406,172,South
+38,Barar Squara Railway Station Area,430,15000,275,South West
+38,CB Area Naraina,371,5000,277,South West
+38,Dhobi Ghat Kirbi Place,959,25000,275,South West
+38,Village Jherea Delhi Cantt.,914,11159,275,South West
+38,Kandhar Line Delhi Cantt.,18,650,280,South West
+38,Behind Genral Hospital Cantt. Sadar Bazar.,18,450,280,South West
+38,Sadar Cantt.,41,3000,280,South West
+52,Shanshi Camp Mathura Road Badarpur,200,6786,199,South
+52,Dora Tabu Camp Near Tuglakabad Railway Station in Mohan Co-Operative,65,9700,199,South
+52,Indira Camp Alimore Mathura Road Mohan Co-Operative,43,2200,199,South
+52,Grah Kalyan Samiti Railway Colony Tuglaka Bad (V.P.Singh Camp) ,1709,38500,197,South
+52,Nandi Vatika Railway Colony Tuglakabad,57,1150,197,South
+52,Sonia Gandhi Camp Pul Prahlad Pur Railway Line Tuglka Bad ,707,28061,197,South
+52,Ram Pyari Camp Near Nangia Park Lal Kuan,107,2525,198,South
+52,Northen Jhuggie Cluster M.B.Road (Behind Petrol Pump),52,27177,198,South
+52,"Shiv Camp Lal Kuan Badarpur Chungi No.-2&3, M.B.Road",495,76216,198,South
+52,Khatta Camp Gosain Crusher M.B.Road Lal Kaun,739,56108,198,South
+49,"Narden Jhuggi S.P.Builder Crusher, M.B.Road",593,38757,188,South
+49,JJC Sangam Vihar (Shiv Mandir),92,1195,188,South
+48,Gandhi Camp West Tuglkabad,54,1508,185,South
+7,Rohini Extension 20 Pooth Kalan,461,10400,25,North West
+7,"Shahbad Daulatpur Block-A, E & F",5984,128000,26,North West
+16,Haryana Power House,595,23150,62,North
+16,Golden Park,265,8200,62,North
+16,JJC Near Dharmarth Eye Hospital,545,9327,62,North
+16,Opposite C-4 Lawerance Road.,292,5397,62,North
+16,B-46 Lawernce Road,135,8779,62,North
+16,C-3 Lawerance Road,47,310,62,North
+16,B-Block Industrial Area Behind Shiv Mandir Lawrence Road ,46,2520,62,North
+16,Near MCD Delhi Jal Board Office Kanhiya Nagar Crossing,87,900,61,North
+18,By The Side of Railway Line Shakti Nagar Godown,28,400,69,North
+18,Ganda Nalla Gulabi Bagh,189,5246,69,North
+18,Near FCI Godown near Under Bridge Shakti Nagar,86,6984,69,North
+18,Near Roshan Ara Club,114,4401,69,North
+18,Near ESI Dispansary 15/4 Shakti Nagar,95,1100,69,North
+18,Ashram Wala Bagh,98,797,69,North
+19,Near Gopal Mandir Kishan Ganj,124,1321,75,Central
+19,JJ Balmiki Camp Railway Quarters Old Sabzi Mandi,185,3978,75,Central
+19,Chuna Bhatti Amba Bagh,218,2953,75,Central
+19,Near Block-No.149 Railway Colony Kishan Ganj near SI Office ,157,1086,75,Central
+19,"JJ Camp near Farishta Soap Factory, Old Rohtak Road",364,1995,74,Central
+19,Out Side Green Belt Near Dispensary Shahzada Bagh,203,1276,74,Central
+19,Matiala Mandir Tulsi Nagar,100,336,74,Central
+19,Open Space RPF Quaters Old Rohtak Road.,1227,22840,74,Central
+19,Balmiki Jhuggies RPF Lane Daya Basti,193,8101,74,Central
+19,Near Block. 318 Daya Basti,23,1087,74,Central
+39,"Sangam Camp Behind JD Kapoor Hospital, Pandav Nagar",707,11330,150,South West
+39,Kathputli Colony,2539,80337,150,South West
+39,JJ Camp Y-Block Loha Mandi Near Dharam Kanta Sanjivan Naraina Industrial Area,648,13220,150,South West
+39,X-Block Nariana Loha Mandi,105,2964,150,South West
+39,Gas Godown TodaPur,448,910,150,South West
+39,TodaPur Village Bihari Colony,324,2043,150,South West
+39,Rattanpuri Chowk New Rajinder Nagar,114,1294,149,South West
+39,C-Block Budh Nagar Inder Puri,346,10821,152,South West
+39,Indira Camp A-85 Naraina Industrial Area Phase-I,188,3329,152,South West
+39,JJ Camp Sonia Gandhi Naraina,562,2536,152,South West
+39,Indira Camp B-212 Narina Industrial Area Phase-I,116,3618,152,South West
+39,Indira Camp B-97/3 Naraina Industrial Area Phase-I,163,2158,152,South West
+39,Rajiv Gandhi Camp C-Block Naraina Vihar,517,7773,152,South West
+39,Z-Block Adjoining Loha Mandi Naraina Industrial Area,223,2811,152,South West
+39,Rajiv Gandhi Sanjay Gandhi Camp Naraina Industrial Area ,135,767,152,South West
+39,Mazdoor Kalyan Camp A-Block Ganda Nalla Budh Nagar Near Inder Puri Nagar Inder Puri ,319,3900,151,South West
+39,Mazdoor Kalyan Camp D-Block Ganda Nalla Budh Nagar Near Inder Puri Nagar Inder Puri ,668,6527,151,South West
+39,Mazdoor Kalyan Camp B-Block Ganda Nalla Budh Nagar Near Inder Puri Nagar Inder Puri ,181,6215,151,South West
+39,E-Block Budh Nagar Inder Puri,243,3857,151,South West
+39,Shashtri Camp Railway Line F-Block Budh Nagar  Near Inder Puri Nagar Inder Puri ,149,1085,151,South West
+39,Shashtri park JJC Halt Line Inder Puri,278,2617,151,South West
+24,Prem Nagar near Patel Nagar Railway Station Opposite Latrins ,517,14734,94,Central
+24,T-10 Opposite F-Block Punjabi Basti Baljeet Nagar,455,87478,94,Central
+24,On Pahadi Near Shiv Mandir Anand Parvat,326,1873,94,Central
+24,Rajasthani Colony West Patel Nagar,250,18177,94,Central
+24,Nehru Nagar Gali No.-13 to 16,167,10363,94,Central
+24,Prem Nagar Road Baljeet Nagar,145,4269,93,Central
+19,JJ Cluster at Teliwara Dera Anand Parvat,649,25945,74,Central
+19,Nirankari Crusher Gali No.12 Anand Parvat,150,3674,74,Central
+19,Mahavir Crusher Anand Parvat,455,1623,74,Central
+52,G-Block Harikesh Nagar Okhla Industrial Area Phase-II ,99,5000,200,South
+52,"S-39 Sanjay Colony, Okhla Industrial Area Phase-II",39,400,200,South
+52,Sanjay Colony Y Block at No.Y-5 to Y-8 and Back Lane of Y-1 to Y-12 and ESS Okhla Industrial Area  Phase-II ,242,2000,200,South
+52,Manav Kalyan Camp Z-Block in Back of Plot No.47 To 49 Okhla Industrial Area Phase.II ,71,1170,200,South
+52,Manav Kalyan Plot No. 23 & 17 Okhla Industrial Area Phase.II ,304,4400,200,South
+52,"Sanjay Colony C-56/3, 60/2, 60/3, 61/1, 61/2 & Its Back Lane, Okhla Industrial Area Phase-II ",108,2000,200,South
+52,JJC in Plot No. X-26 and Back Lane of X-26 to X-37 Okhla Industrial Area Phase-II ,55,300,200,South
+52,Janta Jeewan Camp in Plot No. B-22/2 & 22/3 Okhla Industrial Area Phase-II ,250,2333,200,South
+52,Majdoor Kalyan Camp in Plot No.W-1 to W-5 and Back Lane Okhla Industrial Area Phase II ,306,9770,200,South
+52,Okhla Over Head Tank Okhla Phase-II,316,4400,200,South
+52,"Janta Jeewan Camp E-Block (E-44,45)",114,1000,200,South
+52,"Janta Jeevan Rajeev Camp in Plot No.-B-7/3, B-8/1 to 8/3 and B-9/1, 4/3, B-3/3 & 4/1 and Back Lane of Plot No.-B-4/3 to 7/3 Okhla Industrial Area Ph-II",648,6200,200,South
+52,"New Sanjay Camp at E-33, Okhla Industrial Area Phase-II",198,9850,200,South
+52,Janta Jeewan Rajeev Camp in Back Lane of F 27/1To F 30/2 Okhla Industrial Area Phase-II ,90,1779,200,South
+52,Jeewan Jyoti Rajeev Camp in F Block Near Maruti Service Master Opposite E-40 Okhla Industrial Area Phase-II ,416,5400,200,South
+52,Janta Jeewan Rajeev Camp F-30/5 Near ESS Okhla Industrial Area Phase-II ,29,657,200,South
+52,Janta Jeewan Camp Rajeev Camp in Plot No. D-6/2 and Back Lane of D-6/2 To D-7/3 Okhla Industrial Area Phase-II ,120,400,200,South
+52,Janta Jeevan Rajeev Camp in Back Lane & Plot No B1/1 Okhla Industrial Area Phase-II ,54,400,200,South
+52,Janta Jeewan Camp in Plot No. B-21/2 Okhla Industrial Area Phase-II ,28,400,200,South
+52,Janta Jeewan Camp in Plot No. C-43 on 30 Feet Road Okhla Industrial Area Phase-II ,300,800,200,South
+52,Janta Jeewan Camp in Plot No. C-43 on 80 Feet Road Okhla Industrial Area Phase-II ,820,1500,200,South
+52,At Janta Jeewan Camp Okhla Phase-II near Chawla Hotel in Plot C-38 Okhla Industrial Area Phase-II ,700,3200,200,South
+52,Janta Jeewan Camp Along Drain Opposite DSISDC,12,378,200,South
+52,Janta Jeewan Camp Plot No. D-1/4 Okhla Industrial Area Phase-II ,67,1000,200,South
+52,"Janta Jeewan Between Park and Plot No. D-11/1, 11/2 ,11/4& Back Lane of D-11/4 To D-8/1 Okhla Industrial Area Phase-II",158,1000,200,South
+52,Janta Jeewan Between Park and Plot No. F-17/5&21/5 Near Mata Ka Mandir Okhla Industrial Area  Phase-II ,49,400,200,South
+52,Janta Jeewan Camp in Back Lane of E-46/1 To E-46/14 Okhla Industrial Area Phase-II ,190,1368,200,South
+52,Janta Jeewan Camp in Back Lane of E-41/6 To E-43/7 Okhla Industrial Area Phase-II ,100,2798,200,South
+52,Janta Jeewan Camp in Side Lane & Its Back Lane of F-21/1 & Park Okhla Industrial Area Phase-III ,16,1878,200,South
+52,Janta Jeewan Camp in Back Line of T-9 To T-16 Okhla Industrial Area Phase-II ,9,1110,200,South
+52,"New Sanjay Camp at Road Berm Inside Lane of E -34, Okhla Industrial Area Phase.II",86,759,200,South
+52,Sanjay Colony in Plot No.C 54/4 & Back Lane 54/1 to 54/4 Okhla Industrial Area Phase-II ,49,400,200,South
+52,Sanjay Colony Okhla Phase-II,3792,53000,200,South
+2,Block-EE Ring Bund Huts Jhangir Puri,296,7438,5,North
+5,K-Block ITI Jahangir Puri,1844,25273,20,North West
+5,"K-Block, Opposite-656 MIG Flats Jahangir Puri",652,14212,20,North West
+5,J&K-Block Lakhi Park Jahangir Puri,530,27255,19,North West
+5,CD-Block Sabzi Mandi Jahangir Puri,1238,26969,20,North West
+5,CD Block Samaj Kalyan Samiti Jhangir Puri,636,16776,20,North West
+4,"Block-G, Jahangir Puri Site-1",1775,25735,16,North
+4,"H-2 Block, Gujrati School-I Jhangir Puri.",77,11484,16,North
+4,"H-2 Block Gujrati School Part-II, Jahangir Puri",783,11752,16,North
+4,H-Block Jhangir Puri,1488,19052,16,North
+4,"H-4 Block, Gujrati School Jhangir Puri.",44,1576,16,North
+4,Sarai Peepal Thala Azad Pur,1118,17002,15,North
+4,Rajasthani Udyog Nagar,208,5221,15,North
+4,A-Block Jhangir Puri,205,8348,16,North
+4,Mool Chand Colony Adarsh Nagar.,187,7360,14,North
+3,Sanjay Basti Timarpur,859,36413,10,North
+3,Shayam Basti Timarpur,42,1687.5,10,North
+3,Indira Basti near Thana Timar Pur,239,12100,10,North
+3,Dairy No.3 Lucknow Road Timar Pur,94,5450,10,North
+3,Patra Char Vidyalaya,472,15604,10,North
+3,Dr.Ambedker Nagar Near Wazirabad Timarpur.,84,1472,10,North
+3,T Huts Wazirpur Shiv Mandir,6,53051,10,North
+3,Nand Lal Camp Near Gopalpur Village (Part-I),124,4493,11,North
+3,Nand Lal Camp Near Gopalpur Village (Part-II),405,11997,11,North
+3,JJC Mukherji Nagar Dairy Munshi Ram Kingsway Camp ,526,12055,11,North
+3,Sethi Camp Indira Vikas Colony Opposite Sant Nirankari Senior Secondary School Nirankari ,865,17082,11,North
+3,Outram Line Infront of Gurudwara Kingsway Camp,424,8928,12,North
+3,Patel Chest near Dhaka Village Adjacent to Gandhi Ashram ,236,7811,11,North
+3,Mallik Pur Kingsway Camp,173,5873,12,North
+18,Camp near Gur ki Mandi Rajpura Village,338,950,70,North
+18,Kishor Nagar near R.P.Bagh,307,10343,70,North
+18,Kabir Nagar near R.P. Bagh,1692,43382,70,North
+18,Om Nagar Dhobi Ghat Sangam Park Mahavir Modern School R.P. Bagh ,555,10040,71,North
+18,Cigratte Wala Bagh Prembari Road,636,7615,72,North
+18,Khilona Wala Bagh,622,24888,72,North
+18,Hanuman Mandir Model Town,99,1440,72,North
+18,Mubarak Bagh P.S. Model Town,166,9934,72,North
+18,Chowki No.-4 Railway X GTK Road Azadpur,901,6568,71,North
+18,Lal Bagh Near Mosque GT Karnal Road Near Vijay Cinema,156,9600,71,North
+18,Kaushalpuri near A-Block Railway Line,1494,26086,71,North
+18,Jhuggies Lal Bagh Azadpur Behind A.T. Mill.,475,4715,71,North
+18,Mauji Wala Bagh (GTK Road Azadpur),1143,2719,71,North
+18,Lal Bagh Park near Laxmi Narayan Mandir,1486,13000,71,North
+18,Lal Bagh GT Karnal Road,736,1368,71,North
+28,Plot No.A - 11 & 12 Maya Puri,444,4086.65,111,West
+28,Back of Commercial Center Mayapuri,152,1362,111,West
+28,B-127 Maya Puri,102,641,111,West
+28,B-46 Maya Puri,49,549,111,West
+28,"WH-58-59,Maya Puri.",424,1810,111,West
+28,WZ-E Block Rewari Railway Line Maya Puri,600,42026,111,West
+28,"WZ B-Block along Rewari Railway Line, Maya Puri",1992,24495,111,West
+28,A-34/A Maya Puri,15,171,111,West
+28,C-76 Maya Puri,177,1328,110,West
+28,C-187 Maya Puri Phase.II.,54,705,110,West
+28,C-200 Maya Puri Phase II.,72,1697,110,West
+28,W-228 Maya Puri Phase.II.,40,561,111,West
+28,W-100 Mayapuri,53,572,110,West
+28,Khazan Basti Shamshan Ghat Road Sabzi Mandi Maya Puri Site No.-1 ,389,2361.9,110,West
+28,"G-113,116,117,120 Khazan Basti Mayapuri Part-1",243,2131,110,West
+28,C-3/13 Maya Puri.,34,234,111,West
+28,C-2/11 Maya Puri Phase.II.,32,282,111,West
+28,"Pili Kothi Hari Nagar, Ghanta Ghar",519,6959.04,111,West
+28,"Prayog Vihar, near Swarg Ashram Mandir, Hari Nagar",290,8968,111,West
+30,"JJC A-562, Pankha Road Near Nalla, Uttam Nagar",350,1087,119,West
+33,Gali No.7 Mahavir Enclave,262,4963,147,South West
+33,Opposite MCD Store Naseer Pur Road Mahavir Enclave-I ,50,1021,130,South West
+37,JJC Sabazi Mandi Rajiv Gandhi Camp Mangla Puri Phase-II,219,3293.91,146,South West
+33,East Sagar Pur Nursery Nalla Par,261,19257,131,South West
+33,West Sagar Pur,36,1666,131,South West
+34,Pankaj Garden Goela Dairy,186,14933,134,South West
+34,JJC at Goela Dairy Najafgarh,568,43811,134,South West
+31,Indira Camp No.6 Vikas Puri,23,1658,124,West
+31,Indira Camp No.-3 Vikas Puri,426,6123.91,124,West
+31,JJC Indira Camp No.5 Part-II Vikas Puri,89,1854.01,124,West
+31,Indira Camp No.-5 Vikas Puri,596,7827.72,124,West
+31,Rajiv Gandhi Camp Along Nalla Near Shamshan Bhumi Hastsal ,350,8413.74,123,West
+11,Sultan Puri Road Near Railway Crossing at Block-Y Phase-I Nangloi Besides Suraj Mal Stadium ,63,5500,43,West
+24,Gurunanak Nagar X Block Ranjit Nagar Nalla.,65,3128,96,Central
+24,2262/5B Near Higher Secondary B/W Ranjit Nagar,68,820,96,Central
+24,Harjian Colony Ranjit Nagar Red Cross Basic School Shadipur ,250,1448,95,Central
+24,Y-42 New Ranjit Nagar Munshi Ram Bagh,50,1954,96,Central
+23,Opposite Health Enquiry Dev Nagar,147,503,92,Central
+23,D.B.Gupta Road Karol Bagh Plot No.10,161,3074,91,Central
+23,Behind Karol Bagh Bus Terminal,942,17581,90,Central
+23,Faiz Road Karol Bagh,288,4525,90,Central
+22,Motia Khan Near Community Hall,161,1950,88,Central
+19,"JJ Camp Near Shera Wali Market, Kutab Road",55,5576,76,Central
+19,Sabzi Mandi Railway Station Behind Bagchi Peerji,270,4539,76,Central
+19,JJC Tokri Walan Near Pul Mithai Azad Market,24,68,76,Central
+19,Shivaji ED Azad Market (On Road B17ERM),21,677,76,Central
+23,Near Udasin Mandir Aram Bagh,13,1915,89,Central
+23,Rajiv Gandhi Camp Aram Bagh,187,1884,89,Central
+52,Mazdoor Kalyan Camp in Back Lane of Plot No. B-317 To B-319 and B-254 To B-250 Okhla Industrial Area Phase-I ,91,4055,199,South
+52,Ambedkar Camp Okhla Phase-I,36,415,199,South
+52,Amar Jyoti Camp Okhla Phase-I,52,800,199,South
+52,Bengali Camp Okhla Phase.I,153,1200,199,South
+52,"Indira Kalyan Vihar Okhla Industrial Area Phase-I, Site-II ",2225,49500,199,South
+52,Indira Kalyan Vihar in Back Lane of Plot No. B-230to B-235 Okhla Industrial Area Phase-I ,1928,2894,199,South
+52,"Indira Kalyan Vihar Okhla Industrial Area Phase-I, Site-II",90,34200,199,South
+52,"Gola Kuan Okhla Industrial Area Phase-I, Tehkhand",1631,19600,199,South
+52,New Sanjay Camp Okhla Industrial Area Phase-I Near KTI Factory (Plot No. B-220) ,342,3800,199,South
+52,Mazdoor Camp in Plot No. B-295 & Back Lane of B-292 to B-301 Okhla Industrial Area Phase-I. ,62,284,199,South
+52,Back Lane of 151 to 159 Okhla Industrial Area Phase-I ,20,442,199,South
+15,JJ Cluster Adjoining Punjab Migrant Relief Camp Peera Garhi ,163,7217,58,North
+26,C-Block Madipur on Back of Nalla,112,3345,104,West
+15,"In Park Opposite Kothi No.40 SBI Nagar, (Janmastmi Park Paschim Vihar)",62,814,57,North
+15,Dairy Wala Bagh Paschim Vihar,292,5400,57,North
+15,JJC B-Block Meera Bagh on the Side of N.G.Drain Paschim Vihar ,1768,27894,57,North
+15,Opposite BG-6 Block Paschim Vihar Along NG Drain,374,8013,57,North
+15,Saheed Bhagat Singh JJC Paschim Puri Near Shamshan Ghat ,322,22874,57,North
+15,JJ Cluster BG-7 Paschim Vihar Near BSES Office,174,4500,57,North
+29,JJ Camp Indira Camp No-II Vikas Puri,577,7912.22,116,West
+29,Near Harijan Colony Tilak Nagar,228,687,114,West
+29,Indira Colony Chaukhandi Road Opposite Yog Mandir and Jagat Mata Kushat Ashram ,269,2223,114,West
+26,"Block-C, Raghubir Nagar.",48,2830,102,West
+26,"Block-N, Raghubir Nagar",4,786,102,West
+26,"Block-K, Raghubir Nagar.",7,360,102,West
+26,"Block.B-1, Raghubir Nagar.",611,5297,102,West
+26,"R-Block, Raghubir Nagar",836,10880,102,West
+26,Din Dayal Camp near Slum Quarters Road No.77 Punjabi Bagh ,438,6713,103,West
+26,Luxmi Camp Near Slum Quaters N.G. Drain Road No.33 Punjabi Bagh. ,47,796,103,West
+26,Mahatma Gandhi Camp Road No.-77 Punjabi Bagh,573,5604,103,West
+26,Rajiv Camp Road No.-77 Punjabi Bagh near DTC Terminal ,145,2713,103,West
+26,Near Double Storey Sweeper Tenements Raghubir Nagar. ,569,15700,101,West
+26,Shyama Prashad Mukharjee Camp Back Side of Kukreja Hospital Tagore Garden ,174,2035,101,West
+29,Shanker Garden B-Block Vikas Puri,604,9235.15,113,West
+29,Krishna Park Vikas Puri Indira Camp No. 4,387,7071.11,113,West
+29,Double Story Sweeper Tenements Tilak Nagar,622,3232,116,West
+29,Tilak Nagar Along Subhash Nagar Drain,159,653,114,West
+14,"AO Block, Shalimar Bagh",409,5042,56,North
+14,Sanjay Sudhar Samiti Camp GP-Block Pitam Pura,1246,24982,32,North
+14,Ambedeker Camp U & V Paschim Shalimar Bagh,600,6216,55,North
+14,"Block.C, Pocket A Shalimar Bagh",347,586,55,North
+14,Opposite Old Creamation Ground Near Shalimar Bagh Village Shalimar Bagh ,115,2860,55,North
+14,Indira Colony Near Railway Phatak No.3 Shalimar Bagh ,329,7266,55,North
+14,A-A Block Shalimar Bagh Kela Godown,306,6324,56,North
+14,Indira Colony BG-1 Shalimar Bagh,383,7893,55,North
+14,"Ekta Camp AU-Block, near Varun Niketen Pitam Pura",366,5631,54,North
+14,JJ Cluster on Outer Ring Road No.-26 Badli Morh Shifted from Rohini Sector-XIV Haiderpur ,1635,57295,34,North
+14,Dr. Ambedkar JJC Outer Ring Road More,245,8568,54,North
+14,In Front of Ayurvedic Hospital Haiderpur.,219,34416,54,North
+5,Bihari Samaj Vishwanath Puri (Part-B) Kalander Colony near Bhalswa Dairy ,774,39818,19,North West
+5,Basant Dada Patil Cluster(Part-A) Kalander Colony Near Bhalswa Dairy ,976,22545,19,North West
+5,Kalander Colony Part-C near Bhalswa Dairy,514,41841,19,North West
+17,Infront of E&F Patharwala Bagh Wazir Pur Phase-IV,100,8064,65,North
+17,Patharwala Bagh E-Block Wazir Pur JJ Colony Phase I,283,15013,65,North
+17,"B-Block, Shamshan Ghat Wazirpur",774,1045,66,North
+17,Opposite K & L-Block Wazirpur JJ Colony,256,16942,65,North
+17,K-Block Wazir Pur,536,7458,65,North
+17,J1J2-Block Wazir Pur JJ Colony,159,1713,65,North
+17,J-3 Wazirpur,538,7254,65,North
+17,J-Block Murga Market Ashok Vihar Ward No.-31 Wazir Pur Village ,700,5038,67,North
+17,Mata Jai Kaur Public School Ashok Vihar,52,1367,66,North
+17,Sawan Park Chowck No.-3 Ashok Vihar,300,8827,66,North
+17,"Weaver Colony, Bharat Nagar.",57,1141,66,North
+17,Near Jain Mandir Shakti Nagar Extension,51,878,66,North
+17,Near Arya Samaj Mandir Shakti Nagar Extension,39,1485,66,North
+17,Jailer Wala Bagh Ashok Vihar,1575,22500,66,North
+17,"Chander Shekhar Azad Colony, Wazirpur Industrial Area",1470,43716,68,North
+17,C-35 Wazir Pur Industrial Area,230,3178,68,North
+17,"C-Block, Azad Colony Opposite Narula Factory Wazirpur Industriual Area",165,1597,68,North
+17,DDA Park Chander Shekher Azad Colony Wazir Pur Industrial Area ,775,5735,68,North
+17,B-33 Wazirpur Industrial Area,62,638,68,North
+17,B-27 Wazirpur Industrial Area,45,372,68,North
+17,B-46 Wazirpur Industrial Area,21,443,68,North
+17,B-46/2 Wazirpur Industrial Area,46,221,68,North
+17,B-70/1 Wazirpur Industrial Area,51,839,68,North
+17,Prem Bari Bridge along Railway Line Sukhdev Nagar ,3799,40300,68,North
+17,Tool Room Training Center Wazirpur Industrial Area ,400,1539,68,North
+17,Shahdeed Udam Singh Park Wazirpur Industrial Area,1252,12817,68,North
+16,HCL Factory Shakur Pur,35,560,59,North
+16,Indira Camp F-Block Shakur Pur,32,780,64,North
+16,"Sant Ravi Dass Camp L-Block, Shakur Pur.",68,840,64,North
+15,Near Railway Colony Shakur Basti,775,34800,59,North
+15,Dera Gaji Khan Tarun Enclave Pitam Pura Parwan Road ,547,8120,60,North
+15,Rang Mahal Housing Society Pitampura.,99,1663,60,North
+16,Near Kohat Enclave Pitam Pura,32,990,63,North
+46,Junapur Bhim Basti,656,65998,175,South
+46,Mandi Village Bapu Camp,358,70938,175,South
+46,Mandi Pahari (Shambhav Camp),312,31928,175,South
+46,Mandi Village (Biru Camp),170,12549,175,South
+46,Mandi Village (Shanti Camp),408,62854,175,South
+46,Dr. Ambedkar Satwari Mehrauli,230,6424,176,South
+46,Suhurpuri Mehrauli,51,10049,176,South
+46,Kharak Riwara Satwari Mehrauli,628,121636,176,South
+46,Sanjay Colony- Mehrauli Bhatti Mines,1263,783173,176,South
+46,Ambedker Colony Andheria More,87,6725,174,South
+46,Chattar Pur Pahari Mehrauli,114,13123,174,South
+51,Bhoomiheen Camp Govind Puri Kalkaji,2128,35156,195,South East
+51,Navjeevan Camp & J.L. Nehru Camp Govind Puri Kalkaji ,4578,103896,195,South East
+50,Karotia Camp Kalkaji,136,2400,190,New Delhi
+41,Indira Gandhi Camp No.2 Jeewan Nagar near Police Post Hari Nagar ,400,7351,156,South East
+41,Indira Gandhi Camp No.1 Siddarth Basti Hari Nagar Ashram ,150,3832,156,South East
+41,"Garhi Mohalla Summon Bazar, Bhogal",19,1970,156,South East
+41,Behind PGDAV College Nehru Nagar Block-8 & Adivasi Camp ,209,6044,155,South East
+41,Partap Camp Behind Gurudwara Nehru Nagar.,524,9028,155,South East
+41,Block.8 Nehru Nagar,90,2100,155,South East
+41,Indira Camp MCD School Block-10 Nehru Nagar,252,4577,155,South East
+41,Vijay Camp Housing Factory Jal Vihar Lajpat Nagar.,370,2600,155,South East
+41,Madrasi Basti Near Railway Line Jal Vihar,1310,14010,156,South East
+42,"Sai Baba Camp Adjoining Bal Bharti School,Lodhi Road (Institutional Area Lodhi Road)",93,1614,157,South East
+42,Harijan Camp Meher Chand Market Lodhi Road,700,7500,157,South East
+51,Karpuri Thakur Jagjeewan Camp Shriniwas Puri,393,13400,193,South East
+51,JJC Indira Gandhi Camp Shriniwas Puri,141,3000,193,South East
+51,Indira Gandhi Tea Market Shriniwas Puri,514,10500,193,South East
+51,Okhla DTC Depot-I,409,32349,193,South East
+51,Gandhi Camp Behind Fruit & Vegitable Market Okhla Railway Station ,496,13652,193,South East
+51,Dayal Singh Colony Near West Front Okhla.,404,7580,193,South East
+51,Indira Camp Sriniwas Puri Gurdawara,159,3195,193,South East
+51,Priyanka Camp Mathura Road Opposite Sukhdev Vihar Depot ,91,850,193,South East
+51,CRRI Camp Mathura Road Opposite Sukhdev Vihar Depot ,104,2795,193,South East
+51,Manav Kalyan Camp Giri Nagar Kalkaji,91,2690,196,South East
+51,JJC at Bal Mukund Khand Kalkaji,123,1450,196,South East
+51,Sudhar Camp Kalkaji,546,10790,196,South East
+51,Sarvodaya Colony near MCD School Tilak Khand Kalkaji ,204,1680,196,South East
+54,Indira Camp Park 2 Okhla (Tamur Nagar),541,20188,205,South East
+54,Indira Camp Pahari No.-2 Taimur Nagar,460,34281,205,South East
+54,North of Jamia College Mehboob Nagar P/Ground Okhla ,250,4164,205,South East
+54,In the North of Okhla Village Khizarbaba Camp Okhla ,322,1800,205,South East
+54,Abul Fazal Enclave Okhla Village Across Canal,218,9200,206,South East
+50,Chander Arya Vidya Mandir,306,8310,194,New Delhi
+42,Back of Police Colony Andrews Ganj Part-I,586,8798,159,South East
+43,Jagdamba Camp Khirki Gaun Near Satpula Nalla.,143,530,162,New Delhi
+50,Swami Nagar Near Water Tank Outer Ring Road,127,2500,191,New Delhi
+50,Lal Gumbad behind Sadhana Enclave Malviya Nagar,265,6797,191,New Delhi
+50,Sh.Ram Bhan Dass Malviya Nagar Corner Mkt.,120,859,191,New Delhi
+43,Balmiki Camp Creamation Ground Begum Pur,600,12484,162,New Delhi
+43,Indira Camp Begum Pur,522,17213,161,New Delhi
+43,Balmiki Camp Navjeewan Vihar Malviya Nagar,16,795,161,New Delhi
+54,New Priyanka Camp near Sarita Vihar,762,40000,207,South East
+5,At Sanjay Colony Gali No. 9 Samai Pur Badli.,1265,24754,17,North West
+5,Railway Phatak No.8 Badli,125,4369,17,North West
+5,Balmiki JJ Cluster Samai Pur Badli,188,49306,17,North West
+5,Bhagwan Pura,766,11012,17,North West
+5,JJ Cluster at Badli Village,879,20075,17,North West
+13,At Khaada Basti Suraj Park-B at Bawana Road Samai Pur Badli. ,700,22050,49,North West
+13,Suraj Park Samai Pur Badli,1478,36300,49,North West
+13,At Industrial Area Badli Phase-II.,467,11200,49,North West
+27,JJ Camp F Extension khayala Near O.H.Tank.,1091,18370,108,West
+27,F Extension/Outside Boundary Wall of G.G.S. Hospital Khayala ,200,3625,108,West
+27,"Back Side of Sanatan Dhram Mandir, Shiv Mandir K-Block, Shyam Nagar",714,22926,108,West
+27,Sehkari Bhatta.,136,3297,106,West
+27,Opposite Sham Nagar Transit Camp Raghubir Nagar ,1097,25059,106,West
+27,E-Block Raghubir Nagar,88,970,106,West
+10,HGI Labour Colony Sultanpuri,1187,56924,40,North West
+10,Opposite F-7 Sultanpuri,278,4200,40,North West
+10,F-7 Sultanpuri,281,1200,40,North West
+10,E-6 Block Sultanpuri,191,3500,39,North West
+10,D-1 Machhi Chowck Sultanpuri,90,4000,39,North West
+10,D-4 Block Sultanpuri,157,6000,39,North West
+10,"C-Block, Near Main Bus Stand Sultanpuri.",18,300,37,North West
+10,C-10 Sultanpuri (Potters Huts),109,8000,37,North West
+10,P-1 Block Sultanpuri,404,10240,38,North West
+10,C-7 Block Sultanpuri,156,2800,37,North West
+10,"A-2 Block, Sultanpuri.",64,2000,37,North West
+10,B-1 Mangal Bazar Sultanpuri,40,500,37,North West
+10,Y-Block Mangol Puri,176,2500,38,North West
+12,F-Block Mangolpuri,400,5552,47,West
+12,G-Block Mangol Puri,267,3181,47,West
+12,D-4 Block Mangol Puri,47,1000,46,West
+12,X-Block Mangol Puri,108,3500,47,West
+12,K-Block Mangol Puri,119,2000,47,West
+12,L-Block Mangol Puri,240,2685,47,West
+12,"Q-Block, Mangol Puri",34,1000,48,West
+12,JJC Indira Camp Jaipur Golden Hospital Sec-3 Rohini ,770,15000,45,West
+,C-3 Udog Nagar Near Pira Garhi Fly Over.,282,2887,42,West
+11,Udyog Nagar Water Tank No.-2 Jwalapuri,950,10415,42,West
+11,Bheem Nagar behind Nangloi Bus Depot,954,12288,42,West
+11,Hans Raj Mulk Raj Bhatta Jwalapuri,627,11827,42,West
+11,Road No.-5 Jawala Puri,535,7546,42,West
+12,C-Block Near Tanga Stand Mangol Puri,20,250,46,West
+11,Leprosy Camp Near C-3 Udyog Nagar.,23,2000,42,West
+11,Jagannath Camp Udyog Nagar Peera Garhi,894,1500,42,West
+10,C-2 Block Sultan Puri,48,500,37,North West
+10,Y-Block Dhobi Ghat Mangol Puri,173,3000,38,North West
+40,"Shaheed Arjun Dass Camp, Laxmi Bai Nagar at Maharaja Agrasen Marg",122,2480,289,New Delhi
+38,"Sanjay Camp Part-I, Railway Camp Colony, Chankya Puri",3500,33000,275,South West
+38,"Sanjay Camp Part-II, Railway Camp Colony, Chankya Puri Iraq Embassy Side",750,20000,275,South West
+40,"Shaheed Arjun Dass Camp on Kushak Nalla Between Vishwa Yuvak Kendra, T.P Lane, Mother Terressa Crescent.",20,373,287,New Delhi
+40,"Rajiv Gandhi Camp Behind T.P Lane, Mother Terressa Crescent",56,1283,287,New Delhi
+40,Juggies at Dhobi Ghat No. 15 South Avenue,35,346,289,New Delhi
+40,"JJ Cluster at Back of House No. 2, Tughlak Lane 21-A Aurangzeb Lane",130,623,287,New Delhi
+40,"Indira Gandhi Camp behind new Khanna Market, Lodhi Road",269,5820,289,New Delhi
+54,"Rajasthni Camp Near Janta Quarter, Sarita Vihar",306,5700,208,South East
+40,"JJ Cluster Known as Dairy No 95, C-31 Block, Kali Bari Marg",590,3080,289,New Delhi
+40,"JJ Cluster, Near NDMC Water Supply Control Near Kali Bari Marg",118,1050,289,New Delhi
+40,"Raju Camp, C-33 Block, Havlock Squater, Kali Bari Marg",92,1808,287,New Delhi
+40,JJ Cluster Behind Palika Dham & Hotel Nicco Bangla Sahib Road ,86,377,287,New Delhi
+40,Pacca JJ Cluster Near Princes Park Sangli Mess,453,2590,289,New Delhi
+25,"Amar Park Infront of HIL Factory Gate, Petrol Pump, Zhakira",341,13265,100,Central
+40,"Indira Camp, Pandara Road Behind Kendiriya Bhandar",29,306,287,New Delhi
+40,"JJ Cluster, Back of Chelmsford Club, Raisina Road",27,177,287,New Delhi
+40,"JJ Cluster Behind Meridien Hotel, Dr. Rajinder Prasad Road.",124,884,287,New Delhi
+40,"JJ Camp Near Masjid Polo Ground, Race Course Club, Kamal Attaturk Road",47,4304,287,New Delhi
+40,"Bhaiya Ram Camp, Race Course Club, Race Course Road.",500,9125,289,New Delhi
+40,"JJ Camp at DID, Race Course Near Riding Club, Safdarjung Road",85,2160,287,New Delhi
+40,JJ Camp (Small Cluster) Below Safdarjung Flyover Railway Line ,84,350,289,New Delhi
+40,JJ Cluster at Shiv Mandir Near Railway Flying Club,51,220,287,New Delhi
+40,"JJ Cluster at Purana Quila Road, N.S.C.I",204,576,288,New Delhi
+3,Nehru Basti Kalai Basti (Seeta Saran Colony.),129,13090,9,North
+3,Near Petrol Pump Opposite HANS RAJ College Malka Ganj ,29,575,9,North
+44,Azad Basti Mohomed Pur,165,3876,167,New Delhi
+44,Ambedkar Basti West Block-II R.K.Puram,1200,27137,167,New Delhi
+44,Leprosy Colony Infront of Mohan Singh Market R.K.Puram ,64,1444,167,New Delhi
+44,Sardar Patel Ekta Camp (Ekta Vihar),1856,29333,168,New Delhi
+44,Sonia Gandhi Camp Sector 7 R.K.Puram,150,5285,168,New Delhi
+44,"Lal Bahadur Shastri Camp Sector-7, R.K.Puram",92,1960,168,New Delhi
+44,Nehru Ekta Camp Sector-VII R.K.Puram,335,5850,168,New Delhi
+44,S.P./J.P. Colony Sector 6 R.K.Puram,111,3524,168,New Delhi
+44,Malai Mandir Sector VII R.K.Puram.,143,5440,168,New Delhi
+44,Shastri Market Moti Bagh (South),943,37500,168,New Delhi
+44,Shri Ram JJC near SPRINGDALE School Dhaula Kaun,550,12500,168,New Delhi
+44,Sector-I R.K.Puram Police Post (Hanuman Camp),373,18874,167,New Delhi
+44,Kanak Durga Camp R.K.Puram Sector XII,1047,26800,167,New Delhi
+44,Behind Sangam Cinema Sector IX/Sabzi Market R.K.Puram ,96,4800,167,New Delhi
+44,Ravi Dass Camp Sector-3 R.K.Puram,150,3505,166,New Delhi
+44,Police Chowki Sector IV R.K.Puram Parvatiya Camp,228,4616,166,New Delhi
+44,Sector III/JJ Mahiwal Saraswati Camp R.K. Puram,298,9582,166,New Delhi
+44,Nepali Camp Near Bhanwar Singh Camp Vasant Vihar,686,13600,165,New Delhi
+44,"Bhanwar Singh Camp Behind Janta Flat Block-D, Vasant Vihar Phase-I",1088,36400,165,New Delhi
+44,Sewa Camp Behind Police Staff Quarter Vasant Vihar Depot Munirika,92,3110,165,New Delhi
+44,Shiva Camp Vasant Vihar Near Petrol Pump,175,4964,165,New Delhi
+44,Coolie Camp Vasant Vihar,281,11200,165,New Delhi
+44,Adarsh Colony Mohammed Pur,530,3200,167,New Delhi
+44,Kumhar Basti Mohomed Pur,241,4600,168,New Delhi
+47,Janta Jeewan Tigri Part-I,5419,76104,178,South
+48,Harijan Camp Khanpur & Banjara Camp Opposite PNB Khanpur,348,18900,180,South
+47,Sanjay Camp Dakshin Puri Extension,915,18790,179,South
+47,JJC Sheheed Camp Block.16 Dakshin Puri Extension,205,5214,179,South
+47,Mini Subhash Camp near Police Station Dakshin Puri Extension,195,7425,180,South
+47,"Subhash Camp Block-4,5,6,7 Dakshin Puri",1230,25888,180,South
+48,JJC Near Virat Cinema C-Block,101,3570,183,South
+55,"Indira Camp Surrounded By Block-28,29&19 Trilok Puri Site-I",1200,18708,211,East
+55,Sanjay Camp Block-27 Trilok Puri,300,3884,209,East
+55,"Indira Nagar Block-22,23 Trilok Puri",19,464,209,East
+55,"Sanjay Shakha Camp Block-15,16 Trilok Puri",105,1776,210,East
+55,"Shastri Camp Block-6,7& 8 Trilok Puri",58,5193,210,East
+55,"Indira Camp Block-1, 2&3 Trilok Puri",215,9742,210,East
+57,Pandit Bismil Camp Shashi Garden Patpar Ganj,1159,77212,220,East
+56,"Block-19,20 Kalyan Puri",341,5723,213,East
+56,"Indira Camp Block-11,12 Kalyan Puri",167,2283,213,East
+56,JJC Block-18 Indira Camp Kalyan Puri,1019,16208,213,East
+56,"Block-1,6,7 Khichripur near Gaji Pur Drain-II",150,2703,213,East
+56,Block-17 & 21 Kalyan Puri,1300,29346,213,East
+57,"NH-24, Patpar Ganj (Nehru Camp)",603,17418,217,East
+56,"Bus Stand Khichripur Block-13,14",94,5867,213,East
+57,Indira Jhugie Jhompri Camp Kalyanvas Khichripur,50,3234,219,East
+57,"Sangarsh Morcha, Ravidas Camp Pandav Nagar Mother Diary",177,3154,217,East
+56,"Mulla colony,Village Gharoli",287,16193,216,East
+57,Jai Bharti Camp East Vinod Nagar,250,7718,219,East
+57,"J-Block, East Vinod Nagar",166,4791,219,East
+57,"Block 6,7,8 Khichri Pur Near Gazi Pur Drain Phase-II",482,37491,213,East
+55,Rajiv Camp Block-26 Trilok Puri,79,855,209,East
+55,Harijan Camp Block-31 Tirlok Puri,67,923,211,East
+55,Ambedekar Camp Block-32&34 Trilok Puri,950,10657,211,East
+57,Hr. Sec. School behind Patpar Ganj,1624,24310,220,East
+57,"D-Block, West Vinod Nagar.",33,1176,219,East
+55,Block-24 Tirlok Puri,29,1212,209,East
+45,Rana Colony-II Mehrauli,397,755,170,South
+45,Islam Colony Mahrauli,450,1131,170,South
+45,"In Front of B-4, B-5 Vasant Kunj",59,18500,171,South
+45,Kusumpur Pahari Block-B Vasant Vihar,4909,173251,171,South
+45,Moti Lal Nehru Camp J.N.U.,960,30367,171,South
+53,"Parasad Nagar, Meethapur",173,9208,204,South
+53,Bilas Pur Camp Molar Band NTPC,1122,40500,204,South
+53,Subash Camp NTPC Badarpur,521,8600,203,South
+53,BIW JJ Camp B.T. Badarpur,717,26200,203,South
+53,Tajpur Pahari Badarpur,198,18239,203,South
+59,Mazboor Camp Near Police Chowcki Mandavli Fazalpur ,248,7854,227,East
+59,Indira Camp Madhu Vihar Phase-II,221,7544,227,East
+59,Madhu Vihar Phase-I behind Patpar Ganj Depot,345,9464,227,East
+58,Sonia Camp near Dispensary Mandavali,357,4366,224,East
+59,AGCR Shahdara,35,1764,228,East
+59,Rajiv Gandhi Camp Chitra Vihar,375,8903,228,East
+59,"EAST GURU ANGAD NAGARD, NEAR RADHU PLACE",177,3697,228,East
+59,"C-Block, Jaina Tower Preet Vihar",63,435,228,East
+59,New Sanjay Amar Colony Vishwas Nagar,3309,72588,226,East
+58,"Sayeed Peerwala ki Mazar, Ramesh Park Laxmi Nagar",184,8514,221,East
+58,Indira Camp Flood Deptt. Office Kishan Kunj Extension ,307,11933,221,East
+60,Rani Garden Opposite Hr. Sec. School Shastri Nagar,935,16130,230,East
+60,Infront of Block-12 Geeta Colony,130,2594,230,East
+60,JJ Indira Camp Budh Bazar Block-B Geeta Colony,135,8910,229,East
+60,"Shakar Pur Chungi Thokar 16 Lalita Park, Laxmi Nagar & Shamshan Ghat Thokar No.16 (For Pocket at Thokar No.16)",593,28073,229,East
+67,Janta Mazdoor Camp Zafrabad Part-I,3943,78900,259,North East
+67,Janta Mazdoor Camp Zafrabad Part-II,5000,30600,259,North East
+65,CPJ-Block New Seelam Pur,151,8400,250,North East
+65,"Along With Pushta EIJ Block, New Seelam Pur",348,14500,250,North East
+65,Block.3/4K Brahampuri Road New Seelampur,254,24900,250,North East
+65,"Block-D, Seelampur",1000,4294,250,North East
+65,Block C-1 Imbira Pushta New Seelm Pur Market.,107,4696,250,North East
+61,Block-G Gurdawra Park New Seelampur,283,4910,236,East
+61,Chander Puri Railway Lines Old Seelam Pur,445,45906,234,East
+61,Along Railway Lanes Kailash Lanes Gali No.-17,929,24541,234,East
+61,Ajit Nagar Old Seelampur,604,24272,236,East
+61,Pusthta Buland Masjid,2500,5672,233,East
+61,"Block-C Shashtri Park, New Seelampur",400,6191,233,East
+61,"Syamli Chirga, Near Police Check Post, Bihari
+Building Yaumna Bridge",87,1100,233,East
+61,Taj Colony G.T. Road Railway Line New Seelam Pur,173,2800,236,East
+62,Old Seema Puri near Creamation Ground & Sun Light Colony ,545,11313,240,East
+62,"Pushta between Old Seemapuri, DIF Dilshad Garden (Indira Nehru Camp Part-I)",101,2447,240,East
+62,"Pushta Between Old Seemapuri, DLF Dilshad Garden (Indira Nehru Camp Part-II)",232,5188,240,East
+63,E-Block Seema Puri,175,2701,242,East
+63,D-Block New Seema Puri (Part-I),313,7208,242,East
+63,"D-Block, New Seema Puri Part-II",157,4956,242,East
+63,Sarhad Puri Road No.64 (Near Shanti Samiti ) Opposite New Seema Puri Part-II ,129,1775,242,East
+63,Sarhad Puri Road No.64 Near Shanti Simiti Opposite New Seema Puri Part-I ,110,1750,242,East
+63,New Janta Quaters New Seemapuri (Shanti Samiti),320,3374,242,East
+63,Road No.64 Tahir Pur (Leprosy Camp),444,8450,242,East
+63,"Opposite OSPD-Block, New Seema Puri",488,4200,242,East
+63,Jain Mandir Block-B-1/35 Dilshad Garden,841,14025,242,East
+63,Block-F New Seema Puri,1107,26050,242,East
+64,"Ram Nagar Lal Bagh, Khand-B Railway Phatak, Shahdara",123,2282,247,North East
+64,"Lal Bagh Shriram Nagar, A-Block G.T Road Shahdara",223,2462,247,North East
+62,"Aradhik Nagar, Dehi U.P. Border G.T. Road Shahdara",365,17315,239,East
+62,Behind Krishna Market Jhilmil Colony,1108,11430,238,East
+62,Block-B Jhilmil Colony (Balmiki Basti),125,3506,239,East
+62,A&B-Block Jhilmil Industrial Area Raj Nagar Sonia  Colony (Sonia Camp) ,509,18542,239,East
+62,A&B-Block Jhilmil Industrial Area Raj Nagar Sonia Colony (Rajiv Camp) ,295,5011,239,East
+62,A&B-Block Jhilmil Industrial Area Raj Nagar Sonia Colony (Dr. Ambedekar Camp) ,713,10837,239,East
+62,Deepak Colony Dilshad Garden Behind D.D.A. Office ,195,10713,239,East
+62,"H-Block Kalender Colony, Dilshad Garden Part-I",933,6671,239,East
+62,"H-Block Kalender Colony, Dilshad Garden Part-II",2567,18352,239,East
+62,Dilshad Vihar Julfi Bengal Dilshad Garden Shahdara,219,2920,239,East
+62,Dr. Rajinder Parsad Colony at Dilshad Garden,110,2734,239,East
+62,Dilshad Garden E-120 Near Gurudwara,77,1891,239,East
+62,"E-39, Jhugiee Colony Dilshad Garden",250,1701,239,East
+63,Gram Khera Mansarover Park,557,17600,241,East
+63,Tahir Pur Road No.64,1073,14470,241,East
+63,"Block.G-3,G-5 Sunder Nagri",999,38304,244,East
+63,F2 Block Sunder Nagari,188,11845,244,East
+63,E-2 Block Nand Nagri,93,2707,244,East
+63,"F1 Block, Sunder Nagari",290,10212,244,East
+64,"C-Block, Nand Nagri",69,617,245,North East
+64,Railway Quarters Colony Mandoli Road Delhi,99,686,245,North East
+63,Block-D 1&2 Nand Nagari,492,8085,243,East
+68,Block-C Sanjay Camp Gokal Puri-I,735,17160,262,North East
+59,18 Quarters Vishwas Nagar.,67,2557,226,East
+59,Jhuggies Adjoining Railway Line Anand Vihar,528,24441,225,East
+58,Harizan Samiti Near Dispensary Mangal Bazar Mandavali ,200,5285,224,East
+38,"Shanker Camp Behind C-II Flats, Moti Bagh Near Vidhan Chand Vidyalaya.",86,800,275,South West
+38,"JJ Cluster Harijan Basti, Anant Ram Dairy, Sector XIII, R.K. Puram",311,2352,275,South West
+51,Leprosy Camp Shriniwas Puri,67,650,193,South East
+51,Priya Camp Mathura Road Opposite Sukhdev Vihar Depot,139,494,193,South East
+54,"Subhash Camp, Ali Gaon, Near Old Iron Bridge.",294,18585,207,South East
+41,Jal Vihar Railway Line Shiv Mandir Marg Lajpat Nagar,438,9700,155,South East
+50,Jagdamba Camp Near SFS Sheikh Sarai,704,12000,191,New Delhi
+52,"Mazdoor Kalyan Camp Plot No. A-7,8,12 & Back Lane of A-9 to A-17 Okhla Industrial Area Phase.I",171,5813,199,South
+52,New Sanjay Camp Opposite E-44 Near Mohan Export  Okhla Industrial Area  Phase-I ,34,7131,199,South
+52,New Sanjay Camp Opposite Plot No. B-47 & B-48 Along Railway Boundary Wall Okhla Industrial Area  Phase-I ,6,1299,199,South
+52,New Sanjay Camp Opposite Plot No. A-27 & Back Lane of A-7 To A-35 Okhla Industrial Area Phase-I ,35,880,199,South
+52,"New Sanjay Camp Opposite Plot No. B-90 - B-93 , B-94, B-102 & Back Lane of B-90 To B-102 Okhla Industrial Area Phase-I",372,1904,199,South
+52,Majdoor Camp Block. B in Plot No. B-130 & 131 & Its Back Lane Okhla Industrial Area Phase-I ,202,2200,199,South
+52,Majdoor Camp on Back Lane of C1 To C10 Okhla Industrial Area Phase-I ,117,2453,199,South
+52,Majdoor Camp on Back Lane of C24 To C30 Okhla Industrial Area Phase-I ,21,1087,199,South
+52,"Majdoor Camp Plot No.B-145, B-147, B-150 & Its Back Lane of B-143 To B-150 Okhla Industrial Area Phase-I",149,1440,199,South
+52,Majdoor Camp B Block Plot No.B-122 & Back Lane of B-118 to B-123 Okhla Industrial Area Phase-I ,163,1344,199,South
+52,Majdoor Camp on Back Lane on Road Berm Along Central Ware Housing & Steel Authority of India  Okhla Industrial Area Phase-I ,127,16752,199,South
+52,Yog Shala Camp in Back Lane of D-120 to D-126 Okhla Industrial Area Phase-I ,54,741,199,South
+52,Yog Shala Camp in Back Lane of D-153 to D-157 Okhla Industrial Area Phase-I ,50,700,199,South
+52,Yog Shala Camp in Park Opposite D-42 Okhla Industrial Area Phase-I ,40,500,199,South
+52,Yog Shala Camp in Back Lane of D-56 to D-60 Okhla Industrial Area Phase-I ,20,500,199,South
+52,Yog Shala Camp in Park Near ESS Opposite D-159 Okhla Industrial Area Phase-I ,22,1312,199,South
+52,Yog Shala Camp in Plot No. D-88/6 Okhla Industrial Area Phase-I ,26,150,199,South
+52,At Janta Jeewan Camp Okhla Phase-II Between Plot C-52 & C-53 Okhla Industrial Area Phase-II ,300,2000,200,South
+52,"Sanjay Colony Block.C-62/1, Okhla Industrial Area Phase-II ",29,625,200,South
+52,"Sanjay Colony Near C-63/2 & Its Back Lane, Okhla Industrial Area Phase-II ",56,400,200,South
+52,Sanjay Colony Plot No. A-112 & 113 Okhla Industrial Area Phase-II ,122,2000,200,South
+52,Sanjay Colony Plot No. A-106 Okhla Industrial Area Phase-II ,65,1000,200,South
+52,Sanjay Colony Plot No. A-108 Okhla Industrial Area Phase-II ,81,1000,200,South
+52,Sanjay Colony Plot No. A-128 Okhla Industrial Area Phase-II ,44,1000,200,South
+47,Janta Jeewan Camp Tigri Part-II,1755,30800,179,South
+31,Near Shamshan Bhumi Hastsal,828,13920.05,123,West
+42,JJC Jhuggie No.4 MCD Store Pant Nagar,20,600,157,South East
+54,Noor Nagar Okhla Village (Pucca Structure),100,1600,206,South East
+42,Back of Police Colony Andrews Ganj Part-II,186,1899,159,South East
+42,JJC Prem Nagar Barapullah Road,150,2280,158,South East
+42,JJC Rajiv Camp Siri Fort Road Sadiq Nagar,25,400,159,South East
+36,Rangpuri Pharai Nalla,150,52167,144,South West
+18,"JJC Near Ramlila Maidan, Azadpur",500,6108,71,North
+18,JJC Block -38 Shakti Nagar,50,1331,69,North
+42,JJC Tea Huts Near MCD Nursery Amar Colony Lajpat Nagar ,40,650,159,South East
+52,JJC Rori Bajri Camp Badarpur,50,2850,199,South
+52,JJC Lohar Basti T-Point red Light Lal Kuan,150,7178,197,South
+52,Sonia Gandhi Camp Pul Prahlad Pur Railway Line Tuglka Bad Part-2 ,50,1721,198,South
+52,JJC Sanjay Colony S-Block Near Delhi Jal Board Booster Pumping Station Okhla Industrial Area Ph-II,150,2000,200,South
+52,JJC Janta Jeevan Camp in the back Lane of X-38 to X51 Okhla Industrial area Ph-II ,150,1449,200,South
+56,JJ Cluster Gazipur adjoining NH24,650,17302,213,East
+9,Khub Ram park Pem Nagar Kirari,350,18300,35,North West
+45,jai Hind Camp near Masoodpur Village Vasant Kunj,1000,18400,172,South

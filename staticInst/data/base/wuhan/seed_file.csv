@@ -1,0 +1,20 @@
+ID2,age,sex,Name,city,LatLong,date_onset_symptoms,date_admission_hospital,outcome,date_death_or_discharge,Hospital Name
+1,61,male,Zeng XX,Wuhan City,"30.634889, 114.327945",20.12.2019,27.12.2019,died,09.01.2020,Wuhan Puren/Jinyintan Hosp
+2,69,male,Xiong XMoumou,Wuhan City,"30.634889, 114.327945",31.12.2019,04.01.2020,died,15.01.2020,Wuhan Jinyintan Hosp
+3,89,male,Wang XX,Wuhan City,"30.579001, 114.262166",05.01.2020,05.01.2020,died,18.01.2020,Tongji Hosp
+4,89,male,Chen X,Wuhan City,"30.583425, 114.275635",13.01.2020,18.01.2020,died,19.01.2020,Wuhan Union Hospital
+6,75,male,Wang XX,Wuhan City,"30.546685, 114.270625",06.01.2020,11.01.2020,died,20.01.2020,Wuhan Fifth Hospital
+7,48,female,Yin XX,Wuhan City,"30.579001, 114.262166",10.12.2019,10.12.2019,died,20.01.2020,Tongji Hosp
+8,82,male,Liu XX,Wuhan City,"30.546685, 114.270625",09.01.2020,14.01.2020,died,21.01.2020,Wuhan Fifth Hospital
+9,66,male,Luo XX,Wuhan City,"30.581136, 114.295733",22.12.2019,31.12.2019,died,21.01.2020,Wuhan Central Hosp
+10,81,male,Zhang XX,Wuhan City,"30.571727, 114.271968",15.01.2020,18.01.2020,died,22.01.2020,Wuhan First Hosp
+11,82,female,ZhangXX,Wuhan City,"30.608292, 114.273849",03.01.2020,06.01.2020,died,22.01.2020,Hubei Hospital of Integrated Traditional Chinese and Western Medicine
+12,65,male,Zhou XX,Wuhan City,"30.571727, 114.271968",05.01.2020,11.01.2020,died,21.01.2020,Wuhan First Hosp
+13,80,female,Hu XX,Wuhan City,"30.631778, 114.404473",11.01.2020,18.01.2020,died,22.01.2020,Wuhan Iron and Steel Corporation General Hospital
+15,86,male,Wang XX,Wuhan City,"30.607729, 114.273404",02.01.2020,09.01.2020,died,21.01.2020,Xinhua hosp
+16,70,female,Yuan XX,Wuhan City,"30.571727, 114.271968",13.01.2020,13.01.2020,died,21.01.2020,Wuhan First Hosp
+17,84,male,Zhan XX,Wuhan City,"30.546685, 114.270625",06.01.2020,09.01.2020,died,22.01.2020,Wuhan Fifth Hospital
+18,48,female,Yin Moumou,Wuhan City,"30.634889, 114.327945",10.12.2019,27.12.2019,died,31.12.2019,Wuhan Jinyintan Hosp
+19,89,Male,Chen Mou,Wuhan City,"30.634889, 114.327945",13.01.2020,18.01.2020,died,19.01.2020,Wuhan Jinyintan Hosp
+20,66,male,Li Moumou,Wuhan City,"30.631778, 114.404473",10.01.2020,16.01.2020,died,20.01.2020,Wuhan Iron and Steel Corporation General Hospital
+21,48,female,Yin Moumou,Wuhan City,"30.634889, 114.327945",10.12.2019,31.12.2019,died,31.12.2019,Wuhan Jinyintan Hosp

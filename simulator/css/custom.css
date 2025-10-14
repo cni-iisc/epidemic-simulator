@@ -1,0 +1,1712 @@
+/* ========================================
+   CITY-SCALE EPIDEMIC SIMULATOR CSS
+   Updated for 2021 libraries compatibility
+   Well-structured and organized
+   ======================================== */
+
+/* ========================================
+   CSS VARIABLES & ROOT STYLES
+   ======================================== */
+:root {
+  /* Color Palette */
+  --primary-green: #009933;
+  --primary-green-dark: #007a2a;
+  --primary-green-darker: #006622;
+  --primary-green-light: rgba(0, 153, 51, 0.1);
+  --primary-green-border: rgba(0, 153, 51, 0.25);
+  
+  /* Neutral Colors */
+  --white: #ffffff;
+  --light-gray: #f8f9fa;
+  --medium-gray: #e9ecef;
+  --border-gray: #dee2e6;
+  --text-gray: #495057;
+  --muted-gray: #6c757d;
+  --dark-gray: #343a40;
+  
+  /* Status Colors */
+  --danger-red: #dc3545;
+  --danger-red-dark: #c82333;
+  --success-green: #28a745;
+  --warning-yellow: #ffc107;
+  --info-blue: #17a2b8;
+  
+  /* Layout Dimensions */
+  --header-height: 120px;
+  --form-border-radius: 0.375rem;
+  --card-border-radius: 12px;
+  --plot-height: 320px;
+  --plot-height-mobile: 240px;
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-size-base: 16px;
+  --font-size-small: 14px;
+  --font-size-xs: 12px;
+  --line-height: 1.6;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease-in-out;
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: var(--line-height);
+  font-size: var(--font-size-base);
+  margin: 0;
+  padding: 0;
+  background-color: var(--light-gray);
+}
+
+/* ========================================
+   LAYOUT STRUCTURE
+   ======================================== */
+.splitter-container {
+  height: calc(100vh - var(--header-height));
+  overflow: hidden;
+  display: flex;
+}
+
+.left-pane {
+  width: 33.333333%;
+  background: var(--white);
+  border-right: 1px solid var(--border-gray);
+  display: flex;
+  flex-direction: column;
+}
+
+.right-pane {
+  width: 66.666667%;
+  background: var(--light-gray);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.vsplitbar {
+  width: 6px;
+  background: var(--border-gray);
+  cursor: col-resize;
+  transition: background-color var(--transition-fast);
+}
+
+.vsplitbar:hover {
+  background: var(--primary-green);
+}
+
+/* ========================================
+   HEADER STYLES
+   ======================================== */
+.custom-header {
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+  color: var(--white);
+  border-radius: 0 !important;
+  margin-bottom: 0;
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.custom-header a {
+  color: var(--white);
+  font-size: 11px;
+  display: block;
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.custom-header a:hover {
+  opacity: 0.8;
+  text-decoration: none;
+}
+
+.navbar-header {
+  font-size: var(--font-size-xs);
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navbar-header > div {
+  display: flex;
+  align-items: center;
+}
+
+.main-title {
+  text-align: center;
+  flex: 1;
+}
+
+.main-title h4 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* Logo sections */
+.iisc,
+.tif,
+.sap,
+.cisco {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.logos.first,
+.logos.second {
+  width: 35%;
+  padding-right: 1rem;
+}
+
+.logos.third {
+  width: 15%;
+  padding-right: 0.5rem;
+}
+
+.logos.fourth {
+  width: 15%;
+}
+
+.logos a {
+  transition: all var(--transition-normal);
+  display: inline-block;
+}
+
+.logos a:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.logos img {
+  transition: all var(--transition-normal);
+  filter: brightness(1);
+}
+
+.logos a:hover img {
+  filter: brightness(1.1) contrast(1.1);
+}
+
+/* ========================================
+   RIGHT PANE HEADER
+   ======================================== */
+.right-top {
+  padding: 1rem;
+  background: var(--white);
+  border-bottom: 1px solid var(--border-gray);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.right-top label {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-gray);
+}
+
+.status-bar {
+  border: 1px solid var(--primary-green);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: var(--font-size-xs);
+  background-color: var(--primary-green-light);
+  color: var(--primary-green);
+  font-weight: 500;
+  transition: all var(--transition-normal);
+  animation: fadeIn var(--transition-normal) ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.status-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: statusShine 2s infinite;
+}
+
+/* ========================================
+   LEFT PANE FORM STYLES
+   ======================================== */
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-green) #f1f1f1;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background: var(--primary-green);
+  border-radius: 3px;
+}
+
+.scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-green-dark);
+}
+
+.run-btn-cnt {
+  padding: 1rem 2rem;
+  background: var(--white);
+  border-top: 1px solid var(--border-gray);
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  font-size: var(--font-size-small);
+  font-weight: 500 !important;
+  color: var(--text-gray);
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
+.form-group label,
+.parameter-section label,
+label {
+  text-align: left !important;
+  display: block;
+  width: 100%;
+  float: none !important;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: var(--font-size-small);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-gray);
+  background-color: var(--white);
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: var(--form-border-radius);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-control:focus {
+  color: var(--text-gray);
+  background-color: var(--white);
+  border-color: var(--primary-green);
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem var(--primary-green-border);
+}
+
+.form-control[readonly] {
+  background-color: var(--medium-gray) !important;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+/* Specific form controls */
+#Population {
+  background-color: var(--medium-gray) !important;
+  border: 1px solid #ced4da;
+  cursor: not-allowed;
+}
+
+#caseInfectionRatio {
+  background: linear-gradient(to right, 
+    rgba(220, 53, 69, 0.1) 0%, 
+    rgba(255, 193, 7, 0.1) 50%, 
+    rgba(40, 167, 69, 0.1) 100%);
+  border: 2px solid #ced4da;
+  transition: all var(--transition-normal);
+}
+
+#caseInfectionRatio:focus {
+  background: var(--white);
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 0.2rem var(--primary-green-border);
+}
+
+#compliance {
+  background: linear-gradient(to right, 
+    rgba(220, 53, 69, 0.1) 0%, 
+    rgba(255, 193, 7, 0.1) 50%, 
+    rgba(40, 167, 69, 0.1) 100%);
+}
+
+#compliance:focus {
+  background: var(--white);
+}
+
+/* Section titles */
+.section-title {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-green);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  clear: both;
+}
+
+.line-separator {
+  border: 0;
+  border-top: 2px solid var(--primary-green);
+  margin: 0.5rem 0 1rem 0;
+  opacity: 0.3;
+}
+
+.form-text.text-muted {
+  font-size: var(--font-size-xs);
+  color: var(--muted-gray);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+/* ========================================
+   ABOUT SECTION
+   ======================================== */
+.abt-parent {
+  margin: 1rem 0;
+  background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d4edda;
+}
+
+.abt-parent .abt-toggle {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0;
+  display: block;
+  text-decoration: none;
+  color: var(--primary-green);
+  font-size: 18px;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.abt-parent .abt-toggle:hover {
+  color: var(--primary-green-dark);
+  text-decoration: none;
+}
+
+.abt-parent .abt-dec {
+  border-top: 1px solid var(--primary-green);
+  padding-top: 1rem;
+  font-size: var(--font-size-small);
+  line-height: var(--line-height);
+  color: var(--text-gray);
+}
+
+.abt-dec a {
+  color: var(--primary-green);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.abt-dec a:hover {
+  text-decoration: underline;
+}
+
+.surveillance-info {
+  background-color: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: var(--form-border-radius);
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 13px;
+  color: #1565c0;
+  line-height: 1.4;
+}
+
+/* ========================================
+   FORM INPUTS & CONTROLS
+   ======================================== */
+/* Radio buttons */
+.radio {
+  position: relative;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.radio label {
+  min-height: 20px;
+  padding-left: 30px;
+  margin-bottom: 0;
+  font-weight: 400;
+  cursor: pointer;
+  font-size: var(--font-size-small);
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+}
+
+input[type='radio'] {
+  position: absolute;
+  margin-top: 4px;
+  margin-left: -30px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ced4da;
+  border-radius: 50%;
+  outline: none;
+  transition: all var(--transition-fast);
+  background-color: var(--white);
+  cursor: pointer;
+}
+
+input[type='radio']:hover {
+  border-color: var(--primary-green);
+}
+
+input[type='radio']:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 0.2rem var(--primary-green-border);
+}
+
+input[type='radio']:checked {
+  border-color: var(--primary-green);
+  background-color: var(--primary-green);
+}
+
+input[type='radio']:checked::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--white);
+  margin: 3px auto;
+}
+
+/* Enhanced dropdown styling */
+.selectpicker,
+select.form-control {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Enhanced input styling for numbers */
+input[type="number"] {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* City map styling */
+#mapImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal);
+}
+
+#mapImage:hover {
+  transform: scale(1.05);
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+.btn {
+  display: inline-block;
+  font-weight: 500;
+  color: #212529;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  font-size: var(--font-size-small);
+  line-height: 1.5;
+  border-radius: var(--form-border-radius);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.btn:focus,
+.btn:hover {
+  color: #212529;
+  text-decoration: none;
+}
+
+.btn:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-success {
+  color: var(--white);
+  background-color: var(--primary-green);
+  border-color: var(--primary-green);
+}
+
+.btn-success:hover {
+  color: var(--white);
+  background-color: var(--primary-green-dark);
+  border-color: var(--primary-green-darker);
+}
+
+.btn-success:focus {
+  color: var(--white);
+  background-color: var(--primary-green-dark);
+  border-color: var(--primary-green-darker);
+  box-shadow: 0 0 0 0.2rem rgba(0, 153, 51, 0.5);
+}
+
+.btn-danger {
+  color: var(--white);
+  background-color: var(--danger-red);
+  border-color: var(--danger-red);
+}
+
+.btn-danger:hover {
+  color: var(--white);
+  background-color: var(--danger-red-dark);
+  border-color: #bd2130;
+}
+
+.btn-danger:focus {
+  color: var(--white);
+  background-color: var(--danger-red-dark);
+  border-color: #bd2130;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5);
+}
+
+.btn-outline-primary {
+  color: var(--primary-green);
+  background-color: var(--white);
+  border: 1px solid var(--primary-green);
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 0;
+  position: relative;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  color: var(--white);
+  background-color: var(--primary-green-dark);
+  border-color: var(--primary-green-dark);
+  outline: none;
+  z-index: 1;
+}
+
+.btn-outline-primary:active,
+.btn-outline-primary.active {
+  color: var(--white);
+  background-color: var(--primary-green);
+  border-color: var(--primary-green);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.btn-check {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.btn-check:checked + .btn-outline-primary {
+  color: var(--white);
+  background-color: var(--primary-green);
+  border-color: var(--primary-green);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.btn-group {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-group-sm .btn {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 11px !important;
+  line-height: 1.4;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all var(--transition-fast);
+}
+
+.btn-group > .btn:not(:first-child) {
+  border-left: none;
+  margin-left: -1px;
+}
+
+.btn-group > .btn:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btn-group > .btn:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.btn-group > .btn:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.pull-right {
+  float: right !important;
+}
+
+/* ========================================
+   SIMULATION AREA
+   ======================================== */
+.sim-lane {
+  flex: 1;
+  padding: 1rem;
+  text-align: center;
+  overflow: auto;
+  background: var(--light-gray);
+  max-height: calc(100vh - 140px);
+}
+
+.custom-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  font-size: var(--font-size-base);
+  color: var(--muted-gray);
+  gap: 1rem;
+}
+
+.custom-loader span {
+  font-size: 4rem;
+  color: var(--primary-green);
+}
+
+/* ========================================
+   PLOTS AREA & CARDS
+   ======================================== */
+.plots-area {
+  animation: fadeIn var(--transition-slow) ease-in-out;
+  padding: 0.5rem !important;
+  min-height: 400px;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 180px);
+}
+
+.plots-area.show {
+  display: block !important;
+}
+
+.custom-card {
+  display: inline-block;
+  box-shadow: var(--shadow-md);
+  border: 1px solid #e5e7eb;
+  margin: 0.5rem !important;
+  background: var(--white);
+  border-radius: var(--card-border-radius);
+  padding: 1rem !important;
+  width: calc(48% - 1rem) !important;
+  min-width: 380px !important;
+  max-width: 600px !important;
+  transition: all cubic-bezier(0.4, 0, 0.2, 1) var(--transition-normal);
+  vertical-align: top;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.custom-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-green), var(--primary-green-dark));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-normal);
+}
+
+.custom-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.custom-card:hover::before {
+  transform: scaleX(1);
+}
+
+.custom-card * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Chart controls */
+.chart-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+/* Plot containers */
+#num_infected_plot,
+#num_cases_plot,
+#num_hospitalised_plot,
+#num_critical_plot,
+#num_fatalities_plot,
+#num_recovered_plot,
+#lambda_evolution {
+  min-height: var(--plot-height) !important;
+  max-height: 350px !important;
+  width: 100% !important;
+  padding: 0.25rem !important;
+  margin-top: 0.25rem !important;
+  overflow: hidden;
+  background-color: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #f3f4f6;
+  position: relative;
+}
+
+/* Plotly specific styling */
+.js-plotly-plot {
+  width: 100% !important;
+  height: var(--plot-height) !important;
+  max-height: var(--plot-height) !important;
+}
+
+.plotly,
+.plotly-container {
+  width: 100% !important;
+  height: var(--plot-height) !important;
+  max-height: var(--plot-height) !important;
+}
+
+.plotly .legend {
+  font-size: 10px !important;
+  x: 0.98 !important;
+  y: 0.98 !important;
+}
+
+/* Lambda plot specific sizing */
+.custom-card:has(#lambda_evolution),
+.custom-card:nth-child(7),
+.custom-card:last-child {
+  width: calc(48% - 1rem) !important;
+  max-width: 600px !important;
+  min-width: 380px !important;
+  margin: 0.5rem !important;
+}
+
+/* Plot states */
+.plot-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, transparent 37%, transparent 63%, #f0f0f0 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.plot-error {
+  background-color: #fee;
+  border: 1px solid #fcc;
+  color: #c33;
+  padding: 1.25rem;
+  text-align: center;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.simulation-complete {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 0.75rem 1.25rem;
+  text-align: center;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-weight: 500;
+}
+
+/* ========================================
+   CUSTOM INTERVENTION STYLES
+   ======================================== */
+#customIntv {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--light-gray);
+  border-radius: 8px;
+  border: 1px solid var(--border-gray);
+}
+
+#interv {
+  min-height: 60px;
+  background-color: var(--light-gray);
+  border: 2px dashed var(--border-gray);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: all var(--transition-normal);
+}
+
+#interv:not(:empty) {
+  background-color: var(--white);
+  border-style: solid;
+  border-color: var(--primary-green);
+}
+
+.interv-li {
+  list-style-type: none;
+  margin-bottom: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.li-interv-select {
+  flex: 1;
+  height: 38px;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: var(--form-border-radius);
+  font-size: var(--font-size-small);
+}
+
+.li-interv-time {
+  width: 120px;
+  height: 38px;
+  border: 1px solid #ced4da;
+  border-radius: var(--form-border-radius);
+  padding: 0.5rem;
+  font-size: var(--font-size-small);
+}
+
+.li-close {
+  width: 38px;
+  height: 38px;
+  background-color: var(--danger-red);
+  color: var(--white);
+  font-weight: 700;
+  border: none;
+  border-radius: var(--form-border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.li-close:hover {
+  background-color: var(--danger-red-dark);
+  transform: scale(1.05);
+}
+
+#intvButton {
+  margin-top: 0.75rem;
+  width: 100%;
+}
+
+/* ========================================
+   INFO ICONS AND TOOLTIPS
+   ======================================== */
+.toggleInfo {
+  color: var(--muted-gray);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-base);
+}
+
+.toggleInfo:hover {
+  color: var(--primary-green);
+  transform: scale(1.1);
+}
+
+.tool-dec {
+  background-color: var(--light-gray);
+  border: 1px solid var(--border-gray);
+  border-radius: var(--form-border-radius);
+  padding: 1rem;
+  margin-top: 0.75rem;
+  font-size: var(--font-size-small);
+  line-height: var(--line-height);
+  box-shadow: var(--shadow-sm);
+  animation: slideDown var(--transition-normal) ease;
+}
+
+.tool-dec img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--form-border-radius);
+  margin: 0.5rem 0;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.footer {
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+  color: var(--white);
+  padding: 1rem 2rem;
+  font-size: var(--font-size-xs);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer a {
+  color: var(--white);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.footer a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+.fadeIn {
+  animation: fadeIn var(--transition-slow) ease-in-out;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-muted {
+  color: var(--muted-gray) !important;
+}
+
+/* ========================================
+   ANIMATIONS & KEYFRAMES
+   ======================================== */
+@keyframes fadeIn {
+  0% { 
+    opacity: 0; 
+    transform: translateY(20px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes statusShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - TABLET
+   ======================================== */
+@media (max-width: 1400px) {
+  .custom-card,
+  .custom-card:has(#lambda_evolution),
+  .custom-card:nth-child(7),
+  .custom-card:last-child {
+    width: calc(49% - 0.75rem) !important;
+    min-width: 350px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .custom-card,
+  .custom-card:has(#lambda_evolution),
+  .custom-card:nth-child(7),
+  .custom-card:last-child {
+    width: calc(100% - 1rem) !important;
+    min-width: 300px !important;
+  }
+  
+  #num_infected_plot,
+  #num_cases_plot,
+  #num_hospitalised_plot,
+  #num_critical_plot,
+  #num_fatalities_plot,
+  #num_recovered_plot,
+  #lambda_evolution {
+    min-height: 280px !important;
+    max-height: 300px !important;
+  }
+  
+  .js-plotly-plot,
+  .plotly,
+  .plotly-container {
+    height: 280px !important;
+    max-height: 280px !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .logos.first,
+  .logos.second {
+    width: 45%;
+  }
+  
+  .logos.third,
+  .logos.fourth {
+    width: 25%;
+  }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - MOBILE
+   ======================================== */
+@media (max-width: 767px) {
+  :root {
+    --font-size-base: 14px;
+  }
+  
+  body {
+    font-size: var(--font-size-base);
+  }
+  
+  .custom-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .main-title h4 {
+    font-size: 18px;
+  }
+  
+  .navbar-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .logos {
+    width: 100% !important;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .splitter-container {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .left-pane,
+  .right-pane {
+    width: 100%;
+  }
+  
+  .left-pane {
+    border-right: none;
+    border-bottom: 1px solid var(--border-gray);
+  }
+  
+  .scroll {
+    height: auto;
+    max-height: 60vh;
+    padding: 1rem;
+  }
+  
+  .sim-lane {
+    padding: 0.5rem;
+  }
+  
+  .custom-card,
+  .custom-card:has(#lambda_evolution),
+  .custom-card:nth-child(7),
+  .custom-card:last-child {
+    width: calc(100% - 0.5rem) !important;
+    margin: 0.25rem !important;
+    padding: 0.75rem !important;
+    min-width: unset !important;
+  }
+  
+  .chart-controls {
+    justify-content: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .btn-group-sm .btn {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 11px !important;
+  }
+  
+  #num_infected_plot,
+  #num_cases_plot,
+  #num_hospitalised_plot,
+  #num_critical_plot,
+  #num_fatalities_plot,
+  #num_recovered_plot,
+  #lambda_evolution {
+    min-height: var(--plot-height-mobile) !important;
+    max-height: 260px !important;
+  }
+  
+  .js-plotly-plot,
+  .plotly,
+  .plotly-container {
+    height: var(--plot-height-mobile) !important;
+    max-height: var(--plot-height-mobile) !important;
+  }
+  
+  .plots-area {
+    padding: 0.25rem !important;
+  }
+  
+  .form-group.row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .form-label {
+    text-align: left;
+  }
+  
+  .footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .pull-right {
+    float: none !important;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - SMALL MOBILE
+   ======================================== */
+@media (max-width: 480px) {
+  .custom-header {
+    padding: 0.5rem;
+  }
+  
+  .main-title h4 {
+    font-size: 16px;
+  }
+  
+  .scroll {
+    padding: 0.75rem;
+  }
+  
+  .custom-card {
+    padding: 0.75rem;
+  }
+  
+  .section-title {
+    font-size: 16px;
+  }
+  
+  .btn-group-sm .btn {
+    padding: 0.2rem 0.4rem !important;
+    font-size: 10px !important;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY & BROWSER SUPPORT
+   ======================================== */
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus indicators */
+*:focus {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 2px;
+}
+
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem var(--primary-green-border);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .custom-header {
+    border: 2px solid var(--white);
+  }
+  
+  .custom-card {
+    border: 2px solid #000;
+  }
+  
+  .btn-outline-primary {
+    border-width: 2px;
+  }
+}
+
+/* Cursor styling for interactive elements */
+button,
+input[type="radio"],
+input[type="checkbox"],
+select,
+.btn,
+.abt-toggle,
+.toggleInfo {
+  cursor: pointer;
+}
+
+/* Text selection */
+.custom-card,
+.abt-dec,
+.tool-dec {
+  user-select: text;
+}
+
+.btn,
+button {
+  user-select: none;
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --white: #ffffff;
+    --light-gray: #1a1a1a;
+    --medium-gray: #495057;
+    --border-gray: #555555;
+    --text-gray: #e0e0e0;
+    --muted-gray: #9ca3af;
+  }
+  
+  body {
+    background-color: var(--light-gray);
+    color: var(--text-gray);
+  }
+  
+  .left-pane,
+  .right-pane {
+    background-color: #2d2d2d;
+  }
+  
+  .custom-card {
+    background-color: #3d3d3d;
+    border-color: var(--border-gray);
+    color: var(--text-gray);
+  }
+  
+  .form-control {
+    background-color: #2d2d2d;
+    border-color: var(--border-gray);
+    color: var(--text-gray);
+  }
+  
+  .form-control:focus {
+    background-color: #2d2d2d;
+    border-color: var(--primary-green);
+    color: var(--text-gray);
+  }
+  
+  .form-control[readonly] {
+    background-color: var(--medium-gray) !important;
+    color: #f8f9fa !important;
+    border-color: #6c757d;
+  }
+  
+  #Population {
+    background-color: var(--medium-gray) !important;
+    color: #f8f9fa !important;
+    border-color: #6c757d;
+  }
+  
+  #num_infected_plot,
+  #num_cases_plot,
+  #num_hospitalised_plot,
+  #num_critical_plot,
+  #num_fatalities_plot,
+  #num_recovered_plot,
+  #lambda_evolution {
+    background-color: #2d2d2d;
+    border-color: var(--border-gray);
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+  .custom-header,
+  .footer,
+  .left-pane,
+  .btn {
+    display: none !important;
+  }
+  
+  .right-pane {
+    width: 100% !important;
+  }
+  
+  .custom-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .plots-area {
+    display: block !important;
+  }
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+.custom-card,
+.btn,
+.form-control {
+  will-change: transform;
+}
+
+.plots-area {
+  contain: layout style paint;
+}
+
+/* GPU acceleration for animations */
+.custom-loader span,
+.custom-card:hover,
+.btn:hover {
+  transform: translateZ(0);
+}
+
+/* ========================================
+   BROWSER COMPATIBILITY FIXES
+   ======================================== */
+/* IE11 flexbox fixes */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .splitter-container {
+    display: block;
+  }
+  
+  .left-pane,
+  .right-pane {
+    float: left;
+  }
+  
+  .right-pane {
+    float: right;
+  }
+}
+
+/* Safari input styling fixes */
+@supports (-webkit-appearance: none) {
+  input[type="number"],
+  input[type="text"],
+  select {
+    -webkit-appearance: none;
+    border-radius: var(--form-border-radius);
+  }
+}
+
+/* Firefox specific fixes */
+@-moz-document url-prefix() {
+  .form-control {
+    padding: 0.4rem 0.75rem;
+  }
+  
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+/* ========================================
+   FIX FOR HORIZONTAL SCALE LABEL VISIBILITY
+   ======================================== */
+
+/* Enhanced plot container styling to show full labels */
+#num_infected_plot,
+#num_cases_plot,
+#num_hospitalised_plot,
+#num_critical_plot,
+#num_fatalities_plot,
+#num_recovered_plot,
+#lambda_evolution {
+    min-height: 350px !important; /* Increased height */
+    max-height: 380px !important; /* Increased max height */
+    width: 100% !important;
+    padding: 0.5rem !important; /* Increased padding */
+    padding-bottom: 1rem !important; /* Extra bottom padding for labels */
+    margin-top: 0.25rem !important;
+    overflow: visible !important; /* Allow labels to show outside container */
+    background-color: #fafafa;
+    border-radius: 8px;
+    border: 1px solid #f3f4f6;
+    position: relative;
+}
+
+/* Plotly specific styling with better spacing */
+.js-plotly-plot {
+    width: 100% !important;
+    height: 350px !important; /* Increased height */
+    max-height: 350px !important;
+    padding-bottom: 10px !important; /* Space for x-axis labels */
+}
+
+.plotly,
+.plotly-container {
+    width: 100% !important;
+    height: 350px !important; /* Increased height */
+    max-height: 350px !important;
+    overflow: visible !important; /* Allow labels to extend outside */
+}
+
+/* Custom card adjustments for better label visibility */
+.custom-card {
+    padding: 1.25rem !important; /* Increased padding */
+    padding-bottom: 1.5rem !important; /* Extra bottom padding */
+    min-height: 420px !important; /* Increased min height to accommodate labels */
+    overflow: visible !important; /* Allow content to overflow for labels */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    #num_infected_plot,
+    #num_cases_plot,
+    #num_hospitalised_plot,
+    #num_critical_plot,
+    #num_fatalities_plot,
+    #num_recovered_plot,
+    #lambda_evolution {
+        min-height: 320px !important;
+        max-height: 350px !important;
+        padding-bottom: 1rem !important;
+    }
+    
+    .js-plotly-plot,
+    .plotly,
+    .plotly-container {
+        height: 320px !important;
+        max-height: 320px !important;
+    }
+    
+    .custom-card {
+        min-height: 380px !important;
+        padding-bottom: 1.25rem !important;
+    }
+}
+
+@media (max-width: 767px) {
+    #num_infected_plot,
+    #num_cases_plot,
+    #num_hospitalised_plot,
+    #num_critical_plot,
+    #num_fatalities_plot,
+    #num_recovered_plot,
+    #lambda_evolution {
+        min-height: 280px !important;
+        max-height: 310px !important;
+        padding-bottom: 1rem !important;
+    }
+    
+    .js-plotly-plot,
+    .plotly,
+    .plotly-container {
+        height: 280px !important;
+        max-height: 280px !important;
+    }
+    
+    .custom-card {
+        min-height: 340px !important;
+        padding-bottom: 1.25rem !important;
+    }
+}
+/* Fixed Tooltip Styles - No Layout Shift */
+.chart-controls {
+    position: relative;
+}
+
+.info-icon {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.info-tooltip {
+    position: absolute;
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Left tooltip positioning - appears below icon */
+.info-icon:first-child .info-tooltip {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 8px;
+    white-space: normal;
+    max-width: 250px;
+    width: max-content;
+}
+
+/* Right tooltip positioning - appears below icon */
+.info-icon:last-child .info-tooltip {
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    white-space: normal;
+    max-width: 250px;
+    width: max-content;
+}
+
+/* Tooltip arrow - now points upward */
+.info-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    border: 6px solid transparent;
+    border-bottom-color: #333;
+}
+
+/* Arrow for left tooltip */
+.info-icon:first-child .info-tooltip::after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Arrow for right tooltip */
+.info-icon:last-child .info-tooltip::after {
+    right: 10px;
+}
+
+/* End of CSS file */
