@@ -165,6 +165,17 @@ BETA_C = 0.15; //0.097*1// Thailand data. Product  = 0.47
 BETA_PT = 0;
 ALPHA = 0.8 //exponent of number of people in a household while normalising infection rate in a household.
 
+function loadJSON_001(file_path) {
+    var xobj = new XMLHttpRequest();
+    xobj.overrideMimeType("application/json");
+    xobj.open('GET', file_path, false); 
+    xobj.send(null);  
+    
+    if (xobj.status == "200") {
+        return xobj.responseText;
+    }
+    return null;
+}
 // reset daily counters at the start of each day 
 function reset_daily_counters() {
     DAILY_NEW_EXPOSED = 0;
