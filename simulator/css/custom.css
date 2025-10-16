@@ -1414,6 +1414,16 @@ button {
     background-color: #2d2d2d;
   }
   
+  /* Right pane header - "Simulation Results" */
+  .right-top {
+    background-color: #2d2d2d;
+    border-bottom-color: var(--border-gray);
+  }
+  
+  .right-top label {
+    color: #f8f9fa !important;
+  }
+  
   .custom-card {
     background-color: #3d3d3d;
     border-color: var(--border-gray);
@@ -1444,6 +1454,90 @@ button {
     border-color: #6c757d;
   }
   
+  /* Case to Infection Ratio input - special gradient background */
+  #caseInfectionRatio {
+    background: linear-gradient(to right, 
+      rgba(220, 53, 69, 0.2) 0%, 
+      rgba(255, 193, 7, 0.2) 50%, 
+      rgba(40, 167, 69, 0.2) 100%);
+    color: #f8f9fa !important;
+    border-color: var(--border-gray);
+  }
+  
+  #caseInfectionRatio:focus {
+    background-color: #2d2d2d;
+    color: #f8f9fa !important;
+  }
+  
+  /* Compliance input */
+  #compliance {
+    background: linear-gradient(to right, 
+      rgba(220, 53, 69, 0.2) 0%, 
+      rgba(255, 193, 7, 0.2) 50%, 
+      rgba(40, 167, 69, 0.2) 100%);
+    color: #f8f9fa !important;
+  }
+  
+  #compliance:focus {
+    background-color: #2d2d2d;
+    color: #f8f9fa !important;
+  }
+  
+  /* Custom Intervention section */
+  #customIntv {
+    background-color: #2d2d2d;
+    border-color: var(--border-gray);
+    color: var(--text-gray);
+  }
+  
+  #interv {
+    background-color: #2d2d2d;
+    border-color: var(--border-gray);
+    color: var(--text-gray);
+  }
+  
+  #interv:not(:empty) {
+    background-color: #3d3d3d;
+  }
+  
+  /* Intervention select and time inputs */
+  .li-interv-select,
+  .li-interv-time {
+    background-color: #2d2d2d;
+    border-color: var(--border-gray);
+    color: #f8f9fa !important;
+  }
+  
+  /* Small helper text and labels */
+  .form-text.text-muted,
+  .text-muted {
+    color: #9ca3af !important;
+  }
+  
+  .form-label {
+    color: var(--text-gray) !important;
+  }
+  
+  /* Section titles */
+  .section-title {
+    color: #4ade80 !important;
+  }
+  
+  /* Surveillance info box */
+  .surveillance-info {
+    background-color: #1e3a5f;
+    border-color: #2563eb;
+    color: #93c5fd;
+  }
+  
+  /* Select dropdown styling */
+  .selectpicker,
+  select.form-control {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23f8f9fa' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    color: #f8f9fa !important;
+  }
+  
+  /* Plot containers */
   #num_infected_plot,
   #num_cases_plot,
   #num_hospitalised_plot,
@@ -1454,8 +1548,34 @@ button {
     background-color: #2d2d2d;
     border-color: var(--border-gray);
   }
+  
+  /* Simulation lane */
+  .sim-lane {
+    background-color: #2d2d2d;
+  }
+  
+  /* About section */
+  .abt-parent {
+    background: linear-gradient(135deg, #1e3a2e 0%, #2d4a3d 100%);
+    border-color: #3d5a4d;
+  }
+  
+  .abt-parent .abt-toggle {
+    color: #4ade80;
+  }
+  
+  .abt-parent .abt-dec {
+    border-top-color: #4ade80;
+    color: var(--text-gray);
+  }
+  
+  /* Tool description boxes */
+  .tool-dec {
+    background-color: #2d2d2d;
+    border-color: var(--border-gray);
+    color: var(--text-gray);
+  }
 }
-
 /* ========================================
    PRINT STYLES
    ======================================== */
