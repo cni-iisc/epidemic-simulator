@@ -241,23 +241,29 @@ body {
   padding: 0.5rem 1rem;
   font-size: var(--font-size-xs);
   background-color: var(--primary-green-light);
-  color: var(--primary-green);
-  font-weight: 500;
+  color: var(--primary-green-dark);
+  font-weight: 600;
   transition: all var(--transition-normal);
   animation: fadeIn var(--transition-normal) ease-in-out;
   position: relative;
   overflow: hidden;
 }
 
-.status-bar::before {
+/* Animated shine effect - only when simulation is running */
+.status-bar.running::before {
   content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   animation: statusShine 2s infinite;
+}
+
+/* Static state when simulation is complete */
+.status-bar.complete::before {
+  display: none;
 }
 
 /* ========================================
@@ -1575,7 +1581,20 @@ button {
     border-color: var(--border-gray);
     color: var(--text-gray);
   }
+  
+  /* Status bar in dark mode */
+  .status-bar {
+    background-color: rgba(74, 222, 128, 0.15);
+    border-color: #4ade80;
+    color: #4ade80;
+  }
+  
+  .status-bar.running::before {
+    background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.3), transparent);
+  }
 }
+
+
 /* ========================================
    PRINT STYLES
    ======================================== */
