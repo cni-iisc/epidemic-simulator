@@ -2145,3 +2145,188 @@ html body .btn:focus-visible, html body .btn-check:focus-visible + .btn, html bo
 html body input[type='radio']:focus-visible, html body .abt-toggle:focus-visible {
   outline: 2px solid var(--accent-strong); outline-offset: 2px;
 }
+
+/* ==========================================================================
+   PHONE LAYOUT  (body.mobile is set by sim.js when the viewport is <= 767px)
+   - the page is a fixed-height flex column: header / scrolling pane / Run bar
+   - header is compact (logos on one row, one-line title, segmented tabs)
+   - the legal footer scrolls with the form instead of eating screen space
+   ========================================================================== */
+html body.mobile {
+  margin: 0;
+  overflow: hidden;
+}
+html body.mobile .container-fluid {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;                 /* fallback */
+  height: var(--app-h, 100dvh);  /* real visible height, set by sim.js */
+  padding: 0;
+  overflow: hidden;
+}
+html body.mobile .container-fluid::before,
+html body.mobile .container-fluid::after { display: none; }
+html body.mobile .container-fluid > .row { margin: 0; }
+
+/* header */
+html body.mobile .custom-header {
+  flex: 0 0 auto;
+  position: static;
+  min-height: 0;
+  margin: 0;
+  padding: .55rem .75rem .6rem;
+  border: 0;
+}
+html body.mobile .custom-header .navbar-header {
+  float: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  margin: 0;
+  padding: 0 0 .35rem;
+}
+html body.mobile .custom-header .navbar-header a { display: flex; align-items: center; }
+html body.mobile .custom-header .navbar-header img {
+  height: 24px;
+  width: auto;
+  max-width: none;
+}
+html body.mobile .custom-header .col-sm-12 { padding: 0; }
+html body.mobile .main-title { text-align: left; }
+html body.mobile .main-title h4 {
+  margin: 0 0 .45rem;
+  font-size: 17px;
+  line-height: 1.25;
+}
+html body.mobile .main-title h4::before { width: 8px; height: 8px; margin-right: 9px; box-shadow: 0 0 0 3px rgba(53, 211, 154, 0.25); }
+
+/* Parameters / Results tabs as a segmented control */
+html body.mobile .tabs {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 3px;
+  list-style: none;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+}
+html body.mobile .tabs li {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 .5rem;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color .15s ease, color .15s ease;
+}
+html body.mobile .tabs li.active {
+  background: #ffffff;
+  color: var(--hero-1, #0b3d2e);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+/* panes fill whatever is left between header and Run bar */
+html body.mobile .content-mobile {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+html body.mobile .left-pane,
+html body.mobile .right-pane {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  padding: 0;
+  float: none;
+  border: 0;
+}
+html body.mobile .scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  margin: 0;
+  padding: .9rem 1rem 1.25rem;
+}
+html body.mobile .scroll .form-group.row { margin-left: 0; margin-right: 0; }
+html body.mobile .scroll [class*="col-sm-"] { padding-left: 0; padding-right: 0; }
+/* 16px stops iOS Safari zooming the page when a field is focused */
+html body.mobile .form-control { font-size: 16px; }
+html body.mobile #mapImage { width: 60%; max-width: 260px; height: auto; }
+
+/* legal footer now lives at the end of the form */
+html body.mobile .scroll .footer {
+  display: block;
+  margin: 1.5rem 0 0;
+  padding: .75rem 1rem;
+  border-radius: 10px;
+  font-size: 12px;
+  text-align: center;
+}
+html body.mobile .scroll .footer > div { padding: 0; margin: 0 0 .35rem; }
+
+/* results */
+html body.mobile .right-top { flex: 0 0 auto; margin: 0; }
+html body.mobile .sim-lane {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  max-height: none !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: .5rem;
+}
+html body.mobile .plots-area {
+  max-height: none;
+  min-height: 0;
+  overflow: visible;
+  padding: 0 !important;
+}
+html body.mobile .custom-card {
+  display: block;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 0 .6rem !important;
+}
+
+/* sticky Run bar always visible, clear of the iPhone home indicator */
+html body.mobile .sticky-footer {
+  flex: 0 0 auto;
+  margin: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  background: var(--surface, #fff);
+}
+html body.mobile .sticky-footer .run-btn-cnt { min-height: 48px; }
+html body.mobile .run-btn-cnt .btn { min-height: 44px; }
+html body.mobile .scroll .abt-parent { padding: 0; }
+html body.mobile .scroll .abt-parent .abt-toggle { padding-left: 1rem; padding-right: 1rem; }
+html body.mobile .scroll .abt-parent .abt-dec { padding: .75rem 1rem; }
+html body.mobile .scroll > .col.my-3, html body.mobile .scroll .my-3 { text-align: center; }
+
+/* landscape phones: give the content the height (logos hidden, tighter header) */
+@media (max-height: 480px) {
+  html body.mobile .custom-header .navbar-header { display: none; }
+  html body.mobile .custom-header { padding: .4rem .75rem; }
+  html body.mobile .main-title h4 { margin-bottom: .3rem; }
+  html body.mobile .tabs li { min-height: 34px; }
+  html body.mobile .sticky-footer .run-btn-cnt { min-height: 0; padding-top: .4rem; padding-bottom: .4rem; }
+  html body.mobile .run-btn-cnt .btn { min-height: 38px; }
+}
