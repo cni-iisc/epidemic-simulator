@@ -195,14 +195,11 @@ function sim_poisson(mean) {
     return total;
 }
 
+// Legacy loader (used by compute.js / initSimulation.js, which index.html does not load).
+// Reads from the cache filled by preloadJSON(); no synchronous XHR.
 function loadJSON_001(file_path) {
-    var xobj = new XMLHttpRequest();
-    xobj.overrideMimeType("application/json");
-    xobj.open('GET', file_path, false); 
-    xobj.send(null);  
-    
-    if (xobj.status == "200") {
-        return xobj.responseText;
+    if (Object.prototype.hasOwnProperty.call(JSON_CACHE, file_path)) {
+        return JSON_CACHE[file_path];
     }
     return null;
 }
@@ -1748,7 +1745,7 @@ function plot_lambda_evolution(data, plot_position, title_text, legends) {
     var containerHeight = 320; // Match other plots
     
     // Calculate responsive dimensions
-    var plotWidth = Math.max(300, containerWidth - 20);
+    var plotWidth = Math.max(plot_min_width(), containerWidth - 20);
     var plotHeight = containerHeight;
     var layout = {
         autosize: false,
@@ -2031,7 +2028,7 @@ function plot_plotly(data, plotId, titleText, legends, isCumulative) {
     var containerHeight = 320; // Fixed height for consistency
     
     // Calculate responsive dimensions
-    var plotWidth = Math.max(300, containerWidth - 20); // Minimum 300px, with 20px padding
+    var plotWidth = Math.max(plot_min_width(), containerWidth - 20); // Minimum width, with 20px padding
     var plotHeight = containerHeight;
     
     // Enhanced layout for better fit in smaller containers
@@ -2163,7 +2160,7 @@ function handlePlotResize() {
     plotIds.forEach(function(plotId) {
         var plotDiv = document.getElementById(plotId);
         if (plotDiv && plotDiv.layout) {
-            var newWidth = Math.max(300, plotDiv.offsetWidth - 20);
+            var newWidth = Math.max(plot_min_width(), plotDiv.offsetWidth - 20);
             Plotly.relayout(plotId, {
                 width: newWidth,
                 height: 320
@@ -2308,8 +2305,42 @@ function runSimulations() {
   
     // console.log(NUM_DAYS, INIT_FRAC_INFECTED, INTERVENTION);
     // console.log("INTERVENTION = ", INTERVENTION);
-    //where simulation starts
-    run_simulation();
+    //where simulation starts: download the city's input files (asynchronously), then run
+    document.getElementById("run_button").style.display = "none"; // block double-clicks while loading
+    document.getElementById("status").innerHTML = "Loading input files for " + cityName + "...";
+    load_city_data().then(run_simulation, function (err) {
+        console.error("Could not load simulation input files:", err);
+        document.getElementById("status").innerHTML = "Failed to load input files: " + err.message;
+        document.getElementById("run_button").style.display = "inline";
+    });
+}
+
+// Files the simulation reads for the selected city (inputPath is set by setCity()).
+// Files only needed under certain settings are listed separately so a city that
+// lacks them still works when those settings are off.
+function city_data_files() {
+    var required = ['commonArea', 'fractionPopulation', 'houses', 'individuals',
+                    'schools', 'wardCentreDistance', 'workplaces'];
+    var optional = [];
+    if (SEEDING_MODE == RANDOM_SEEDING_WARDWISE && !SEED_WARD_FRACTION_UNIFORM) {
+        optional.push('quarantinedPopulation');
+    }
+    if (SEEDING_MODE == SEED_INFECTION_RATES) {
+        optional.push('infection_seeds');
+    }
+    if (USE_AGE_DEPENDENT_MIXING) {
+        ['household', 'workplace', 'school'].forEach(function (kind) {
+            optional.push('Sigma_' + kind, 'U_' + kind, 'Vtranspose_' + kind);
+        });
+    }
+    var toPath = function (name) { return inputPath + name + '.json'; };
+    return { required: required.map(toPath), optional: optional.map(toPath) };
+}
+
+// Fetch (once per city) everything the synchronous simulation code will read.
+function load_city_data() {
+    var files = city_data_files();
+    return preloadJSON(files.required, files.optional);
 }
 
 function clear_plots() {
@@ -2451,6 +2482,7 @@ function setParameters(city){
 function setCity (city) {
     cityName = city;
     inputPath = INPUTPATHPREFIX + '/' + cityName + '/';
+    clearJSONCache(inputPath); // free the previous city's data
     mapImage.src = IMAGEPREFIX + '/' + cityName + '-wards_v2.png'
     setParameters(city);
 }
@@ -2489,6 +2521,24 @@ function setupTooltipHandlers() {
 }
 
 
+// Phone layout: keep --app-h equal to the visible viewport height. 100vh is taller than the
+// visible area on mobile browsers (address bar), which pushed the Run bar off screen.
+function set_mobile_viewport_height() {
+    var h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    document.documentElement.style.setProperty('--app-h', Math.round(h) + 'px');
+}
+
+function watch_mobile_viewport() {
+    set_mobile_viewport_height();
+    window.addEventListener('resize', set_mobile_viewport_height);
+    window.addEventListener('orientationchange', function () { setTimeout(set_mobile_viewport_height, 200); });
+}
+
+// Narrowest chart width: 300px is wider than the card on a 320px phone and caused sideways scroll.
+function plot_min_width() {
+    return $('body').hasClass('mobile') ? 240 : 300;
+}
+
 //jquery events for the webUI
 $(document).ready(function () {
     if (window.matchMedia("(max-width: 767px)").matches)  {
@@ -2499,8 +2549,9 @@ $(document).ready(function () {
   .then(data => {
     $("body").html(data).addClass('mobile');
   }).then(()=>{
-    let h = $(window).outerHeight() - ($('.custom-header').outerHeight() + $('.sticky-footer').outerHeight());
-    $('.content-mobile, .left-pane, .right-pane').css('height',h - 25 );
+    // Phone layout height is driven by CSS (flex column sized to --app-h), so it stays
+    // correct when logos finish loading, the address bar collapses or the phone rotates.
+    watch_mobile_viewport();
     set_default_values_html();
     initListner();
   });
@@ -2628,7 +2679,11 @@ function initListner() {
         else {
             $('#left').hide();
             $('#right').show();
+            // charts drawn while this tab was hidden have no measured width yet
+            window.setTimeout(handlePlotResize, 0);
         }
+        $('.tabs li').attr('aria-selected', 'false');
+        $(this).attr('aria-selected', 'true');
     })
 
     // Window resize handler
