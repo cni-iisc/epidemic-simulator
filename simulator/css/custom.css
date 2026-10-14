@@ -1400,201 +1400,6 @@ button {
 /* ========================================
    DARK MODE SUPPORT
    ======================================== */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --white: #ffffff;
-    --light-gray: #1a1a1a;
-    --medium-gray: #495057;
-    --border-gray: #555555;
-    --text-gray: #e0e0e0;
-    --muted-gray: #9ca3af;
-  }
-  
-  body {
-    background-color: var(--light-gray);
-    color: var(--text-gray);
-  }
-  
-  .left-pane,
-  .right-pane {
-    background-color: #2d2d2d;
-  }
-  
-  /* Right pane header - "Simulation Results" */
-  .right-top {
-    background-color: #2d2d2d;
-    border-bottom-color: var(--border-gray);
-  }
-  
-  .right-top label {
-    color: #f8f9fa !important;
-  }
-  
-  .custom-card {
-    background-color: #3d3d3d;
-    border-color: var(--border-gray);
-    color: var(--text-gray);
-  }
-  
-  .form-control {
-    background-color: #2d2d2d;
-    border-color: var(--border-gray);
-    color: var(--text-gray);
-  }
-  
-  .form-control:focus {
-    background-color: #2d2d2d;
-    border-color: var(--primary-green);
-    color: var(--text-gray);
-  }
-  
-  .form-control[readonly] {
-    background-color: var(--medium-gray) !important;
-    color: #f8f9fa !important;
-    border-color: #6c757d;
-  }
-  
-  #Population {
-    background-color: var(--medium-gray) !important;
-    color: #f8f9fa !important;
-    border-color: #6c757d;
-  }
-  
-  /* Case to Infection Ratio input - special gradient background */
-  #caseInfectionRatio {
-    background: linear-gradient(to right, 
-      rgba(220, 53, 69, 0.2) 0%, 
-      rgba(255, 193, 7, 0.2) 50%, 
-      rgba(40, 167, 69, 0.2) 100%);
-    color: #f8f9fa !important;
-    border-color: var(--border-gray);
-  }
-  
-  #caseInfectionRatio:focus {
-    background-color: #2d2d2d;
-    color: #f8f9fa !important;
-  }
-  
-  /* Compliance input */
-  #compliance {
-    background: linear-gradient(to right, 
-      rgba(220, 53, 69, 0.2) 0%, 
-      rgba(255, 193, 7, 0.2) 50%, 
-      rgba(40, 167, 69, 0.2) 100%);
-    color: #f8f9fa !important;
-  }
-  
-  #compliance:focus {
-    background-color: #2d2d2d;
-    color: #f8f9fa !important;
-  }
-  
-  /* Custom Intervention section */
-  #customIntv {
-    background-color: #2d2d2d;
-    border-color: var(--border-gray);
-    color: var(--text-gray);
-  }
-  
-  #interv {
-    background-color: #2d2d2d;
-    border-color: var(--border-gray);
-    color: var(--text-gray);
-  }
-  
-  #interv:not(:empty) {
-    background-color: #3d3d3d;
-  }
-  
-  /* Intervention select and time inputs */
-  .li-interv-select,
-  .li-interv-time {
-    background-color: #2d2d2d;
-    border-color: var(--border-gray);
-    color: #f8f9fa !important;
-  }
-  
-  /* Small helper text and labels */
-  .form-text.text-muted,
-  .text-muted {
-    color: #9ca3af !important;
-  }
-  
-  .form-label {
-    color: var(--text-gray) !important;
-  }
-  
-  /* Section titles */
-  .section-title {
-    color: #4ade80 !important;
-  }
-  
-  /* Surveillance info box */
-  .surveillance-info {
-    background-color: #1e3a5f;
-    border-color: #2563eb;
-    color: #93c5fd;
-  }
-  
-  /* Select dropdown styling */
-  .selectpicker,
-  select.form-control {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23f8f9fa' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    color: #f8f9fa !important;
-  }
-  
-  /* Plot containers */
-  #num_infected_plot,
-  #num_cases_plot,
-  #num_hospitalised_plot,
-  #num_critical_plot,
-  #num_fatalities_plot,
-  #num_recovered_plot,
-  #lambda_evolution {
-    background-color: #2d2d2d;
-    border-color: var(--border-gray);
-  }
-  
-  /* Simulation lane */
-  .sim-lane {
-    background-color: #2d2d2d;
-  }
-  
-  /* About section */
-  .abt-parent {
-    background: linear-gradient(135deg, #1e3a2e 0%, #2d4a3d 100%);
-    border-color: #3d5a4d;
-  }
-  
-  .abt-parent .abt-toggle {
-    color: #4ade80;
-  }
-  
-  .abt-parent .abt-dec {
-    border-top-color: #4ade80;
-    color: var(--text-gray);
-  }
-  
-  /* Tool description boxes */
-  .tool-dec {
-    background-color: #2d2d2d;
-    border-color: var(--border-gray);
-    color: var(--text-gray);
-  }
-  
-  /* Status bar in dark mode */
-  .status-bar {
-    background-color: rgba(74, 222, 128, 0.15);
-    border-color: #4ade80;
-    color: #4ade80;
-  }
-  
-  .status-bar.running::before {
-    background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.3), transparent);
-  }
-}
-
-
 /* ========================================
    PRINT STYLES
    ======================================== */
@@ -1849,3 +1654,494 @@ button {
 }
 
 /* End of CSS file */
+
+/* ========================================
+   SINGLE SCROLLBAR ON THE RESULTS PANE (desktop)
+   Previously the page, .sim-lane and .plots-area all scrolled, giving three scrollbars.
+   Now only .sim-lane scrolls.
+   ======================================== */
+body:not(.mobile) {
+  overflow: hidden;
+}
+
+body:not(.mobile) .plots-area {
+  overflow: visible;
+  max-height: none;
+}
+
+
+/* ========================================
+   THEME LAYER  (redesign)
+   Light + dark palettes driven by CSS variables.
+   - follows the OS setting by default
+   - the toggle button sets <html data-theme="light|dark"> to override
+   ======================================== */
+:root {
+  color-scheme: light;
+  --bg: #f3f6f5;
+  --surface: #ffffff;
+  --surface-2: #f7faf9;
+  --surface-3: #eef3f1;
+  --line: #e2e8e5;
+  --line-strong: #cfd9d5;
+  --ink: #0f1f1a;
+  --ink-2: #3b4a44;
+  --ink-muted: #5b6962;
+  --accent: #0f9d6a;
+  --accent-strong: #0b7d54;
+  --accent-soft: rgba(15, 157, 106, 0.10);
+  --accent-ring: rgba(15, 157, 106, 0.28);
+  --hero-1: #0b3b2c;
+  --hero-2: #115c42;
+  --danger: #c42f3d;
+  --btn-1: #0b7d54;
+  --btn-2: #086a47;
+  --shadow-card: 0 1px 2px rgba(16, 40, 32, 0.05), 0 4px 14px rgba(16, 40, 32, 0.06);
+  --shadow-card-hover: 0 2px 4px rgba(16, 40, 32, 0.06), 0 10px 28px rgba(16, 40, 32, 0.10);
+  --plot-text: #31413b;
+  --plot-grid: rgba(15, 31, 26, 0.08);
+  --plot-axis: rgba(15, 31, 26, 0.30);
+  --plot-hover-bg: #0f1f1a;
+  --plot-hover-text: #ffffff;
+
+  --series-infected: #2a78d6;
+  --series-symptomatic: #eb6834;
+  --series-reported: #4a3aa7;
+  --series-hospitalised: #8a5a00;
+  --series-critical: #e34948;
+  --series-fatalities: #52514e;
+  --series-recovered: #008300;
+  --cat-1: #2a78d6; --cat-2: #eb6834; --cat-3: #1baf7a; --cat-4: #eda100;
+
+  /* map old tokens used by the legacy rules */
+  --primary-green: var(--accent);
+  --primary-green-dark: var(--accent-strong);
+  --primary-green-darker: var(--accent-strong);
+  --primary-green-light: var(--accent-soft);
+  --primary-green-border: var(--accent-ring);
+  --light-gray: var(--bg);
+  --medium-gray: var(--surface-3);
+  --border-gray: var(--line);
+  --text-gray: var(--ink-2);
+  --muted-gray: var(--ink-muted);
+  --font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --card-border-radius: 16px;
+  --form-border-radius: 10px;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a1210;
+  --surface: #111b18;
+  --surface-2: #162320;
+  --surface-3: #1b2b27;
+  --line: #22342f;
+  --line-strong: #2f453e;
+  --ink: #e8f1ee;
+  --ink-2: #c3d2cd;
+  --ink-muted: #8aa097;
+  --accent: #35d39a;
+  --accent-strong: #5fe3b2;
+  --accent-soft: rgba(53, 211, 154, 0.12);
+  --accent-ring: rgba(53, 211, 154, 0.30);
+  --hero-1: #06231a;
+  --hero-2: #0a3a2b;
+  --btn-1: #35d39a;
+  --btn-2: #28bd88;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 18px rgba(0, 0, 0, 0.28);
+  --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.45), 0 12px 30px rgba(0, 0, 0, 0.4);
+  --plot-text: #c3d2cd;
+  --plot-grid: rgba(232, 241, 238, 0.09);
+  --plot-axis: rgba(232, 241, 238, 0.30);
+  --plot-hover-bg: #e8f1ee;
+  --plot-hover-text: #0a1210;
+  --series-infected: #3987e5;
+  --series-symptomatic: #d95926;
+  --series-reported: #9085e9;
+  --series-hospitalised: #c98500;
+  --series-critical: #e66767;
+  --series-fatalities: #c3c2b7;
+  --series-recovered: #2fb344;
+  --cat-1: #3987e5; --cat-2: #d95926; --cat-3: #199e70; --cat-4: #c98500;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0a1210;
+    --surface: #111b18;
+    --surface-2: #162320;
+    --surface-3: #1b2b27;
+    --line: #22342f;
+    --line-strong: #2f453e;
+    --ink: #e8f1ee;
+    --ink-2: #c3d2cd;
+    --ink-muted: #8aa097;
+    --accent: #35d39a;
+    --accent-strong: #5fe3b2;
+    --accent-soft: rgba(53, 211, 154, 0.12);
+    --accent-ring: rgba(53, 211, 154, 0.30);
+    --hero-1: #06231a;
+    --hero-2: #0a3a2b;
+    --btn-1: #35d39a;
+    --btn-2: #28bd88;
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 18px rgba(0, 0, 0, 0.28);
+    --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.45), 0 12px 30px rgba(0, 0, 0, 0.4);
+    --plot-text: #c3d2cd;
+    --plot-grid: rgba(232, 241, 238, 0.09);
+    --plot-axis: rgba(232, 241, 238, 0.30);
+    --plot-hover-bg: #e8f1ee;
+    --plot-hover-text: #0a1210;
+    --series-infected: #3987e5;
+    --series-symptomatic: #d95926;
+    --series-reported: #9085e9;
+    --series-hospitalised: #c98500;
+    --series-critical: #e66767;
+    --series-fatalities: #c3c2b7;
+    --series-recovered: #2fb344;
+    --cat-1: #3987e5; --cat-2: #d95926; --cat-3: #199e70; --cat-4: #c98500;
+  }
+}
+
+/* ---------- base ---------- */
+html body {
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15px;
+  transition: background-color .25s ease, color .25s ease;
+}
+html body ::selection { background: var(--accent-ring); }
+
+/* ---------- header ---------- */
+html body .custom-header {
+  background:
+    radial-gradient(900px 220px at 85% -40%, rgba(53, 211, 154, 0.22), transparent 70%),
+    linear-gradient(120deg, var(--hero-1) 0%, var(--hero-2) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 24px rgba(5, 25, 18, 0.25);
+}
+html body .main-title h4 {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-align: left;
+}
+html body .main-title h4::before {
+  content: "";
+  display: inline-block;
+  width: 10px; height: 10px;
+  margin-right: 12px;
+  border-radius: 50%;
+  background: #35d39a;
+  box-shadow: 0 0 0 4px rgba(53, 211, 154, 0.25);
+  vertical-align: middle;
+  position: relative; top: -2px;
+}
+html body .custom-header a { color: rgba(255, 255, 255, 0.88); }
+html body .custom-header a:hover { color: #fff; opacity: 1; }
+html body .logos { color: rgba(255, 255, 255, 0.88); }
+
+/* ---------- panes ---------- */
+html body .left-pane {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+}
+html body .right-pane { background: var(--bg); }
+html body .vsplitbar { background: var(--line); width: 5px; }
+html body .vsplitbar:hover { background: var(--accent); }
+
+html body .scroll {
+  padding: 1.25rem 1.75rem 1.5rem;
+  scrollbar-color: var(--line-strong) transparent;
+}
+html body .scroll::-webkit-scrollbar-track { background: transparent; }
+html body .scroll::-webkit-scrollbar-thumb { background: var(--line-strong); }
+html body .scroll::-webkit-scrollbar-thumb:hover { background: var(--ink-muted); }
+
+/* ---------- about ---------- */
+html body .abt-parent {
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-ring);
+  border-radius: 12px;
+  margin: 0 0 .75rem;
+}
+html body .abt-parent .abt-toggle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+html body .abt-parent .abt-dec {
+  border-top: 1px solid var(--accent-ring);
+  color: var(--ink-2);
+}
+html body .abt-dec a { color: var(--accent-strong); }
+
+/* ---------- section headings ---------- */
+html body .section-title {
+  margin-top: 1.75rem;
+  margin-bottom: .35rem;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+html body .line-separator {
+  border-top: 1px solid var(--line);
+  opacity: 1;
+  margin: .25rem 0 1rem;
+}
+
+/* ---------- form fields ---------- */
+html body .form-label,
+html body .form-group label { color: var(--ink-2); font-weight: 500; font-size: 14px; }
+html body .form-control {
+  background-color: var(--surface-2);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: none;
+  height: 38px;
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+html body .form-control:hover { border-color: var(--line-strong); }
+html body .form-control:focus {
+  background-color: var(--surface);
+  color: var(--ink);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+  outline: 0;
+}
+html body .form-control[readonly],
+html body #Population {
+  background-color: var(--surface-3) !important;
+  color: var(--ink-muted) !important;
+  border-color: var(--line) !important;
+}
+html body #caseInfectionRatio,
+html body #compliance { background: var(--surface-2); color: var(--ink) !important; }
+html body select.form-control { color: var(--ink); }
+html body select.form-control option { background: var(--surface); color: var(--ink); }
+html body #mapImage { border-radius: 12px; border: 1px solid var(--line); box-shadow: var(--shadow-card); }
+html body .text-muted, html body .form-text.text-muted { color: var(--ink-muted) !important; }
+html body .toggleInfo { color: var(--ink-muted); }
+html body .toggleInfo:hover { color: var(--accent); }
+html body .tool-dec { background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; color: var(--ink-2); }
+html body .surveillance-info {
+  background: var(--accent-soft); border: 1px solid var(--accent-ring); color: var(--ink-2); border-radius: 10px;
+}
+
+/* radios (intervention choices) */
+html body input[type='radio'] {
+  width: 16px; height: 16px;
+  border: 2px solid var(--line-strong);
+  background: var(--surface);
+}
+html body input[type='radio']:checked { border-color: var(--accent); background: var(--accent); }
+html body input[type='radio']:checked::before { width: 6px; height: 6px; margin: 3px auto; background: var(--surface); }
+html body .radio label { color: var(--ink-2); font-size: 14px; }
+
+/* custom interventions */
+html body #customIntv, html body #interv {
+  background: var(--surface-2); border: 1px solid var(--line); color: var(--ink); border-radius: 12px;
+}
+html body .li-interv-select, html body .li-interv-time {
+  background: var(--surface); border: 1px solid var(--line); color: var(--ink); border-radius: 8px;
+}
+
+/* ---------- buttons ---------- */
+html body .btn { border-radius: 10px; font-weight: 600; letter-spacing: .01em; }
+html body .btn-success {
+  background: linear-gradient(180deg, var(--btn-1) 0%, var(--btn-2) 100%);
+  border: 1px solid var(--accent-strong);
+  color: #fff;
+  padding: .55rem 1.6rem;
+  box-shadow: 0 1px 2px rgba(11, 125, 84, .35), 0 6px 14px rgba(15, 157, 106, .25);
+}
+:root[data-theme="dark"] .btn-success { color: #04231a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn-success { color: #04231a; } }
+html body .btn-success:hover, html body .btn-success:focus {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(11, 125, 84, .35), 0 10px 20px rgba(15, 157, 106, .3);
+}
+html body .btn-success:active { transform: translateY(0); filter: brightness(.97); }
+html body .btn-success[disabled], html body .btn-success.disabled { opacity: .55; transform: none; box-shadow: none; }
+html body .btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+:root[data-theme="dark"] .btn-danger { background: #e66767; border-color: #e66767; color: #1a0a0a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn-danger { background: #e66767; border-color: #e66767; color: #1a0a0a; } }
+html body .btn-default {
+  background: var(--surface);
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+  box-shadow: none;
+  padding: .55rem 1.1rem;
+  font-size: 14px;
+}
+html body .btn-default:hover:not([disabled]) {
+  background: var(--surface-2); color: var(--ink); border-color: var(--accent);
+}
+html body .btn-default[disabled] { opacity: .5; cursor: not-allowed; background: var(--surface-2); }
+
+html body .run-btn-cnt {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: .9rem 1.75rem;
+  box-shadow: 0 -8px 20px rgba(16, 40, 32, .04);
+}
+
+/* ---------- results header ---------- */
+html body .right-top {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  box-shadow: none;
+  padding: .85rem 1.25rem;
+}
+html body .right-top label { color: var(--ink) !important; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+html body .status-bar {
+  border: 1px solid var(--accent-ring);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  border-radius: 999px;
+  padding: .3rem .9rem;
+  margin-left: 1rem;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------- results area ---------- */
+html body .sim-lane { background: var(--bg); padding: 1rem 1.25rem; }
+html body .custom-loader { color: var(--ink-muted); }
+html body .custom-loader span { color: var(--accent); font-size: 2.6rem; opacity: .85; }
+
+html body .custom-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  color: var(--ink);
+  padding: 1rem 1.1rem 1.1rem !important;
+  min-height: 0 !important;
+  transition: box-shadow .25s ease, border-color .25s ease, transform .25s ease;
+}
+html body .custom-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
+}
+html body .custom-card::before { background: linear-gradient(90deg, var(--accent), transparent); height: 2px; }
+html body .custom-card h5 { color: var(--ink); font-weight: 700; font-size: 15px; }
+
+html body .chart-controls { border-bottom: 0; padding-bottom: .25rem !important; align-items: center; gap: .6rem; }
+html body .info-icon .glyphicon { color: var(--ink-muted); font-size: 13px; transition: color .15s; }
+html body .info-icon:hover .glyphicon { color: var(--accent); }
+html body .info-tooltip { background: var(--plot-hover-bg); color: var(--plot-hover-text); border-radius: 8px; font-size: 12px; }
+html body .info-tooltip::after { border-bottom-color: var(--plot-hover-bg); }
+
+/* segmented Daily / Cumulative control */
+html body .btn-group {
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+  box-shadow: none;
+  overflow: visible;
+}
+html body .btn-outline-primary {
+  background: transparent;
+  color: var(--ink-muted);
+  border: 0;
+  border-radius: 999px !important;
+  margin: 0 !important;
+}
+html body .btn-group-sm .btn { padding: .22rem .85rem !important; font-size: 10.5px !important; letter-spacing: .06em; }
+html body .btn-outline-primary:hover, html body .btn-outline-primary:focus { background: var(--accent-soft); color: var(--accent-strong); }
+html body .btn-check:checked + .btn-outline-primary {
+  background: var(--surface);
+  color: var(--accent-strong);
+  font-weight: 800;
+  box-shadow: 0 1px 2px rgba(16, 40, 32, .15), 0 0 0 1px var(--accent-ring);
+}
+
+/* plot containers: no inset box, let the chart breathe */
+html body #num_infected_plot, html body #num_cases_plot, html body #num_reported_plot,
+html body #num_hospitalised_plot, html body #num_critical_plot, html body #num_fatalities_plot,
+html body #num_recovered_plot, html body #lambda_evolution {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  border-radius: 0;
+}
+html body .js-plotly-plot .plotly .main-svg { border-radius: 10px; }
+
+/* ---------- footer ---------- */
+html body .footer {
+  background: var(--hero-1);
+  border-top: 2px solid var(--accent);
+  padding: .6rem 2rem;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #ffffff;
+}
+html body .footer a, html body .footer span { color: #ffffff !important; }
+html body .footer span a { text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
+html body .footer span { font-weight: 500; letter-spacing: .005em; }
+
+/* ---------- theme toggle ---------- */
+.theme-toggle {
+  margin-left: auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background-color .15s, border-color .15s, color .15s, transform .15s;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent-strong); transform: rotate(12deg); }
+.theme-toggle:focus-visible { outline: 0; box-shadow: 0 0 0 3px var(--accent-ring); }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+html body .right-top { display: flex; align-items: center; }
+html body .right-top > .col-sm-12 { display: flex; align-items: center; flex: 1; }
+
+/* tighter chart frames (chart height is fixed at 320px in sim.js) */
+html body #num_infected_plot, html body #num_cases_plot, html body #num_reported_plot,
+html body #num_hospitalised_plot, html body #num_critical_plot, html body #num_fatalities_plot,
+html body #num_recovered_plot, html body #lambda_evolution {
+  min-height: 320px !important; max-height: 330px !important; overflow: visible !important;
+}
+html body .js-plotly-plot, html body .plotly, html body .plotly-container {
+  height: 320px !important; max-height: 320px !important; padding-bottom: 0 !important;
+}
+
+/* results header: keep the status pill whole, toggle pinned right */
+html body .status-bar { overflow: visible; flex: 0 0 auto; display: inline-block; }
+html body .right-top .col-sm-12 { flex-wrap: nowrap; }
+/* the chart already carries its own title; hide the duplicate card heading */
+html body .custom-card > h5.text-center { display: none; }
+
+html body #caseInfectionRatio, html body #compliance { border: 1px solid var(--line); }
+
+/* phones: Download CSV + Run share one row inside the sticky bar */
+@media (max-width: 767px) {
+  html body .run-btn-cnt { display: flex; align-items: center; gap: .6rem; padding: .7rem 1rem; }
+  html body .run-btn-cnt .btn { float: none !important; margin: 0 !important; width: auto !important; }
+  html body .run-btn-cnt #run_button, html body .run-btn-cnt #sim_stop { flex: 1 1 auto; }
+  html body .run-btn-cnt #download_csv { order: -1; flex: 0 0 auto; }
+}
+
+/* keyboard focus is always visible (not colour-only: 2px ring + offset) */
+html body .btn:focus-visible, html body .btn-check:focus-visible + .btn, html body a:focus-visible,
+html body input[type='radio']:focus-visible, html body .abt-toggle:focus-visible {
+  outline: 2px solid var(--accent-strong); outline-offset: 2px;
+}
