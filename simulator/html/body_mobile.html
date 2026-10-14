@@ -5,16 +5,16 @@
            <a target="_blank" href="https://www.cisco.com/c/en_in/about/csr.html"><img src="simulator/images/cisco-csr.png" alt="Cisco CSR logo" width="80px"></a>
            <a target="_blank" href="https://www.iisc.ac.in"><img src="simulator/images/iisc_1.png" alt="IISc logo" width="50px"></a>
            <a target="_blank" href="https://www.tifr.res.in"><img src="simulator/images/Covid-TIFR-Logo.png" alt="TIFR logo" width="60px"></a>
-           <a target="_blank" href="https://www.sap.com/index.html"><img src=" https://unpkg.com/fiori-fundamentals@1.7.5/dist/images/sap-logo.png" alt="IISc logo" width="50px"></a>
+           <a target="_blank" href="https://www.sap.com/index.html"><img src="simulator/images/sap-logo.png" alt="SAP logo" width="50px"></a>
         </div>
         <div class="col-sm-12 main-title">
            <h4>City-Scale Epidemic Simulator</h4>
         </div>
         <div class="col-sm-12">
            <!-- Nav tabs -->
-           <ul class="tabs">
-              <li class="active" id="left-btn" data-tab = 'left'>Parameters</li>
-              <li data-tab= 'right' id="right-btn">Results</li>
+           <ul class="tabs" role="tablist">
+              <li class="active" id="left-btn" data-tab="left" role="tab">Parameters</li>
+              <li data-tab="right" id="right-btn" role="tab">Results</li>
            </ul>
         </div>
      </nav>
@@ -112,60 +112,60 @@
            <hr class="line-separator"/>
            <div class="form-group row">
               <label class="col-sm-8 form-label" for="Incubation">Mean Incubation Period (days)</label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="30" value="4.58" step="0.25"
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="30" value="4.58" step="0.001"
                  id="Incubation" ></div>
            </div>
            <div class="form-group row">
               <label for="asymptomaticMean" class="col-sm-8 form-label">Mean Asymptomatic/Pre Symptomatic Period (days) </label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="30" value="0.5" step="0.25"
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="30" value="0.5" step="0.001"
                  id="asymptomaticMean"></div>
            </div>
            <div class="form-group row">
               <label for="symptomaticMean" class="col-sm-8 form-label">Mean Symptomatic Period (days)</label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="30" value="5" step="0.25"
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="30" value="5" step="0.001"
                  id="symptomaticMean"></div>
            </div>
            <div class="form-group row">
               <label for="symtomaticFraction" class="col-sm-8 form-label">Symptomatic Fraction </label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="1" value="0.66" step="0.01"
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="1" value="0.66" step="0.001"
                  id="symtomaticFraction">
               </div>
            </div>
            <div class="form-group row">
               <label for="meanHospitalPeriod" class="col-sm-8 form-label">Mean Hospital Stay (days)</label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="30" value="8" step="0.25"
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="30" value="8" step="0.0001"
                  id="meanHospitalPeriod"></div>
            </div>
            <div class="form-group row">
               <label for="meanICUPeriod" class="col-sm-8 form-label">Mean ICU Stay (days)</label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="30" value="8" step="0.25"
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="30" value="8" step="0.00001"
                  id="meanICUPeriod"></div>
            </div>
            <p class="section-title">Transmission Coefficients</p>
            <hr class="line-separator"/>
            <div class="form-group row">
               <label for="betaHouse" class="col-sm-8 form-label">Households</label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="2" value="0.47" step="0.01"
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="2" value="0.47" step="0.00001"
                  id="betaHouse"></div>
            </div>
            <div class="form-group row">
               <label for="betaWork" class="col-sm-8 form-label">Workplaces</label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="2" value="0.376" step="0.01"
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="2" value="0.376" step="0.00001"
                  id="betaWork"></div>
            </div>
            <div class="form-group row">
               <label for="betaSchools" class="col-sm-8 form-label">Schools</label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="2" value="0.752" step="0.01"
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="2" value="0.752" step="0.00001"
                  id="betaSchools"></div>
            </div>
            <div class="form-group row">
               <label for="betaCommunity" class="col-sm-8 form-label">Community</label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="2" value="0.3395" step="0.01"
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="2" value="0.3395" step="0.00001"
                  id="betaCommunity"> </div>
            </div>
            <div class="form-group row">
               <label for="betaPT" class="col-sm-8 form-label">Public Transport</label>
-              <div class="col-sm-4"><input type="number" class="form-control" min="0" max="2" value="0.01" step="0.01" id="betaPT"> </div>
+              <div class="col-sm-4"><input type="number" class="form-control" min="0" max="2" value="0.01" step="0.00001" id="betaPT"> </div>
            </div>
            <!--<div class="form-group row">
               <label for="simNum" class="col-sm-4 col-form-label" style="display: none">Simulations Number</label>
@@ -176,7 +176,20 @@
            <hr class="line-separator"/>
            <div class="form-group row">
               <label for="initFrac" class="col-sm-8 form-label">Fraction Infected</label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="1" value="0.001" id="initFrac">
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="1" value="0.001" step="0.001" id="initFrac">
+              </div>
+           </div>
+           <p class="section-title">Surveillance Parameters</p>
+           <hr class="line-separator"/>
+           <div class="form-group row">
+              <label for="caseInfectionRatio" class="col-sm-8 form-label">Case to Infection Ratio</label>
+              <div class="col-sm-4">
+                 <input class="form-control" type="number" min="0.01" max="1" value="0.8" step="0.01" id="caseInfectionRatio">
+              </div>
+              <div class="col-sm-12">
+                 <small class="form-text text-muted">
+                    Proportion of infections that are detected and reported as cases. Lower values indicate more undetected cases.
+                 </small>
               </div>
            </div>
            <p class="section-title">Intervention <span style="margin-left: 5px;
@@ -256,11 +269,10 @@
            </div>
            <div class="form-group row">
               <label for="compliance" class="col-sm-8 form-label">Compliance Probability</label>
-              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="1" value="0.9" id="compliance">
+              <div class="col-sm-4"><input class="form-control" type="number" min="0" max="1" value="0.9" step="0.001" id="compliance">
               </div>
            </div>
-        </form>
-        <div class="row footer">
+           <div class="footer">
            <div class="col-sm-12" style="text-align:center;">
               <a href="mailto:contact.cni@iisc.ac.in" style="color:#fff;"><i class="fa fa-envelope" aria-hidden="true"></i> contact.cni@iisc.ac.in</a>
            </div>
@@ -268,6 +280,7 @@
               <span style="color: #fff;" title="This simulator is provided for educational and research purposes only. Its outputs must not be used for medical diagnosis, prognosis or treatment, or as guidance for personal travel decisions. Provided &quot;as is&quot;, without warranty of any kind.">&copy; 2020 IISc Bangalore &amp; TIFR Mumbai &middot; <a target="_blank" rel="noopener" href="https://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a> &middot; For educational use only; not medical advice.</span>
            </div>
         </div>
+        </form>
      </div>
      <div class="col-sm-8 right-pane" style="display: none;" id="right">
         <div class="row right-top">
@@ -288,26 +301,161 @@
               <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
               Initializing Simulation...
            </div>
-           <div class="plots-area" id="plots-area" style="display: none;">
-              <div class="custom-card">
-                 <div id="num_affected_plot_2"></div>
-              </div>
-              <div class="custom-card">
-                 <div id="num_infected_plot_2"></div>
-              </div>
-              <div class="custom-card">
-                 <div id="num_hospitalised_plot_2"></div>
-              </div>
-              <div class="custom-card">
-                 <div id="num_critical_plot_2"></div>
-              </div>
-              <div class="custom-card">
-                 <div id="num_fatalities_plot_2"></div>
-              </div>
-              <div class="custom-card">
-                 <div id="lambda_evolution"></div>
-              </div>
-           </div>
+           <div class="plots-area aria-hidden" id="plots-area" style="display: none !important;">
+                    <!-- Plot 1: Number of Infectious -->
+                    <div class="custom-card">
+                        <div class="chart-controls">
+                            <span class="info-icon" data-tooltip="Current infected population at each time point" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Current infected population at each time point</span>
+                            </span>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="viewType-infected" id="daily-infected" checked>
+                                <label class="btn btn-outline-primary" for="daily-infected">Daily</label>
+                                <input type="radio" class="btn-check" name="viewType-infected" id="cumulative-infected">
+                                <label class="btn btn-outline-primary" for="cumulative-infected">Cumulative</label>
+                            </div>
+                            <span class="info-icon" data-tooltip="Total new infections accumulated over time" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Total new infections accumulated over time</span>
+                            </span>
+                        </div>
+                        <div id="num_infected_plot"></div>
+                    </div>
+
+                    <!-- Plot 2: Number of Symptomatic -->
+                    <div class="custom-card">
+                        <div class="chart-controls">
+                            <span class="info-icon" data-tooltip="Current symptomatic cases at each time point" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Current symptomatic cases at each time point</span>
+                            </span>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="viewType-cases" id="daily-cases" checked>
+                                <label class="btn btn-outline-primary" for="daily-cases">Daily</label>
+                                <input type="radio" class="btn-check" name="viewType-cases" id="cumulative-cases">
+                                <label class="btn btn-outline-primary" for="cumulative-cases">Cumulative</label>
+                            </div>
+                            <span class="info-icon" data-tooltip="Total symptomatic cases accumulated over time" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Total symptomatic cases accumulated over time</span>
+                            </span>
+                        </div>
+                        <div id="num_cases_plot"></div>
+                    </div>
+                    
+                    <!-- Plot 3: NEW - Reported Cases (standalone) -->
+                    <div class="custom-card">
+                        <div class="chart-controls">
+                            <span class="info-icon" data-tooltip="New cases reported each day" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">New cases reported each day</span>
+                            </span>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="viewType-reported" id="daily-reported" checked>
+                                <label class="btn btn-outline-primary" for="daily-reported">Daily</label>
+                                <input type="radio" class="btn-check" name="viewType-reported" id="cumulative-reported">
+                                <label class="btn btn-outline-primary" for="cumulative-reported">Cumulative</label>
+                            </div>
+                            <span class="info-icon" data-tooltip="Total reported cases accumulated over time" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Total reported cases accumulated over time</span>
+                            </span>
+                        </div>
+                        <div id="num_reported_plot"></div>
+                    </div>
+                    
+                    
+                    <!-- Plot 4: Number of Hospitalised -->
+                    <div class="custom-card">
+                        <div class="chart-controls">
+                            <span class="info-icon" data-tooltip="Current hospitalized population at each time point" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Current hospitalized population at each time point</span>
+                            </span>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="viewType-hospitalised" id="daily-hospitalised" checked>
+                                <label class="btn btn-outline-primary" for="daily-hospitalised">Daily</label>
+                                <input type="radio" class="btn-check" name="viewType-hospitalised" id="cumulative-hospitalised">
+                                <label class="btn btn-outline-primary" for="cumulative-hospitalised">Cumulative</label>
+                            </div>
+                            <span class="info-icon" data-tooltip="Total hospitalizations accumulated over time" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Total hospitalizations accumulated over time</span>
+                            </span>
+                        </div>
+                        <div id="num_hospitalised_plot"></div>
+                    </div>
+                    
+                    <!-- Plot 5: Number of Critical -->
+                     <div class="custom-card">
+                        <div class="chart-controls">
+                            <span class="info-icon" data-tooltip="Current critical cases at each time point" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Current critical cases at each time point</span>
+                            </span>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="viewType-critical" id="daily-critical" checked>
+                                <label class="btn btn-outline-primary" for="daily-critical">Daily</label>
+                                <input type="radio" class="btn-check" name="viewType-critical" id="cumulative-critical">
+                                <label class="btn btn-outline-primary" for="cumulative-critical">Cumulative</label>
+                            </div>
+                            <span class="info-icon" data-tooltip="Total critical cases accumulated over time" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Total critical cases accumulated over time</span>
+                            </span>
+                        </div>
+                        <div id="num_critical_plot"></div>
+                    </div>
+                    
+                    <!-- Plot 6: Number of Fatalities -->
+                    <div class="custom-card">
+                        <div class="chart-controls">
+                            <span class="info-icon" data-tooltip="New deaths each day" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">New deaths each day</span>
+                            </span>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="viewType-fatalities" id="daily-fatalities" checked>
+                                <label class="btn btn-outline-primary" for="daily-fatalities">Daily</label>
+                                <input type="radio" class="btn-check" name="viewType-fatalities" id="cumulative-fatalities">
+                                <label class="btn btn-outline-primary" for="cumulative-fatalities">Cumulative</label>
+                            </div>
+                            <span class="info-icon" data-tooltip="Total deaths accumulated over time" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Total deaths accumulated over time</span>
+                            </span>
+                        </div>
+                        <div id="num_fatalities_plot"></div>
+                    </div>
+                    
+                    <!-- Plot 7: Number of Recovered -->
+                    <div class="custom-card">
+                        <div class="chart-controls">
+                            <span class="info-icon" data-tooltip="New recoveries each day" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">New recoveries each day</span>
+                            </span>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="viewType-recovered" id="daily-recovered" checked>
+                                <label class="btn btn-outline-primary" for="daily-recovered">Daily</label>
+                                <input type="radio" class="btn-check" name="viewType-recovered" id="cumulative-recovered">
+                                <label class="btn btn-outline-primary" for="cumulative-recovered">Cumulative</label>
+                            </div>
+                            <span class="info-icon" data-tooltip="Total recoveries accumulated over time" onclick="toggleTooltip(this)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                <span class="info-tooltip" style="display: none;">Total recoveries accumulated over time</span>
+                            </span>
+                        </div>
+                        <div id="num_recovered_plot"></div>
+                    </div>
+                    
+                    <!-- Plot 8: Lambda Evolution -->
+                    <div class="custom-card">
+                        <h5 class="text-center mb-3">Source of Infection</h5>
+                        <div id="lambda_evolution"></div>
+                    </div>
+                </div>
         </div>
      </div>
   </div>
