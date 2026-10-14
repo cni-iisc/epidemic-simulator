@@ -37,11 +37,13 @@ NUM_SCHOOLS = 0;
 NUM_DISEASE_STATES = 7; //0-S, 1-E, 2-I, 3-Symp,4-R, 5-H, 6-C, 7-D
 
 var CASE_INFECTION_RATIO = 0.8; // Default value: only 80% of infections are detected as cases
-var NUM_DETECTED_CASES = 0; // Track total detected cases
 
 //Various interventions. These will need to be generalised soon.
 CALIBRATION_DELAY = 0; //// Assuming the simulator starts on March 1.
 NUM_DAYS_BEFORE_INTERVENTIONS = 24 + CALIBRATION_DELAY;
+// City default for NUM_DAYS_BEFORE_INTERVENTIONS (saved by setParameters), so a custom-intervention run
+// (which sets it to 0) does not leak into later preset-intervention runs.
+var CITY_NUM_DAYS_BEFORE_INTERVENTIONS = NUM_DAYS_BEFORE_INTERVENTIONS;
 const CALIBRATION = -1
 const NO_INTERVENTION = 0
 const CASE_ISOLATION = 1
@@ -69,25 +71,12 @@ const HOSPITALISED = 5
 const CRITICAL = 6
 const DEAD = 7
 
-// Daily counters for tracking state transitions
-let DAILY_NEW_EXPOSED = 0;// Number of new exposed individuals each day
-let DAILY_NEW_PRESYMPTOMATIC = 0;// Number of new presymptomatic individuals each day
-let DAILY_NEW_SYMPTOMATIC = 0;// Number of new symptomatic individuals each day
-let DAILY_NEW_DETECTED = 0;// Number of new detected cases each day
-let DAILY_NEW_HOSPITALISED = 0;// Number of new hospitalised individuals each day
-let DAILY_NEW_CRITICAL = 0;// Number of new critical individuals each day
-let DAILY_NEW_RECOVERED = 0;// Number of new recovered individuals each day
-let DAILY_NEW_DEATHS = 0;// Number of new deaths each day
-
-// Cumulative counters for tracking state transitions over the entire simulation
-let CUMULATIVE_NEW_EXPOSED = 0;// Total number of exposed individuals over the simulation
-let CUMULATIVE_NEW_PRESYMPTOMATIC = 0;// Total number of presymptomatic individuals over the simulation
-let CUMULATIVE_NEW_SYMPTOMATIC = 0;// Total number of symptomatic individuals over the simulation
-let CUMULATIVE_NEW_DETECTED = 0;// Total number of detected cases over the simulation
-let CUMULATIVE_NEW_HOSPITALISED = 0;// Total number of hospitalised individuals over the simulation
-let CUMULATIVE_NEW_CRITICAL = 0;// Total number of critical individuals over the simulation
-let CUMULATIVE_NEW_RECOVERED = 0;// Total number of recovered individuals over the simulation
-let CUMULATIVE_NEW_DEATHS = 0;// Total number of deaths over the simulation
+// Event counters. DAILY_NEW holds the events of the current day (reset every day);
+// CUMULATIVE_NEW holds the totals of all completed days. Keys are the state a person has just entered.
+const COUNTER_KEYS = ['exposed', 'presymptomatic', 'symptomatic', 'detected', 'hospitalised', 'critical', 'recovered', 'deaths'];
+const DAILY_NEW = {};
+const CUMULATIVE_NEW = {};
+COUNTER_KEYS.forEach(function (k) { DAILY_NEW[k] = 0; CUMULATIVE_NEW[k] = 0; });
 
 // Additional global arrays to track daily counters over time for plotting
 let days_daily_new_symptomatic = [];     // For cases plot daily Tarun
@@ -99,8 +88,12 @@ let days_cumulative_recovered = [];      // For recovered plot cumulative
 let days_affected_count = [];            // For cases plot cumulative
 let days_daily_new_detected = [];         // For reported cases plot daily
 let days_cumulative_detected = [];        // For reported cases plot cumulative
+let days_daily_new_deaths = [];          // For fatalities plot daily
+let days_daily_new_recovered = [];       // For recovered plot daily
 
 let csvContent = "data:text/csv;charset=utf-8,"; //for file dump
+// Header for csvContent_alltogether; one name per value written in run_simday (28 columns).
+const CSV_ALL_HEADER = "data:text/csv;charset=utf-8,Day,Affected,Recovered,Infected,Symptomatic,Exposed,Hospitalised,Critical,Fatalities,Lambda_H,Lambda_W,Lambda_C,Daily_New_Exposed,Daily_New_Presymptomatic,Daily_New_Symptomatic,Daily_New_Recovered,Daily_New_Detected,Daily_New_Hospitalised,Daily_New_Critical,Daily_New_Deaths,Cumulative_New_Exposed,Cumulative_New_Presymptomatic,Cumulative_New_Symptomatic,Cumulative_New_Recovered,Cumulative_New_Detected,Cumulative_New_Hospitalised,Cumulative_New_Critical,Cumulative_New_Deaths\r\n";
 
 INCUBATION_PERIOD = 2.29
 MEAN_ASYMPTOMATIC_PERIOD = 0.5
@@ -165,6 +158,43 @@ BETA_C = 0.15; //0.097*1// Thailand data. Product  = 0.47
 BETA_PT = 0;
 ALPHA = 0.8 //exponent of number of people in a household while normalising infection rate in a household.
 
+// ---- Reproducible randomness -------------------------------------------------
+// All simulation randomness (except the per-person gamma draws, which already use their own seeded stream)
+// comes from one Mersenne-Twister stream created in initialize_simulation(). Same RANDOM_SEED + same
+// parameters => identical run. Set RANDOM_SEED to a different integer for a different realisation.
+RANDOM_SEED = 20200301;
+var SIM_RANDOM = new Random(RANDOM_SEED);
+
+function reset_random_stream() {
+    SIM_RANDOM = new Random(RANDOM_SEED);
+}
+
+// Uniform in [0, 1) with 53-bit resolution (drop-in for Math.random)
+function sim_random() {
+    return SIM_RANDOM.genrand_res53();
+}
+
+// Uniform integer in [0, n)
+function sim_random_int(n) {
+    return Math.floor(sim_random() * n);
+}
+
+// Poisson(mean). Knuth's method on chunks of at most 30, so it is exact and never underflows for large means.
+function sim_poisson(mean) {
+    var total = 0;
+    while (mean > 0) {
+        var chunk = Math.min(mean, 30);
+        mean -= chunk;
+        var limit = Math.exp(-chunk), prod = 1, k = 0;
+        do {
+            k++;
+            prod *= sim_random();
+        } while (prod > limit);
+        total += k - 1;
+    }
+    return total;
+}
+
 function loadJSON_001(file_path) {
     var xobj = new XMLHttpRequest();
     xobj.overrideMimeType("application/json");
@@ -178,18 +208,16 @@ function loadJSON_001(file_path) {
 }
 // reset daily counters at the start of each day 
 function reset_daily_counters() {
-    DAILY_NEW_EXPOSED = 0;
-    DAILY_NEW_PRESYMPTOMATIC = 0;
-    DAILY_NEW_SYMPTOMATIC = 0;
-    DAILY_NEW_RECOVERED = 0;
-    DAILY_NEW_DETECTED = 0;
-    DAILY_NEW_HOSPITALISED = 0;
-    DAILY_NEW_CRITICAL = 0;
-    DAILY_NEW_DEATHS = 0;
+    COUNTER_KEYS.forEach(function (k) { DAILY_NEW[k] = 0; });
 }
 
-function clearSimulationMemory() {
-    // Clear plot arrays
+function reset_cumulative_counters() {
+    COUNTER_KEYS.forEach(function (k) { CUMULATIVE_NEW[k] = 0; });
+}
+
+// Single place that resets every per-run array, CSV string and counter.
+function reset_simulation_state() {
+    // Plot arrays
     days_daily_new_symptomatic = [];
     days_cumulative_infected = [];
     days_cumulative_hospitalised = [];
@@ -201,42 +229,33 @@ function clearSimulationMemory() {
     days_cumulative_detected = [];
     days_daily_new_deaths = [];
     days_daily_new_recovered = [];
-    
-    // Clear CSV strings (these can get very large)
+
+    // CSV strings (these can get very large)
     csvContent = "data:text/csv;charset=utf-8,";
-    csvContent_alltogether = "data:text/csv;charset=utf-8,Day,Affected,Recovered,Infected,Exposed,Hospitalised,Critical,Fatalities,Lambda_H,Lambda_W,Lambda_C,Daily_New_Exposed,Daily_New_Presymptomatic,Daily_New_Symptomatic,Daily_New_Recovered,Daily_New_Detected,Daily_New_Hospitalised,Daily_New_Critical,Daily_New_Deaths,Cumulative_New_Exposed,Cumulative_New_Presymptomatic,Cumulative_New_Symptomatic,Cumulative_New_Recovered,Cumulative_New_Detected,Cumulative_New_Hospitalised,Cumulative_New_Critical,Cumulative_New_Deaths\r\n";
-    
-    // Clear lambda stats
+    csvContent_alltogether = CSV_ALL_HEADER;
+
+    // Lambda stats
     LAMBDA_INFECTION_STATS = [];
     LAMBDA_INFECTION_MEAN = [0, 0, 0, 0];
-    
+
+    // Counters
+    NUM_AFFECTED_COUNT = 0;
+    reset_daily_counters();
+    reset_cumulative_counters();
+
+    // No data yet: disable the Download CSV button
+    set_download_enabled(false);
+}
+
+function clearSimulationMemory() {
+    reset_simulation_state();
     // Clear plot data cache
     originalPlotData = {};
-    
-    // Reset counters
-    NUM_AFFECTED_COUNT = 0;
-    NUM_DETECTED_CASES = 0;
-    reset_daily_counters();
-    CUMULATIVE_NEW_EXPOSED = 0;
-    CUMULATIVE_NEW_PRESYMPTOMATIC = 0;
-    CUMULATIVE_NEW_SYMPTOMATIC = 0;
-    CUMULATIVE_NEW_RECOVERED = 0;
-    CUMULATIVE_NEW_DETECTED = 0;
-    CUMULATIVE_NEW_HOSPITALISED = 0;
-    CUMULATIVE_NEW_CRITICAL = 0;
-    CUMULATIVE_NEW_DEATHS = 0;
 }
 
 // reset cumulative counters at the start of each day
 function update_cumulative_counters() {
-    CUMULATIVE_NEW_EXPOSED += DAILY_NEW_EXPOSED;
-    CUMULATIVE_NEW_PRESYMPTOMATIC += DAILY_NEW_PRESYMPTOMATIC;
-    CUMULATIVE_NEW_SYMPTOMATIC += DAILY_NEW_SYMPTOMATIC;
-    CUMULATIVE_NEW_RECOVERED += DAILY_NEW_RECOVERED;
-    CUMULATIVE_NEW_DETECTED += DAILY_NEW_DETECTED;
-    CUMULATIVE_NEW_HOSPITALISED += DAILY_NEW_HOSPITALISED;
-    CUMULATIVE_NEW_CRITICAL += DAILY_NEW_CRITICAL;
-    CUMULATIVE_NEW_DEATHS += DAILY_NEW_DEATHS;
+    COUNTER_KEYS.forEach(function (k) { CUMULATIVE_NEW[k] += DAILY_NEW[k]; });
 }
 
 COMPLIANCE_PROBABILITY = set_compliance();
@@ -291,7 +310,7 @@ function set_compliance() {
 }
 
 function compliance() {
-    var val = (Math.random() < COMPLIANCE_PROBABILITY) ? 1 : 0;
+    var val = (sim_random() < COMPLIANCE_PROBABILITY) ? 1 : 0;
     return val;
 }
 
@@ -354,7 +373,7 @@ function init_nodes() {
             'age_group': get_age_group(individuals_json[i]['age']),
             'zeta_a': 1,
             'infectiousness': stream1.gamma(0.25, 4), // a.k.a. rho
-            'severity': (Math.random() < 0.5) ? 1 : 0, // a.k.a. S_k
+            'severity': (sim_random() < 0.5) ? 1 : 0, // a.k.a. S_k
             'home': individuals_json[i]['household'],
             'workplace': individuals_json[i]['workplaceType'] == 1 ? individuals_json[i]['workplace'] : individuals_json[i]['school'],
             'community': individuals_json[i]['wardNo'] - 1, //minus one is temporary as the ward number indexing starts from 1,
@@ -368,7 +387,7 @@ function init_nodes() {
             'lambda': 0,
             'kappa_T': 1,
             'psi_T': 0,
-            'public_transport': (Math.random() < PUBLIC_TRANSPORT_FRACTION) ? 0 : null,
+            'public_transport': (sim_random() < PUBLIC_TRANSPORT_FRACTION) ? 0 : null,
             'funct_d_ck': f_kernel(individuals_json[i]['CommunityCentreDistance']), // TODO: need to use the kernel function. function of distance from community...f_kernel
             'dist_hw': 1,
             'workplace_type': individuals_json[i]['workplaceType'], //either school or office
@@ -404,7 +423,7 @@ function init_nodes() {
 
         //Set infective status, set the time of infection, and other age-related factors
         node['infective'] = node['infection_status'] == PRE_SYMPTOMATIC ? 1 : 0; //initialise all infected individuals as infective
-        node['time_of_infection'] = node['infection_status'] == EXPOSED ? (-node['incubation_period'] * Math.random()) : 0;
+        node['time_of_infection'] = node['infection_status'] == EXPOSED ? (-node['incubation_period'] * sim_random()) : 0;
         node['zeta_a'] = zeta(node['age']);
 
         if (SEEDING_MODE == SEED_FROM_INDIVIDUALS_JSON) {
@@ -412,7 +431,7 @@ function init_nodes() {
             node['time_of_infection'] = node['infection_status'] == EXPOSED ? (individuals_json[i]['time_of_infection'] * SIM_STEPS_PER_DAY - node['incubation_period']) : 0;
             
         } else if (SEEDING_MODE == RANDOM_SEEDING_WARDWISE) {
-            node['infection_status'] = (Math.random() < COMMUNITY_INFECTION_PROB[individuals_json[i]['wardNo'] - 1]) ? 1 : 0
+            node['infection_status'] = (sim_random() < COMMUNITY_INFECTION_PROB[individuals_json[i]['wardNo'] - 1]) ? 1 : 0
         }
         nodes.push(node)
 
@@ -427,7 +446,7 @@ function load_infection_seed_json(seed_scaling_factor) {
     var num_seed_days = infection_seeds_json_array.length;
     for (var count = 0; count < num_seed_days * SIM_STEPS_PER_DAY; count++) {
         var mean = (infection_seeds_json_array[Math.floor(count / SIM_STEPS_PER_DAY)] / SIM_STEPS_PER_DAY) * seed_scaling_factor;
-        seed_array.push(d3.randomPoisson(mean)());
+        seed_array.push(sim_poisson(mean));
     }
     return seed_array;
 }
@@ -436,11 +455,12 @@ function infection_seeding(nodes, seed_count, curr_time) {
     var num_individuals_to_seed = seed_count;
     var num_seeded = 0;
     while (num_seeded < num_individuals_to_seed) {
-        let individual_index = d3.randomInt(0, NUM_PEOPLE)();
+        let individual_index = sim_random_int(NUM_PEOPLE);
         if (nodes[individual_index]['infection_status'] == SUSCEPTIBLE) {
             nodes[individual_index]['infection_status'] = EXPOSED;
-            nodes[individual_index]['time_of_infection'] = curr_time; 
+            nodes[individual_index]['time_of_infection'] = curr_time;
             num_seeded++;
+            DAILY_NEW.exposed++;  // count seeded exposures (reporting only)
         }
     }
     // console.log(curr_time / SIM_STEPS_PER_DAY, num_individuals_to_seed);
@@ -451,15 +471,16 @@ function infection_seeding_exp_rate(nodes, curr_time) {
         var time_since_seeding_start = curr_time - SEEDING_START_DATE * SIM_STEPS_PER_DAY;
         var seed_doubling_time = SEEDING_DOUBLING_TIME * SIM_STEPS_PER_DAY;
         var current_seeding_rate = SEEDING_RATE_SCALE * Math.pow(2, time_since_seeding_start / seed_doubling_time);
-        var num_seeds_curr_time = d3.randomPoisson(current_seeding_rate)();
+        var num_seeds_curr_time = sim_poisson(current_seeding_rate);
         var num_seeded = 0;
         // console.log(curr_time, num_seeds_curr_time);
         while (num_seeded < num_seeds_curr_time) {
-            let individual_index = d3.randomInt(0, NUM_PEOPLE)();
+            let individual_index = sim_random_int(NUM_PEOPLE);
             if (nodes[individual_index]['infection_status'] == SUSCEPTIBLE) {
                 nodes[individual_index]['infection_status'] = EXPOSED;
-                nodes[individual_index]['time_of_infection'] = curr_time; 
+                nodes[individual_index]['time_of_infection'] = curr_time;
                 num_seeded++;
+                DAILY_NEW.exposed++;  // count seeded exposures (reporting only)
             }
         }
     }
@@ -858,90 +879,88 @@ function update_infection(node, cur_time) {
     }
 
     // SUSCEPTIBLE → EXPOSED
-    if (node['infection_status'] == SUSCEPTIBLE && Math.random() < (1 - Math.exp(-node['lambda'] / SIM_STEPS_PER_DAY))) {
+    if (node['infection_status'] == SUSCEPTIBLE && sim_random() < (1 - Math.exp(-node['lambda'] / SIM_STEPS_PER_DAY))) {
         node['infection_status'] = EXPOSED; //move to exposed state
         node['time_of_infection'] = cur_time;
         node['infective'] = 0;
         update_lambda_stats(node);
-        DAILY_NEW_EXPOSED++;  // Track Daily new exposure 
+        DAILY_NEW.exposed++;  // Track Daily new exposure 
     } 
     // EXPOSED → PRE_SYMPTOMATIC
     else if (node['infection_status'] == EXPOSED && (cur_time - node['time_of_infection'] >= node['incubation_period'])) {
         node['infection_status'] = PRE_SYMPTOMATIC;
         node['infective'] = 1;
-        DAILY_NEW_PRESYMPTOMATIC++;  // Track Daily new pre-symptomatic 
+        DAILY_NEW.presymptomatic++;  // Track Daily new pre-symptomatic 
     } 
     // PRE_SYMPTOMATIC → SYMPTOMATIC or RECOVERED
     else if (node['infection_status'] == PRE_SYMPTOMATIC && (cur_time - node['time_of_infection'] >= (node['incubation_period'] + node['asymptomatic_period']))) {
-        if (Math.random() < SYMPTOMATIC_FRACTION) {
+        if (sim_random() < SYMPTOMATIC_FRACTION) {
             // Person becomes symptomatic
             node['infection_status'] = SYMPTOMATIC;
             node['infective'] = 1;
             NUM_AFFECTED_COUNT++;
-            DAILY_NEW_SYMPTOMATIC++;
+            DAILY_NEW.symptomatic++;
             
-            if (Math.random() < CASE_INFECTION_RATIO) {
+            if (sim_random() < CASE_INFECTION_RATIO) {
                 node['detected'] = true;
-                NUM_DETECTED_CASES++;
-                DAILY_NEW_DETECTED++;
+                DAILY_NEW.detected++;
             }
             
         } else {
             // Person is asymptomatic - they recover without symptoms
             node['infection_status'] = RECOVERED;
             node['infective'] = 0;
-            DAILY_NEW_RECOVERED++;
+            DAILY_NEW.recovered++;
         }
     } 
     // SYMPTOMATIC → HOSPITALISED or RECOVERED
     else if (node['infection_status'] == SYMPTOMATIC && (cur_time - node['time_of_infection'] >= (node['incubation_period'] + node['asymptomatic_period'] + node['symptomatic_period']))) {
         
         // Determine if person needs hospitalization
-        var needs_hospitalization = Math.random() < STATE_TRAN[age_index][0];
+        var needs_hospitalization = sim_random() < STATE_TRAN[age_index][0];
         
         if (needs_hospitalization) {
             // Person gets hospitalized
             node['infection_status'] = HOSPITALISED;
             node['infective'] = 0;
-            DAILY_NEW_HOSPITALISED++;
+            DAILY_NEW.hospitalised++;
             
             // MODIFIED: Only detect if not already detected
             if (!node['detected']) {
                 node['detected'] = true;
-                NUM_DETECTED_CASES++;
-                DAILY_NEW_DETECTED++;
+                DAILY_NEW.detected++;
             }
         } else {
             // Person recovers
             node['infection_status'] = RECOVERED;
             node['infective'] = 0;
-            DAILY_NEW_RECOVERED++;
+            DAILY_NEW.recovered++;
         }
     }
     // HOSPITALISED → CRITICAL or RECOVERED
     else if (node['infection_status'] == HOSPITALISED && (cur_time - node['time_of_infection'] >= (node['incubation_period'] + node['asymptomatic_period'] + node['symptomatic_period'] + node['hospital_regular_period']))) {
         // All hospitalized people are already detected and counted
-        if (Math.random() < STATE_TRAN[age_index][1]) {
+        if (sim_random() < STATE_TRAN[age_index][1]) {
             node['infection_status'] = CRITICAL;
             node['infective'] = 0;
-            DAILY_NEW_CRITICAL++;
+            DAILY_NEW.critical++;
         } else {
             node['infection_status'] = RECOVERED;
             node['infective'] = 0;
-            DAILY_NEW_RECOVERED++;
+            DAILY_NEW.recovered++;
         }
     } 
     // CRITICAL → DEAD or RECOVERED
     else if (node['infection_status'] == CRITICAL && (cur_time - node['time_of_infection'] >= (node['incubation_period'] + node['asymptomatic_period'] + node['symptomatic_period'] + node['hospital_regular_period'] + node['hospital_critical_period']))) {
         // All critical people are already detected and counted
-        if (Math.random() < STATE_TRAN[age_index][2]) {
+        if (sim_random() < STATE_TRAN[age_index][2]) {
             node['infection_status'] = DEAD;
             node['infective'] = 0;
-            DAILY_NEW_DEATHS++;
+            DAILY_NEW.deaths++;
         } else {
             node['infection_status'] = RECOVERED;
             node['infective'] = 0;
-            DAILY_NEW_RECOVERED++;
+            DAILY_NEW.recovered++;
         }
     }
 
@@ -1157,43 +1176,37 @@ function update_lambda_c_global(communities, community_distance_matrix) {
         communities[c1]['lambda_community_global'] = temp / temp2;
     }
 }
-// responcible for getting the infected individuals in a community
-function get_infected_community(nodes, community) {
-    var affected_stat = 0
-    var infected_stat = 0
-    var exposed_stat = 0
-    var hospitalised_stat = 0
-    var critical_stat = 0
-    var dead_stat = 0
-    var recovered_stat = 0
-    var exposed_stat = 0
-    for (var i = 0; i < community['individuals'].length; i++) {
-        
-        if (nodes[community['individuals'][i]]['infection_status'] == EXPOSED) {
-            exposed_stat += 1
-        }
-        if (nodes[community['individuals'][i]]['infection_status'] == RECOVERED) {
-            recovered_stat += 1
-        }
-        if (nodes[community['individuals'][i]]['infection_status'] == HOSPITALISED) {
-            hospitalised_stat += 1
-        }
-        if (nodes[community['individuals'][i]]['infection_status'] == CRITICAL) {
-            critical_stat += 1
-        }
-        if (nodes[community['individuals'][i]]['infection_status'] == DEAD) {
-            dead_stat += 1
-        }
-        if (nodes[community['individuals'][i]]['infection_status'] == PRE_SYMPTOMATIC ||
-            nodes[community['individuals'][i]]['infection_status'] == SYMPTOMATIC ||
-            nodes[community['individuals'][i]]['infection_status'] == HOSPITALISED ||
-            nodes[community['individuals'][i]]['infection_status'] == CRITICAL) {
-            infected_stat += 1
+// One pass over the population. Returns the global state counts and, per community,
+// [infected, affected, hospitalised, critical, dead]  (replaces 8 reduce passes + one pass per community).
+function compute_state_counts(nodes, num_communities) {
+    var g = { infected: 0, symptomatic: 0, exposed: 0, hospitalised: 0, critical: 0, fatalities: 0, recovered: 0 };
+    var ward = [];
+    for (var c = 0; c < num_communities; c++) {
+        ward.push([0, 0, 0, 0, 0]);
+    }
+    for (var j = 0; j < nodes.length; j++) {
+        var node = nodes[j];
+        var st = node['infection_status'];
+        var is_infected = (st == PRE_SYMPTOMATIC || st == SYMPTOMATIC || st == HOSPITALISED || st == CRITICAL);
+        if (is_infected) g.infected++;
+        if (st == SYMPTOMATIC) g.symptomatic++;
+        if (st == EXPOSED) g.exposed++;
+        if (st == HOSPITALISED) g.hospitalised++;
+        if (st == CRITICAL) g.critical++;
+        if (st == DEAD) g.fatalities++;
+        if (st == RECOVERED) g.recovered++;
+
+        if (node['community'] != null) {
+            var w = ward[node['community']];
+            if (is_infected) w[0]++;
+            if (is_infected || st == EXPOSED || st == RECOVERED || st == DEAD) w[1]++;
+            if (st == HOSPITALISED) w[2]++;
+            if (st == CRITICAL) w[3]++;
+            if (st == DEAD) w[4]++;
         }
     }
-    affected_stat = exposed_stat + infected_stat + recovered_stat + dead_stat;
-    return [infected_stat, affected_stat, hospitalised_stat, critical_stat, dead_stat];
-    
+    g.ward = ward;
+    return g;
 }
 
 function update_lambdas(node, homes, workplaces, communities, public_transports, nodes, cur_time) {
@@ -1229,7 +1242,7 @@ function update_lambda_stats(node) {
     LAMBDA_INFECTION_STATS.push(lambda_vector)
 }
 
-let csvContent_alltogether = "data:text/csv;charset=utf-8,Day,Affected,Recovered,Infected,Exposed,Hospitalised,Critical,Fatalities,Lambda_H,Lambda_W,Lambda_C,Daily_New_Exposed,Daily_New_Presymptomatic,Daily_New_Symptomatic,Daily_New_Recovered,Daily_New_Detected,Daily_New_Hospitalised,Daily_New_Critical,Daily_New_Deaths,Cumulative_New_Exposed,Cumulative_New_Presymptomatic,Cumulative_New_Symptomatic,Cumulative_New_Recovered,Cumulative_New_Detected,Cumulative_New_Hospitalised,Cumulative_New_Critical,Cumulative_New_Deaths\r\n";
+let csvContent_alltogether = CSV_ALL_HEADER;
 
 function update_all_kappa(nodes, homes, workplaces, communities, cur_time) {
     var current_time = cur_time;
@@ -1282,7 +1295,7 @@ function update_all_kappa(nodes, homes, workplaces, communities, cur_time) {
 }
 
 function run_simday(time_step, homes, workplaces, communities, public_transports, nodes, community_distance_matrix, seed_array,
-                    days_num_affected, days_num_critical, days_num_exposed, days_num_fatalities, days_num_hospitalised, days_num_infected, days_num_recovered,days_num_symptomatic, lambda_evolution) {
+                    days_num_critical, days_num_hospitalised, days_num_infected, days_num_symptomatic, lambda_evolution) {
     // console.log(time_step / SIM_STEPS_PER_DAY);
     // Reset daily counters at the beginning of each day
     if (time_step % SIM_STEPS_PER_DAY === 0) {
@@ -1310,9 +1323,10 @@ function run_simday(time_step, homes, workplaces, communities, public_transports
     for (var w = 0; w < NUM_SCHOOLS + NUM_WORKPLACES; w++) {
         workplaces[w]['age_dependent_mixing'] = update_lambda_w(nodes, workplaces[w]);
     }
+    var counts = compute_state_counts(nodes, NUM_COMMUNITIES);
     for (var c = 0; c < NUM_COMMUNITIES; c++) {
         communities[c]['lambda_community'] = update_lambda_c_local(nodes, communities[c]);
-        var temp_stats = get_infected_community(nodes, communities[c]);
+        var temp_stats = counts.ward[c];
         var row = [time_step / SIM_STEPS_PER_DAY, c, temp_stats[0], temp_stats[1], temp_stats[2], temp_stats[3], temp_stats[4]].join(",");
         csvContent += row + "\r\n";
     }
@@ -1324,64 +1338,22 @@ function run_simday(time_step, homes, workplaces, communities, public_transports
     for (var j = 0; j < NUM_PEOPLE; j++) {
         update_lambdas(nodes[j], homes, workplaces, communities, public_transports, nodes, time_step);
     }
-    // Calculate current state statistics (EXISTING - keep unchanged)
-    var n_infected = nodes.reduce(function (partial_sum, node) {
-        return partial_sum + ((node['infection_status'] == PRE_SYMPTOMATIC || node['infection_status'] == SYMPTOMATIC || node['infection_status'] == HOSPITALISED || node['infection_status'] == CRITICAL) ? 1 : 0);
-    }, 0);
+    // Current state statistics (from the single pass above)
+    var n_infected = counts.infected;
+    var n_symptomatic = counts.symptomatic;
+    var n_exposed = counts.exposed;
+    var n_hospitalised = counts.hospitalised;
+    var n_critical = counts.critical;
+    var n_fatalities = counts.fatalities;
+    var n_recovered = counts.recovered;
     days_num_infected.push([time_step / SIM_STEPS_PER_DAY, n_infected]);
-    var n_symptomatic = nodes.reduce(function (partial_sum, node) {
-        return partial_sum + ((node['infection_status'] == SYMPTOMATIC) ? 1 : 0);
-    }, 0);
     days_num_symptomatic.push([time_step / SIM_STEPS_PER_DAY, n_symptomatic]);
-    var n_exposed = nodes.reduce(function (partial_sum, node) {
-        return partial_sum + ((node['infection_status'] == EXPOSED) ? 1 : 0);
-    }, 0);
-    days_num_exposed.push([time_step / SIM_STEPS_PER_DAY, n_exposed]);
-    var n_hospitalised = nodes.reduce(function (partial_sum, node) {
-        return partial_sum + ((node['infection_status'] == HOSPITALISED) ? 1 : 0);
-    }, 0);
     days_num_hospitalised.push([time_step / SIM_STEPS_PER_DAY, n_hospitalised]);
-    var n_critical = nodes.reduce(function (partial_sum, node) {
-        return partial_sum + ((node['infection_status'] == CRITICAL) ? 1 : 0);
-    }, 0);
     days_num_critical.push([time_step / SIM_STEPS_PER_DAY, n_critical]);
-    var n_fatalities = nodes.reduce(function (partial_sum, node) {
-        return partial_sum + ((node['infection_status'] == DEAD) ? 1 : 0);
-    }, 0);
-    days_num_fatalities.push([time_step / SIM_STEPS_PER_DAY, n_fatalities]);
-    var n_recovered = nodes.reduce(function (partial_sum, node) {
-        return partial_sum + ((node['infection_status'] == RECOVERED) ? 1 : 0);
-    }, 0);
-    days_num_recovered.push([time_step / SIM_STEPS_PER_DAY, n_recovered]);
-    days_num_affected.push([time_step / SIM_STEPS_PER_DAY, NUM_AFFECTED_COUNT]);
     
-    // Track daily new symptomatic EVERY timestep
-    if (time_step % SIM_STEPS_PER_DAY === (SIM_STEPS_PER_DAY - 1)) {
-        var current_day = Math.floor(time_step / SIM_STEPS_PER_DAY) + 1;
-        days_daily_new_symptomatic.push([current_day, DAILY_NEW_SYMPTOMATIC]);
-    }
-    
-    // Track daily new detected EVERY timestep
-    if (time_step % SIM_STEPS_PER_DAY === (SIM_STEPS_PER_DAY - 1)) {
-        var current_day = Math.floor(time_step / SIM_STEPS_PER_DAY) + 1;
-        days_daily_new_detected.push([current_day, DAILY_NEW_DETECTED]);
-    }
-
     // Track cumulative affected count EVERY timestep
     days_affected_count.push([time_step / SIM_STEPS_PER_DAY, NUM_AFFECTED_COUNT]);
-    // Track daily deaths and recovered EVERY timestep
-    // Track daily deaths EVERY timestep
-    if (time_step % SIM_STEPS_PER_DAY === (SIM_STEPS_PER_DAY - 1)) {
-        var current_day = Math.floor(time_step / SIM_STEPS_PER_DAY) + 1;
-        days_daily_new_deaths.push([current_day, DAILY_NEW_DEATHS]);
-    }
-    
-    // Track daily new recovered EVERY timestep
-    if (time_step % SIM_STEPS_PER_DAY === (SIM_STEPS_PER_DAY - 1)) {
-        var current_day = Math.floor(time_step / SIM_STEPS_PER_DAY) + 1;
-        days_daily_new_recovered.push([current_day, DAILY_NEW_RECOVERED]);
-    }
-    
+
     // Extended CSV content with all counters
     var row = [
         time_step / SIM_STEPS_PER_DAY, 
@@ -1396,87 +1368,55 @@ function run_simday(time_step, homes, workplaces, communities, public_transports
         LAMBDA_INFECTION_MEAN[0], 
         LAMBDA_INFECTION_MEAN[1], 
         LAMBDA_INFECTION_MEAN[2],
-        DAILY_NEW_EXPOSED,
-        DAILY_NEW_PRESYMPTOMATIC,
-        DAILY_NEW_SYMPTOMATIC,
-        DAILY_NEW_RECOVERED,
-        DAILY_NEW_DETECTED,
-        DAILY_NEW_HOSPITALISED,
-        DAILY_NEW_CRITICAL,
-        DAILY_NEW_DEATHS,
-        CUMULATIVE_NEW_EXPOSED,
-        CUMULATIVE_NEW_PRESYMPTOMATIC,
-        CUMULATIVE_NEW_SYMPTOMATIC,
-        CUMULATIVE_NEW_RECOVERED,
-        CUMULATIVE_NEW_DETECTED,
-        CUMULATIVE_NEW_HOSPITALISED,
-        CUMULATIVE_NEW_CRITICAL,
-        CUMULATIVE_NEW_DEATHS
+        DAILY_NEW.exposed,
+        DAILY_NEW.presymptomatic,
+        DAILY_NEW.symptomatic,
+        DAILY_NEW.recovered,
+        DAILY_NEW.detected,
+        DAILY_NEW.hospitalised,
+        DAILY_NEW.critical,
+        DAILY_NEW.deaths,
+        CUMULATIVE_NEW.exposed,
+        CUMULATIVE_NEW.presymptomatic,
+        CUMULATIVE_NEW.symptomatic,
+        CUMULATIVE_NEW.recovered,
+        CUMULATIVE_NEW.detected,
+        CUMULATIVE_NEW.hospitalised,
+        CUMULATIVE_NEW.critical,
+        CUMULATIVE_NEW.deaths
     ].join(",");
     csvContent_alltogether += row + "\r\n";
     
     if (LAMBDA_INFECTION_STATS.length > 0) {
         lambda_evolution.push([time_step / SIM_STEPS_PER_DAY, [LAMBDA_INFECTION_MEAN[0], LAMBDA_INFECTION_MEAN[1], LAMBDA_INFECTION_MEAN[2], LAMBDA_INFECTION_MEAN[3]]])
     }
-    // At the end of each day, update cumulative counters AND populate cumulative arrays
     if (time_step % SIM_STEPS_PER_DAY === (SIM_STEPS_PER_DAY - 1)) {
-        update_cumulative_counters();
-        
+        // End of day: record the day's new events, roll them into the cumulative counters, record the cumulative series
         var current_day = Math.floor(time_step / SIM_STEPS_PER_DAY) + 1;
-        
-        // Track cumulative data for plotting
-        // 1. Cumulative infected: total people who have ever been infected ( Exposed )
-        days_cumulative_infected.push([current_day, CUMULATIVE_NEW_EXPOSED]);
-        
-        // 2. Cumulative hospitalised: total people who have ever been hospitalized
-        days_cumulative_hospitalised.push([current_day, CUMULATIVE_NEW_HOSPITALISED]);
-        
-        // 3. Cumulative critical: total people who have ever been in critical care
-        days_cumulative_critical.push([current_day, CUMULATIVE_NEW_CRITICAL]);
-        
-        // 4. Cumulative deaths: total people who have died
-        days_cumulative_deaths.push([current_day, CUMULATIVE_NEW_DEATHS]);
-        
-        // 5. Cumulative recovered: total people who have recovered
-        days_cumulative_recovered.push([current_day, CUMULATIVE_NEW_RECOVERED]);
+        days_daily_new_symptomatic.push([current_day, DAILY_NEW.symptomatic]);
+        days_daily_new_detected.push([current_day, DAILY_NEW.detected]);
+        days_daily_new_deaths.push([current_day, DAILY_NEW.deaths]);
+        days_daily_new_recovered.push([current_day, DAILY_NEW.recovered]);
 
-        // 6. Cumulative detected: total detected cases
-        days_cumulative_detected.push([current_day, CUMULATIVE_NEW_DETECTED]);
-        
-        // console.log("Day " + current_day + " Summary:");
-        // console.log("  Daily - Exposed: " + DAILY_NEW_EXPOSED + ", Symptomatic: " + DAILY_NEW_SYMPTOMATIC + ", Hospitalised: " + DAILY_NEW_HOSPITALISED + ", Deaths: " + DAILY_NEW_DEATHS);
-        // console.log("  Cumulative - Infected Total: " + CUMULATIVE_NEW_EXPOSED + ", Hospitalised: " + CUMULATIVE_NEW_HOSPITALISED + ", Deaths: " + CUMULATIVE_NEW_DEATHS);
-    }
+        update_cumulative_counters();
 
-    // Also populate cumulative arrays every timestep for smooth plotting
-    var last_cumulative_infected, last_cumulative_hospitalised, last_cumulative_critical, last_cumulative_deaths, last_cumulative_recovered, last_cumulative_detected;
-    
-    if (days_cumulative_infected.length > 0) {
-        last_cumulative_infected = days_cumulative_infected[days_cumulative_infected.length - 1][1];
-        last_cumulative_hospitalised = days_cumulative_hospitalised[days_cumulative_hospitalised.length - 1][1];
-        last_cumulative_critical = days_cumulative_critical[days_cumulative_critical.length - 1][1];
-        last_cumulative_deaths = days_cumulative_deaths[days_cumulative_deaths.length - 1][1];
-        last_cumulative_recovered = days_cumulative_recovered[days_cumulative_recovered.length - 1][1];
-        last_cumulative_detected = days_cumulative_detected[days_cumulative_detected.length - 1][1];
-    } else {
-        // First timestep - initialize with current cumulative values
-        // last_cumulative_infected = CUMULATIVE_NEW_PRESYMPTOMATIC + CUMULATIVE_NEW_SYMPTOMATIC + CUMULATIVE_NEW_HOSPITALISED + CUMULATIVE_NEW_CRITICAL;
-        last_cumulative_infected = CUMULATIVE_NEW_EXPOSED;
-        last_cumulative_hospitalised = CUMULATIVE_NEW_HOSPITALISED;
-        last_cumulative_critical = CUMULATIVE_NEW_CRITICAL;
-        last_cumulative_deaths = CUMULATIVE_NEW_DEATHS;
-        last_cumulative_recovered = CUMULATIVE_NEW_RECOVERED;
-        last_cumulative_detected = CUMULATIVE_NEW_DETECTED;
-    }
-    // Ensure cumulative arrays have data for every timestep (for smooth plotting)
-    if (time_step % SIM_STEPS_PER_DAY !== (SIM_STEPS_PER_DAY - 1)) {
-        // Fill in inter-day timesteps with current cumulative values
-        days_cumulative_infected.push([time_step / SIM_STEPS_PER_DAY, last_cumulative_infected]);
-        days_cumulative_hospitalised.push([time_step / SIM_STEPS_PER_DAY, last_cumulative_hospitalised]);
-        days_cumulative_critical.push([time_step / SIM_STEPS_PER_DAY, last_cumulative_critical]);
-        days_cumulative_deaths.push([time_step / SIM_STEPS_PER_DAY, last_cumulative_deaths]);
-        days_cumulative_recovered.push([time_step / SIM_STEPS_PER_DAY, last_cumulative_recovered]);
-        days_cumulative_detected.push([time_step / SIM_STEPS_PER_DAY, last_cumulative_detected]);
+        days_cumulative_infected.push([current_day, CUMULATIVE_NEW.exposed]);   // ever exposed
+        days_cumulative_hospitalised.push([current_day, CUMULATIVE_NEW.hospitalised]);
+        days_cumulative_critical.push([current_day, CUMULATIVE_NEW.critical]);
+        days_cumulative_deaths.push([current_day, CUMULATIVE_NEW.deaths]);
+        days_cumulative_recovered.push([current_day, CUMULATIVE_NEW.recovered]);
+        days_cumulative_detected.push([current_day, CUMULATIVE_NEW.detected]);
+    } else if (time_step === 0 || time_step % SIM_STEPS_PER_DAY !== 0) {
+        // Inter-day timesteps: carry the last recorded cumulative value forward (smooth plotting).
+        // Step 4k (k>0) is skipped: the previous day-end entry already sits at x = k.
+        var x_now = time_step / SIM_STEPS_PER_DAY;
+        var carry = function (arr, initial) { return arr.length > 0 ? arr[arr.length - 1][1] : initial; };
+        days_cumulative_infected.push([x_now, carry(days_cumulative_infected, CUMULATIVE_NEW.exposed)]);
+        days_cumulative_hospitalised.push([x_now, carry(days_cumulative_hospitalised, CUMULATIVE_NEW.hospitalised)]);
+        days_cumulative_critical.push([x_now, carry(days_cumulative_critical, CUMULATIVE_NEW.critical)]);
+        days_cumulative_deaths.push([x_now, carry(days_cumulative_deaths, CUMULATIVE_NEW.deaths)]);
+        days_cumulative_recovered.push([x_now, carry(days_cumulative_recovered, CUMULATIVE_NEW.recovered)]);
+        days_cumulative_detected.push([x_now, carry(days_cumulative_detected, CUMULATIVE_NEW.detected)]);
     }
     // Continue simulation or return
     if (time_step % SIM_STEPS_PER_DAY == 0 && time_step > 0) {
@@ -1486,35 +1426,16 @@ function run_simday(time_step, homes, workplaces, communities, public_transports
         return time_step;
     } else {
         return run_simday(time_step + 1, homes, workplaces, communities, public_transports, nodes, community_distance_matrix, seed_array,
-            days_num_affected, days_num_critical, days_num_exposed, days_num_fatalities, days_num_hospitalised, days_num_infected, days_num_recovered, days_num_symptomatic, lambda_evolution);
+            days_num_critical, days_num_hospitalised, days_num_infected, days_num_symptomatic, lambda_evolution);
     }
-}
-
-// Helper functions for counter management
-function newFilledArray(len, val) {
-    var rv = new Array(len);
-    while (--len >= 0) {
-        rv[len] = val;
-    }
-    return rv;
 }
 
 function initialize_simulation() {
     document.getElementById("status").innerHTML = "Initializing Simulation...";
-    // Reset tracking arrays (use var instead of let/const)
-    days_daily_new_symptomatic = [];
-    days_cumulative_infected = [];
-    days_cumulative_hospitalised = [];
-    days_cumulative_critical = [];
-    days_cumulative_deaths = [];
-    days_cumulative_recovered = [];
-    days_affected_count = [];
-    days_daily_new_detected = [];
-    days_cumulative_detected = [];
-    days_daily_new_deaths = [];
-    days_daily_new_recovered = [];
-    
-    
+    // Reset all per-run arrays, CSV strings and counters, and restart the random stream
+    reset_simulation_state();
+    reset_random_stream();
+
     var homes = init_homes();
     var workplaces = init_workplaces();
     var communities = init_community();
@@ -1535,37 +1456,19 @@ function initialize_simulation() {
     compute_scale_communities(nodes, communities);
     compute_scale_public_transport(nodes, public_transports);
 
-    var array_len = NUM_TIMESTEPS;
-    var array_default = 0;
-    var days_num_exposed = newFilledArray(array_len, array_default);
-    var days_num_infected = newFilledArray(array_len, array_default);
-    var days_num_symptomatic = newFilledArray(array_len, array_default);
-    var days_num_affected = newFilledArray(array_len, array_default);
-    var days_num_hospitalised = newFilledArray(array_len, array_default);
-    var days_num_critical = newFilledArray(array_len, array_default);
-    var days_num_fatalities = newFilledArray(array_len, array_default);
-    var days_num_recovered = newFilledArray(array_len, array_default);
+    var days_num_infected = [];
+    var days_num_symptomatic = [];
+    var days_num_hospitalised = [];
+    var days_num_critical = [];
 
-    // Initialize all counters
-    reset_daily_counters();
-    CUMULATIVE_NEW_EXPOSED = 0;
-    CUMULATIVE_NEW_PRESYMPTOMATIC = 0;
-    CUMULATIVE_NEW_SYMPTOMATIC = 0;
-    CUMULATIVE_NEW_RECOVERED = 0;
-    CUMULATIVE_NEW_DETECTED = 0;
-    CUMULATIVE_NEW_HOSPITALISED = 0;
-    CUMULATIVE_NEW_CRITICAL = 0;
-    CUMULATIVE_NEW_DEATHS = 0;
-    NUM_DETECTED_CASES = 0;
+    // Initial seeds (already non-susceptible after init_nodes) count as exposed (reporting only)
+    CUMULATIVE_NEW.exposed = nodes.reduce(function (s, n) { return s + (n['infection_status'] != SUSCEPTIBLE ? 1 : 0); }, 0);
 
     var lambda_evolution = []
-    LAMBDA_INFECTION_STATS = []; //global variable to track lambda evolution when a person gets infected
-    LAMBDA_INFECTION_MEAN = [0, 0, 0, 0];
-    NUM_AFFECTED_COUNT = 0;
-    
+
     document.getElementById("status").innerHTML = "Initialization Done...";
     return [homes, workplaces, communities, public_transports, nodes, community_distance_matrix, seed_array,
-        days_num_affected, days_num_critical, days_num_exposed, days_num_fatalities, days_num_hospitalised, days_num_infected, days_num_recovered, days_num_symptomatic, lambda_evolution];
+        days_num_critical, days_num_hospitalised, days_num_infected, days_num_symptomatic, lambda_evolution];
 }
 
 SIMULATION_STOP = false;
@@ -1574,19 +1477,54 @@ function stop_sim() {
     SIMULATION_STOP = true;
 }
 
+// ---- CSV download button ----------------------------------------------------
+function set_download_enabled(enabled) {
+    var btn = document.getElementById("download_csv");
+    if (btn) {
+        btn.disabled = !enabled;
+    }
+}
+
+function download_text_file(filename, csv_data_uri_text) {
+    // csvContent* strings start with a data-URI prefix; strip it and download the text as a file.
+    var text = csv_data_uri_text.replace(/^data:text\/csv;charset=utf-8,/, '');
+    var blob = new Blob([text], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+}
+
+// Download the CSV files of the current (or just finished) simulation:
+//   my_data_all_together.csv : one row per step (state counts, lambda means, daily/cumulative counters)
+//   my_data.csv              : one row per ward per step (day, ward, infected, affected, hospitalised, critical, dead)
+function download_csv() {
+    if (csvContent_alltogether === CSV_ALL_HEADER) {
+        return; // nothing simulated yet
+    }
+    download_text_file("my_data_all_together.csv", csvContent_alltogether);
+    // small delay so the browser does not merge the two downloads
+    setTimeout(function () { download_text_file("my_data.csv", csvContent); }, 300);
+}
+
 function run_simulation() {
     document.getElementById("run_button").style.display = "none";
     document.getElementById("sim_stop").style.display = "inline";
 
     // document.getElementById('plots-area').style.display = 'block';
     let [homes, workplaces, communities, public_transports, nodes, community_distance_matrix, seed_array,
-        days_num_affected, days_num_critical, days_num_exposed, days_num_fatalities, days_num_hospitalised, days_num_infected, days_num_recovered, days_num_symptomatic, lambda_evolution] = initialize_simulation();
+        days_num_critical, days_num_hospitalised, days_num_infected, days_num_symptomatic, lambda_evolution] = initialize_simulation();
     document.getElementById("status").innerHTML = "Starting to run Simulation...";
     let time_step = 0;
     time_step = run_simday(time_step, homes, workplaces, communities, public_transports, nodes, community_distance_matrix, seed_array,
-        days_num_affected, days_num_critical, days_num_exposed, days_num_fatalities, days_num_hospitalised, days_num_infected, days_num_recovered, days_num_symptomatic, lambda_evolution);
+        days_num_critical, days_num_hospitalised, days_num_infected, days_num_symptomatic, lambda_evolution);
+    set_download_enabled(true); // data exists now
 
-    let plot_tuple = [days_num_infected, days_num_symptomatic, days_num_hospitalised, days_num_critical, days_num_fatalities, days_num_recovered, days_num_affected, days_num_exposed, lambda_evolution];// this is a tuple of all the data to be plotted
+    let plot_tuple = [days_num_infected, days_num_symptomatic, days_num_hospitalised, days_num_critical, lambda_evolution];// this is a tuple of all the data to be plotted
     call_plotly(plot_tuple);
     document.getElementById("in-progress").style.display = 'none';
     document.getElementById('plots-area').style.display = 'block';
@@ -1611,7 +1549,7 @@ function run_simulation() {
         }
         // console.log({ days, INTERVENTION });
         time_step = run_simday(time_step + 1, homes, workplaces, communities, public_transports, nodes, community_distance_matrix, seed_array,
-            days_num_affected, days_num_critical, days_num_exposed, days_num_fatalities, days_num_hospitalised, days_num_infected, days_num_recovered, days_num_symptomatic, lambda_evolution);
+            days_num_critical, days_num_hospitalised, days_num_infected, days_num_symptomatic, lambda_evolution);
         call_plotly(plot_tuple);
        
         if (time_step >= NUM_TIMESTEPS || SIMULATION_STOP) {
@@ -1660,6 +1598,120 @@ function run_simulation() {
 
 }
 
+
+// ---------------------------------------------------------------
+// Visual theme helpers (presentation only - no effect on the model)
+// ---------------------------------------------------------------
+const PLOT_SERIES_COLORS = {
+    'num_infected_plot': '#f59e0b',
+    'num_cases_plot': '#f97316',
+    'num_reported_plot': '#3b82f6',
+    'num_hospitalised_plot': '#8b5cf6',
+    'num_critical_plot': '#ef4444',
+    'num_fatalities_plot': '#64748b',
+    'num_recovered_plot': '#10b981'
+};
+const PLOT_SERIES_KEYS = {
+    'num_infected_plot': 'infected',
+    'num_cases_plot': 'symptomatic',
+    'num_reported_plot': 'reported',
+    'num_hospitalised_plot': 'hospitalised',
+    'num_critical_plot': 'critical',
+    'num_fatalities_plot': 'fatalities',
+    'num_recovered_plot': 'recovered'
+};
+const LAMBDA_FALLBACK = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100'];
+const PLOT_FALLBACK_COLORS = ['#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#64748b'];
+
+function css_var(name, fallback) {
+    try {
+        var v = getComputedStyle(document.documentElement).getPropertyValue(name);
+        return (v && v.trim()) ? v.trim() : fallback;
+    } catch (e) { return fallback; }
+}
+
+function plot_theme() {
+    var series = {};
+    Object.keys(PLOT_SERIES_COLORS).forEach(function (id) {
+        series[id] = css_var('--series-' + PLOT_SERIES_KEYS[id], PLOT_SERIES_COLORS[id]);
+    });
+    return {
+        series: series,
+        cat: ['--cat-1', '--cat-2', '--cat-3', '--cat-4'].map(function (v, i) { return css_var(v, LAMBDA_FALLBACK[i]); }),
+        surface: css_var('--surface', '#ffffff'),
+        font: '"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif',
+        text: css_var('--plot-text', '#333333'),
+        grid: css_var('--plot-grid', '#e6e6e6'),
+        axis: css_var('--plot-axis', '#666666'),
+        hoverBg: css_var('--plot-hover-bg', '#111111'),
+        hoverText: css_var('--plot-hover-text', '#ffffff')
+    };
+}
+
+function hex_to_rgba(hex, alpha) {
+    var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
+    if (!m) return hex;
+    return 'rgba(' + parseInt(m[1], 16) + ',' + parseInt(m[2], 16) + ',' + parseInt(m[3], 16) + ',' + alpha + ')';
+}
+
+function current_theme() {
+    var t = document.documentElement.getAttribute('data-theme');
+    if (t === 'light' || t === 'dark') return t;
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+}
+
+// Re-colour charts that are already drawn (called after the theme changes).
+function restyle_plots() {
+    var T = plot_theme();
+    var els = document.querySelectorAll('.js-plotly-plot');
+    for (var i = 0; i < els.length; i++) {
+        try {
+            if (T.series[els[i].id]) {
+                Plotly.restyle(els[i], { 'line.color': T.series[els[i].id], 'fillcolor': hex_to_rgba(T.series[els[i].id], 0.12) });
+            } else if (els[i].id === 'lambda_evolution' && els[i].data) {
+                var idx = [], cols = [];
+                for (var k = 0; k < els[i].data.length; k++) { idx.push(k); cols.push(T.cat[k % T.cat.length]); }
+                Plotly.restyle(els[i], { 'marker.color': cols, 'line.color': cols }, idx);
+            }
+            Plotly.relayout(els[i], {
+                'title.font.color': T.text,
+                'xaxis.title.font.color': T.text,
+                'yaxis.title.font.color': T.text,
+                'xaxis.tickfont.color': T.text,
+                'yaxis.tickfont.color': T.text,
+                'xaxis.gridcolor': T.grid,
+                'yaxis.gridcolor': T.grid,
+                'xaxis.linecolor': T.axis,
+                'yaxis.linecolor': T.axis,
+                'yaxis.zerolinecolor': T.axis,
+                'legend.font.color': T.text,
+                'hoverlabel.bgcolor': T.hoverBg,
+                'hoverlabel.font.color': T.hoverText
+            });
+        } catch (e) { /* chart not ready - ignore */ }
+    }
+}
+
+function apply_theme(theme, persist) {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (persist) {
+        try { localStorage.setItem('sim-theme', theme); } catch (e) { /* storage unavailable */ }
+    }
+    restyle_plots();
+}
+
+function toggle_theme() {
+    apply_theme(current_theme() === 'dark' ? 'light' : 'dark', true);
+}
+
+(function init_theme() {
+    var saved = null;
+    try { saved = localStorage.getItem('sim-theme'); } catch (e) { /* storage unavailable */ }
+    if (saved === 'light' || saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', saved);
+    }
+})();
+
 // Enhanced plot_lambda_evolution function with proper sizing
 function plot_lambda_evolution(data, plot_position, title_text, legends) {
     if (data[0] == undefined || data[0][0] == undefined) {
@@ -1667,6 +1719,8 @@ function plot_lambda_evolution(data, plot_position, title_text, legends) {
         return;
     }
     var trace = [];
+    var T = plot_theme();
+    var lambdaColors = T.cat;
 
     for (var count = 0; count < data.length; count++) {
         for (var lambda_length_count = 0; lambda_length_count < data[0][0][1].length; lambda_length_count++) {
@@ -1675,7 +1729,10 @@ function plot_lambda_evolution(data, plot_position, title_text, legends) {
                 x: [],
                 y: [],
                 mode: 'bar',
-                name: legends[lambda_length_count]
+                name: legends[lambda_length_count],
+                marker: { color: lambdaColors[lambda_length_count % lambdaColors.length] },
+                // colour-blind safety: each series also gets its own dash pattern
+                line: { color: lambdaColors[lambda_length_count % lambdaColors.length], width: 2.5, dash: ['solid', 'dash', 'dot', 'dashdot'][lambda_length_count % 4] }
             };
             for (var count2 = 0; count2 < data[count].length; count2++) {
                 trace1.x.push(data[count][count2][0]);
@@ -1707,8 +1764,9 @@ function plot_lambda_evolution(data, plot_position, title_text, legends) {
         title: {
             text: title_text,
             font: {
-                family: 'Arial, sans-serif',
-                size: 14  // Smaller font to match other plots
+                family: T.font,
+                size: 14,  // Smaller font to match other plots
+                color: T.text
             },
             xref: 'paper',
             x: 0.5,
@@ -1718,25 +1776,29 @@ function plot_lambda_evolution(data, plot_position, title_text, legends) {
             title: {
                 text: 'Days',
                 font: {
-                    family: 'Arial, sans-serif',
+                    family: T.font,
                     size: 12,  // Smaller font
-                    color: '#333333'
+                    color: T.text
                 }
             },
-            tickfont: { size: 10 }  // Smaller tick labels
+            tickfont: { size: 10, color: T.text },
+            gridcolor: T.grid,
+            linecolor: T.axis  // Smaller tick labels
         },
         yaxis: {
             fixedrange: getFixedRange(),
             title: {
                 text: 'Fraction of Transmission',
                 font: {
-                    family: 'Arial, sans-serif',
+                    family: T.font,
                     size: 12,  // Smaller font
-                    color: '#333333'
+                    color: T.text
                 }
             },
             range: [0, 1],
-            tickfont: { size: 10 }  // Smaller tick labels
+            tickfont: { size: 10, color: T.text },
+            gridcolor: T.grid,
+            linecolor: T.axis  // Smaller tick labels
         },
         showlegend: true,
         legend: {
@@ -1744,15 +1806,17 @@ function plot_lambda_evolution(data, plot_position, title_text, legends) {
             xanchor: 'right',
             y: 0.98,
             yanchor: 'top',
-            bgcolor: 'rgba(255, 255, 255, 0.9)',
-            bordercolor: '#cccccc', 
+            bgcolor: 'rgba(0,0,0,0)',
+            bordercolor: 'rgba(0,0,0,0)', 
             borderwidth: 1,
-            font: { size: 9, color: '#333333' }, // Smaller legend font
+            font: { size: 9, color: T.text }, // Smaller legend font
             itemsizing: 'constant', 
-            itemwidth: 25
+            itemwidth: 45
         },
-        plot_bgcolor: '#ffffff',
-        paper_bgcolor: '#ffffff'
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        font: { family: T.font, color: T.text },
+        hoverlabel: { bgcolor: T.hoverBg, font: { color: T.hoverText, family: T.font }, bordercolor: 'rgba(0,0,0,0)' }
     };
 
     // Plotly configuration to match other plots
@@ -1788,19 +1852,6 @@ function getFixedRange() {
         return true;
     }
     return false;
-}
-
-// ADD THIS helper function: for reporting cases based on infection data
-function calculateReportedCases(infectiousData) {
-    var reportedData = [];
-    for (var i = 0; i < infectiousData.length; i++) {
-        if (Array.isArray(infectiousData[i]) && infectiousData[i].length >= 2) {
-            var day = infectiousData[i][0];
-            var reportedCount = Math.round(infectiousData[i][1] * CASE_INFECTION_RATIO);
-            reportedData.push([day, reportedCount]);
-        }
-    }
-    return reportedData;
 }
 
 function call_plotly(data_tuple) {
@@ -1856,25 +1907,28 @@ function call_plotly(data_tuple) {
         legends: ['Recovered Population']
     };
     
-    // Plot all charts with daily data initially - use traditional for...in loop
+    // Plot all charts, honouring the daily/cumulative toggle the user has currently selected
     var plotIds = Object.keys(originalPlotData);
     for (var i = 0; i < plotIds.length; i++) {
         var plotId = plotIds[i];
         if (originalPlotData[plotId].dailyData && originalPlotData[plotId].dailyData[0]) {
+            var chartType = plotId.replace('num_', '').replace('_plot', '');
+            var cumulativeToggle = document.getElementById('cumulative-' + chartType);
+            var showCumulative = !!(cumulativeToggle && cumulativeToggle.checked) && !!originalPlotData[plotId].cumulativeData;
             plot_plotly(
-                originalPlotData[plotId].dailyData,
+                showCumulative ? originalPlotData[plotId].cumulativeData : originalPlotData[plotId].dailyData,
                 plotId,
-                originalPlotData[plotId].title + ' (daily)',
+                originalPlotData[plotId].title + (showCumulative ? ' (cumulative)' : ' (daily)'),
                 originalPlotData[plotId].legends,
-                false
+                showCumulative
             );
         }
     }
     
     // Plot source of infection (unchanged)
-    if (data_tuple[8]) {
+    if (data_tuple[4]) {
         plot_lambda_evolution(
-            [data_tuple[8]], 
+            [data_tuple[4]], 
             'lambda_evolution', 
             'Source of infection', 
             ['Home', 'School/Workplace', 'Community', 'Public Transport']
@@ -1941,33 +1995,25 @@ function plot_plotly(data, plotId, titleText, legends, isCumulative) {
     }
     // console.log("Plotting", plotId, "with isCumulative =", isCumulative);
     var displayData = data;
+    var T = plot_theme();
     // Create traces with explicit line mode
     var traces = [];
-    var colorPalette = [
-        '#1f77b4', // Blue
-        '#ff7f0e', // Orange  
-        '#2ca02c', // Green
-        '#d62728', // Red
-        '#9467bd', // Purple
-        '#8c564b'  // Brown
-    ];
+    var colorPalette = T.series[plotId] ? [T.series[plotId]].concat(T.cat) : T.cat;
     
     for (var i = 0; i < displayData.length; i++) {
         var trace = {
             x: [],
             y: [],
-            mode: 'lines+markers',
+            mode: 'lines',
             name: legends[i] || 'Data ' + (i + 1),
             type: 'scatter',
             line: { 
-                width: 2, // Slightly thinner for smaller plots
+                width: 2.5,
                 color: colorPalette[i % colorPalette.length],
                 shape: 'linear'
             },
-            marker: {
-                size: 3, // Smaller markers for compact plots
-                color: colorPalette[i % colorPalette.length]
-            }
+            fill: displayData.length === 1 ? 'tozeroy' : 'none',
+            fillcolor: hex_to_rgba(colorPalette[i % colorPalette.length], 0.12)
         };
         // Populate data points
         for (var j = 0; j < displayData[i].length; j++) {
@@ -2004,7 +2050,7 @@ function plot_plotly(data, plotId, titleText, legends, isCumulative) {
         },
         title: {
             text: titleText,
-            font: { family: 'Arial, sans-serif', size: 14, color: '#333333' }, // Smaller title
+            font: { family: T.font, size: 14, color: T.text }, // Smaller title
             xref: 'paper',
             x: 0.5,
             y: 0.95
@@ -2012,42 +2058,44 @@ function plot_plotly(data, plotId, titleText, legends, isCumulative) {
         xaxis: {
             title: {
                 text: 'Days',
-                font: { family: 'Arial, sans-serif', size: 12, color: '#333333' } // Smaller axis labels
+                font: { family: T.font, size: 12, color: T.text } // Smaller axis labels
             },
             range: [0, NUM_DAYS],
             autorange: false,
-            gridcolor: '#e6e6e6',
-            linecolor: '#666666',
+            gridcolor: T.grid,
+            linecolor: T.axis,
             zeroline: false,
             showgrid: true,
-            tickfont: { size: 10 } // Smaller tick labels
+            tickfont: { size: 10, color: T.text } // Smaller tick labels
         },
         yaxis: {
             title: {
                 text: isCumulative ? 'Cumulative Count' : 'Daily Count',
-                font: { family: 'Arial, sans-serif', size: 12, color: '#333333' }
+                font: { family: T.font, size: 12, color: T.text }
             },
-            gridcolor: '#e6e6e6',
-            linecolor: '#666666',
+            gridcolor: T.grid,
+            linecolor: T.axis,
             zeroline: true,
-            zerolinecolor: '#cccccc',
+            zerolinecolor: T.axis,
             showgrid: true,
-            tickfont: { size: 10 },
+            tickfont: { size: 10, color: T.text },
             rangemode: 'tozero' // Ensure y-axis starts at zero
         },
-        plot_bgcolor: '#ffffff',
-        paper_bgcolor: '#ffffff',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        font: { family: T.font, color: T.text },
+        hoverlabel: { bgcolor: T.hoverBg, font: { color: T.hoverText, family: T.font }, bordercolor: 'rgba(0,0,0,0)' },
         showlegend: false,
         legend: {
             x: 0.98, 
             y: 0.98, 
             xanchor: 'right', 
             yanchor: 'top',
-            bgcolor: 'rgba(255, 255, 255, 0.9)',
-            bordercolor: '#cccccc', 
+            bgcolor: 'rgba(0,0,0,0)',
+            bordercolor: 'rgba(0,0,0,0)', 
             borderwidth: 1,
             orientation: 'v', 
-            font: { size: 9, color: '#333333' }, // Smaller legend font
+            font: { size: 9, color: T.text }, // Smaller legend font
             itemsizing: 'constant', 
             itemwidth: 25, // Smaller legend items
             traceorder: 'normal'
@@ -2136,6 +2184,9 @@ function setupToggleButtons() {
     // Daily toggle buttons - use traditional DOM methods like sim.js
     var dailyButtons = document.querySelectorAll('[id^="daily-"]');
     for (var i = 0; i < dailyButtons.length; i++) {
+        // call_plotly runs every tick; bind each button only once to avoid piling up listeners
+        if (dailyButtons[i].getAttribute('data-toggle-bound')) { continue; }
+        dailyButtons[i].setAttribute('data-toggle-bound', '1');
         dailyButtons[i].addEventListener('change', function() {
             if (this.checked) {
                 var chartType = this.id.replace('daily-', '');
@@ -2158,6 +2209,8 @@ function setupToggleButtons() {
     // Cumulative toggle buttons
     var cumulativeButtons = document.querySelectorAll('[id^="cumulative-"]');
     for (var i = 0; i < cumulativeButtons.length; i++) {
+        if (cumulativeButtons[i].getAttribute('data-toggle-bound')) { continue; }
+        cumulativeButtons[i].setAttribute('data-toggle-bound', '1');
         cumulativeButtons[i].addEventListener('change', function() {
             if (this.checked) {
                 var chartType = this.id.replace('cumulative-', '');
@@ -2249,6 +2302,8 @@ function runSimulations() {
     }
     else{
         INTERVENTION = parseInt(document.querySelector('input[name="interventions2"]:checked').value);
+        // A previous custom run sets this to 0; restore the city default for preset interventions.
+        NUM_DAYS_BEFORE_INTERVENTIONS = CITY_NUM_DAYS_BEFORE_INTERVENTIONS;
     }
   
     // console.log(NUM_DAYS, INIT_FRAC_INFECTED, INTERVENTION);
@@ -2389,6 +2444,8 @@ function setParameters(city){
         CALIBRATION_DELAY = 0; //// Assuming the simulator starts on March 1.
         NUM_DAYS_BEFORE_INTERVENTIONS = 15 + CALIBRATION_DELAY;
     }
+    // Remember the city default (see runSimulations)
+    CITY_NUM_DAYS_BEFORE_INTERVENTIONS = NUM_DAYS_BEFORE_INTERVENTIONS;
 }
 
 function setCity (city) {
@@ -2577,6 +2634,7 @@ function initListner() {
     // Window resize handler
     if(!$('body').hasClass('mobile')) {
         $(window).resize();
+        watch_layout_size();
     }
 
     // Custom intervention setup
@@ -2616,6 +2674,22 @@ $(window).resize(function() {
         $('.sim-lane').css('height',h2);
     }
 })
+
+// Header / footer heights change after logos, fonts or the theme load, which left the
+// footer pushed below the window. Re-run the layout whenever either of them changes size.
+function watch_layout_size() {
+    if (watch_layout_size.started || $('body').hasClass('mobile')) return;
+    watch_layout_size.started = true;
+    var relayout = function () { $(window).resize(); };
+    if (typeof ResizeObserver !== 'undefined') {
+        var ro = new ResizeObserver(relayout);
+        ['.custom-header', '.footer'].forEach(function (sel) {
+            var el = document.querySelector(sel);
+            if (el) ro.observe(el);
+        });
+    }
+    $(window).on('load', relayout);
+}
 
 // Create new intervention function
 function newInterv() {
